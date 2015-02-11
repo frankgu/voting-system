@@ -1,4 +1,4 @@
-package com.voting;
+package com.object;
 
 public class Voter {
 
