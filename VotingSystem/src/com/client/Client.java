@@ -7,12 +7,13 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.functions.Transmission;
+import com.object.User;
 
 public class Client {
 
-	private String userName = null; 		// the user name for the voter
+	private User user = null; 		// the user who login to the client
 	private DatagramSocket aSocket = null;
-	private Transmission tran = null;
+	private Transmission tran = null;		
 	
 	
 	/*
@@ -39,8 +40,10 @@ public class Client {
 				//error
 				
 			} else if(flag == 2){
+				
 				//success
 				System.out.print("success");
+			
 			}
 			// -----test end
 			
@@ -93,6 +96,7 @@ public class Client {
 		// -----reply form : "[flag]:[value]"
 		// [flag] = 1 , [value] = string (error message)
 		// [flag] = 2 , [value] = success
+		// [flag] = 3 , [value] = [candidate name]:[candidate name]:...
 		
 		// for the lab
 		// sendDataToServer("hello world", "60009", "134.117.28.81");

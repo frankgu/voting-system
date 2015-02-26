@@ -1,7 +1,6 @@
 package com.functions;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -22,6 +21,7 @@ public class Transmission {
 
 	}
 
+	//reply the data without checking the data has been valid or not.
 	public void replyData(String data, int port, InetAddress host) {
 		try {
 			
@@ -36,7 +36,7 @@ public class Transmission {
 		}
 	}
 
-	// send the data
+	// send the data, with valid crc32 code.
 	public String sendData(String data, int port, InetAddress host) {
 
 		try {

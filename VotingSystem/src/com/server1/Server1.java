@@ -1,21 +1,16 @@
 // udpServer.java: A simple UDP server program.
 package com.server1;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Properties;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
 
 import com.functions.Property;
 import com.functions.Transmission;
+import com.object.User;
 
 public class Server1 {
 
@@ -49,7 +44,7 @@ public class Server1 {
 	private String district = null;
 
 	// -----active user list
-	private String[] activeUsers = null;
+	private User[] activeUsers = null;
 
 	// for the lab
 	// private static String host = "134.117.59.109";
@@ -66,7 +61,7 @@ public class Server1 {
 			int userNumber = Integer.parseInt(new Property()
 					.loadProperties("activeUserForServer1"));
 			aSocket = new DatagramSocket(portNumber, aHost);
-			activeUsers = new String[userNumber];
+			activeUsers = new User[userNumber];
 			tran = new Transmission(aSocket);
 
 			// for the lab in HP4115
