@@ -18,7 +18,7 @@ public class Client {
 	
 	/*
 	 * 		validate the host and port before send a message
-			InetAddress aHost = InetAddress.getByName(host);
+			 InetAddress aHost = InetAddress.getByName(host);
 			int serverPort = Integer.valueOf(port).intValue();
 	 */
 	
