@@ -11,14 +11,14 @@ import com.object.User;
 
 public class Client {
 
-	private User user = null; 		// the user who login to the client
+	private User user = null; 		 // the user who login to the client
 	private DatagramSocket aSocket = null;
 	private Transmission tran = null;		
 	
 	
 	/*
 	 * 		validate the host and port before send a message
-			InetAddress aHost = InetAddress.getByName(host);
+			 InetAddress aHost = InetAddress.getByName(host);
 			int serverPort = Integer.valueOf(port).intValue();
 	 */
 	
