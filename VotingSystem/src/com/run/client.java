@@ -17,7 +17,7 @@ public class client {
 		Voter voter = (Voter)user;
 		voter.setCandidateName("hello");
 		
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtilServer2.getSessionFactory().openSession();
 		session.beginTransaction();
 		session.save(voter);
 		session.getTransaction().commit();
