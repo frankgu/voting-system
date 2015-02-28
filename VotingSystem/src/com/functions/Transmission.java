@@ -64,7 +64,7 @@ public class Transmission {
 			aSocket.send(request);
 
 			// ------receive the data
-			byte[] buffer = new byte[80];
+			byte[] buffer = new byte[10000];
 			DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
 			aSocket.receive(reply);
 

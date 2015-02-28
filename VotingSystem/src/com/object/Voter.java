@@ -7,13 +7,15 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "VOTER")
-@PrimaryKeyJoinColumn(name = "USER_ID")
+@PrimaryKeyJoinColumn(name = "USER_NAME")
 public class Voter extends User {
 
+	public Voter(){}
+	
 	public Voter(String userName, String lastName, String firstName,
 			String districtName, String address) {
 		super(userName, lastName, firstName, districtName, address);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Column(name = "CANDIDATE_NAME")
