@@ -86,7 +86,7 @@ public class Client {
 		 */
 		// -----the client can show the status of the server
 
-		// -----request form : "[flag]:[value]"
+		// -----request to : "[flag]:[value]"
 		// [flag] = 1 , [value] = [flag2]:[userName] (regist account)
 		// [flag] = 2 , [value] = [userName]:[candidateName] (voting)
 		// [flag] = 3 , [value] = [userName] (login)
@@ -97,6 +97,7 @@ public class Client {
 		// [flag] = 1 , [value] = string (error message)
 		// [flag] = 2 , [value] = success
 		// [flag] = 3 , [value] = [candidate name]:[candidate name]:...
+		//i suggest the reply flag to be 6,7,8 so u it's clear to be reply
 		
 		// for the lab
 		// sendDataToServer("hello world", "60009", "134.117.28.81");

@@ -5,6 +5,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Composite;
 
 
 //login panel
@@ -54,7 +56,32 @@ public class ClientLogin {
 		Label lblSelectDistrict = new Label(shlLogin, SWT.NONE);
 		lblSelectDistrict.setBounds(50, 28, 97, 14);
 		lblSelectDistrict.setText("Select District:");
+		
+		List list = new List(shlLogin, SWT.BORDER);
+		list.setBounds(50, 110, 117, 83);
+		
+		Label lblCandidates = new Label(shlLogin, SWT.NONE);
+		lblCandidates.setText("Candidates:");
+		lblCandidates.setBounds(50, 91, 97, 14);
+		
+		Composite composite = new Composite(shlLogin, SWT.NONE);
+		composite.setBounds(269, 110, 110, 83);
+		
+		Label lblName = new Label(composite, SWT.NONE);
+		lblName.setBounds(10, 10, 60, 14);
+		lblName.setText("name");
+		
+		Label lblInfo = new Label(composite, SWT.NONE);
+		lblInfo.setBounds(10, 25, 60, 14);
+		lblInfo.setText("info1");
+		
+		Label lblInfo_1 = new Label(composite, SWT.NONE);
+		lblInfo_1.setBounds(10, 42, 60, 14);
+		lblInfo_1.setText("info2");
+		
+		Label lblCandidateInfo = new Label(shlLogin, SWT.NONE);
+		lblCandidateInfo.setText("Candidate Info");
+		lblCandidateInfo.setBounds(269, 91, 97, 14);
 
 	}
-
 }
