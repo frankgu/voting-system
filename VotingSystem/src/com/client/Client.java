@@ -37,12 +37,12 @@ public class Client {
 			int flag = Integer.parseInt(replyMessage.split(":")[0]);
 			if(flag == 1){
 				
-				//error
+				System.out.println("flag 1 error");//error
 				
 			} else if(flag == 2){
 				
 				//success
-				System.out.print("success");
+				System.out.println("flag 2 success");
 			
 			}
 			// -----test end
