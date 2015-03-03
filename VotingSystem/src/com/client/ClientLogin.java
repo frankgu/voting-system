@@ -2,24 +2,23 @@ package com.client;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Label;
 
 
-//voting panel
-public class ClientGUI {
+//login panel
+public class ClientLogin {
 
-	protected Shell shell;
+	protected Shell shlLogin;
 
 	/**
 	 * Launch the application.
 	 * @param args
-	 * @wbp.parser.entryPoint
 	 */
 	public static void main(String[] args) {
 		try {
-			ClientGUI window = new ClientGUI();
+			ClientLogin window = new ClientLogin();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -32,9 +31,9 @@ public class ClientGUI {
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
-		shell.open();
-		shell.layout();
-		while (!shell.isDisposed()) {
+		shlLogin.open();
+		shlLogin.layout();
+		while (!shlLogin.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
@@ -45,9 +44,17 @@ public class ClientGUI {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shell = new Shell();
-		shell.setSize(450, 300);
-		shell.setText("SWT Application");
+		shlLogin = new Shell();
+		shlLogin.setSize(450, 300);
+		shlLogin.setText("Login");
+		
+		Combo combo = new Combo(shlLogin, SWT.NONE);
+		combo.setBounds(50, 48, 117, 22);
+		
+		Label lblSelectDistrict = new Label(shlLogin, SWT.NONE);
+		lblSelectDistrict.setBounds(50, 28, 97, 14);
+		lblSelectDistrict.setText("Select District:");
 
 	}
+
 }

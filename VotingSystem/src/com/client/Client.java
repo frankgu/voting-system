@@ -61,7 +61,7 @@ public class Client {
 		// -----client should pop up a dialog to let the customer to fulfill the
 		// server port (have several option, for different districts)
 
-		// -----client should grap the candidate information from the server
+		// -----client should grab the candidate information from the server
 		// belong to the specific district
 
 		/*
