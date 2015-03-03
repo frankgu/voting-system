@@ -7,12 +7,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Button;
 
 
 //login panel
 public class ClientLogin {
 
 	protected Shell shlLogin;
+	private Text text;
 
 	/**
 	 * Launch the application.
@@ -82,6 +85,21 @@ public class ClientLogin {
 		Label lblCandidateInfo = new Label(shlLogin, SWT.NONE);
 		lblCandidateInfo.setText("Candidate Info");
 		lblCandidateInfo.setBounds(269, 91, 97, 14);
+		
+		text = new Text(shlLogin, SWT.BORDER);
+		text.setBounds(191, 205, 86, 19);
+		
+		Label lblUsername = new Label(shlLogin, SWT.NONE);
+		lblUsername.setBounds(128, 208, 65, 16);
+		lblUsername.setText("Username:");
+		
+		Button btnRegister = new Button(shlLogin, SWT.NONE);
+		btnRegister.setBounds(138, 230, 95, 28);
+		btnRegister.setText("Register");
+		
+		Button btnLogin = new Button(shlLogin, SWT.NONE);
+		btnLogin.setBounds(242, 230, 95, 28);
+		btnLogin.setText("Login");
 
 	}
 }
