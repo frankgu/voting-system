@@ -7,9 +7,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "CANDIDATE")
-@PrimaryKeyJoinColumn(name = "USER_ID")
+@PrimaryKeyJoinColumn(name = "USER_NAME")
 public class Candidate extends User {
 
+	public Candidate(){}
+	
 	public Candidate(String userName, String lastName, String firstName,
 			String districtName, String address) {
 		super(userName, lastName, firstName, districtName, address);

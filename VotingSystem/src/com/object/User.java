@@ -15,9 +15,6 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
-	@Column(name = "USER_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long userID;
 	@Column(name = "USER_NAME")
 	private String userName;
 	@Column(name = "LAST_NAME")
@@ -29,6 +26,9 @@ public class User {
 	@Column(name = "ADDRESS")
 	private String address;
 
+	//------default constructor
+	public User(){}
+	
 	public User(String userName, String lastName, String firstName,
 			String districtName, String address) {
 		super();

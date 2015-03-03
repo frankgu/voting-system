@@ -6,11 +6,19 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import org.hibernate.JDBCException;
+import org.hibernate.Session;
+
+import com.functions.HibernateUtil;
 import com.functions.Property;
 import com.functions.Transmission;
+import com.object.Candidate;
 import com.object.User;
+import com.object.Voter;
 
 public class Server1 {
 
@@ -37,14 +45,18 @@ public class Server1 {
 	private Transmission tran = null;
 
 	// -----the host and the port for the server 2
-	private static String host = "localhost";
-	private static String port = "8081";
+	private static String server2host = "localhost";
+	private static String server2port = "8081";
 
 	// -----district for this server
 	private String district = null;
 
 	// -----active user list
-	private User[] activeUsers = null;
+	private ArrayList<User> activeUsers = null;
+
+	// -----lock
+	private Object lock1;
+	private Object lock2;
 
 	// for the lab
 	// private static String host = "134.117.59.109";
@@ -61,7 +73,8 @@ public class Server1 {
 			int userNumber = Integer.parseInt(new Property()
 					.loadProperties("activeUserForServer1"));
 			aSocket = new DatagramSocket(portNumber, aHost);
-			activeUsers = new User[userNumber];
+			activeUsers = new ArrayList<User>(userNumber);
+
 			tran = new Transmission(aSocket);
 
 			// for the lab in HP4115
@@ -71,7 +84,7 @@ public class Server1 {
 
 			// ------receive the datagram packet from the client and simulate
 			// the loss and modification
-			byte[] buffer = new byte[80];
+			byte[] buffer = new byte[10000];
 			while (true) {
 
 				DatagramPacket request = new DatagramPacket(buffer,
@@ -84,12 +97,18 @@ public class Server1 {
 			}
 
 		} catch (SocketException e) {
+
 			System.out.println("Socket: " + e.getMessage());
+
 		} catch (IOException e) {
+
 			System.out.println("IO: " + e.getMessage());
+
 		} finally {
+
 			if (aSocket != null)
 				aSocket.close();
+
 		}
 	}
 
@@ -120,7 +139,7 @@ public class Server1 {
 				// -----data is valid, process the data
 				analyseDataFromClient(packet.getData(), packet.getLength(),
 						packet.getPort(), packet.getAddress());
-				
+
 			}
 
 		}
@@ -130,51 +149,206 @@ public class Server1 {
 			InetAddress host) {
 
 		// -----request form : "[flag]:[value]"
-		// [flag] = 1 , [value] = [flag2]:[userName] (regist account)
-		// [flag] = 2 , [value] = [userName]:[candidateName] (voting)
-		// [flag] = 3 , [value] = [userName] (login)
-		// [flag] = 4 , [value] = null (get candidate list)
-		// [flag] = 5 , [value] = [userName] (logout the server1)
+		// ---[flag] = 1 , [value] =
+		// [flag2]:[userName]:[lastName]:[firstName]:[address] (regist account,
+		// flag2 = 1 is voter, flag2 = 2 is candidate)
+		// ---[flag] = 2 , [value] = [userName]:[candidateUserName] (voting)
+		// ---[flag] = 3 , [value] = [userName] (login)
+		// ---[flag] = 4 , [value] = null (get candidate list)
+		// ---[flag] = 5 , [value] = [userName] (logout the server1)
 
 		// -----reply form : "[flag]:[value]"
-		// [flag] = 1 , [value] = string (error message)
-		// [flag] = 2 , [value] = success (success message)
-		
+		// ---[flag] = 1 , [value] = string (error message)
+		// ---[flag] = 2 , [value] = success
+		// ---[flag] = 3 , [value] = [candidate name]:[candidate name]:...
+		// (candidate name consist of [userName]:[FirstName]:[LastName])
+
 		// -----get the data exclude check sum value
 		byte[] dataByte = Arrays.copyOfRange(data, 9, length);
 		String message = new String(dataByte);
 
 		String[] dataArray = message.split(":");
-		
+
 		if (dataArray[0].compareTo("1") == 0) {
 
 			// -----regist an account
 			if (dataArray[1].compareTo("1") == 0) {
 
-				// voter
-				tran.replyData("2:success", port, host);
-				
+				Voter voter = new Voter(dataArray[2], dataArray[3],
+						dataArray[4], district, dataArray[5]);
+
+				String replyMessage = new String("2:success");
+				try {
+
+					// store the voter information to the database
+					Session session = HibernateUtil.getSessionFactory()
+							.openSession();
+					session.beginTransaction();
+					session.save(voter);
+					session.getTransaction().commit();
+					session.close();
+
+				} catch (JDBCException e) {
+
+					// fail to insert the voter because the userName already
+					// being used
+					replyMessage = new String("1:Voter user name already exist");
+				}
+
+				// reply to the client
+				tran.replyData(replyMessage, port, host);
+
 			} else if (dataArray[1].compareTo("2") == 0) {
 
-				// candidate
+				Candidate candidate = new Candidate(dataArray[2], dataArray[3],
+						dataArray[4], district, dataArray[5]);
+
+				String replyMessage = new String("2:Sucess");
+
+				try {
+
+					// store the candidate information to the database
+					Session session = HibernateUtil.getSessionFactory()
+							.openSession();
+					session.beginTransaction();
+					session.save(candidate);
+					session.getTransaction().commit();
+					session.close();
+
+				} catch (JDBCException e) {
+
+					replyMessage = new String(
+							"1:Candidate user name already exist");
+
+				}
+
+				tran.replyData(replyMessage, port, host);
+
 			}
 
 		} else if (dataArray[0].compareTo("2") == 0) {
 
-			// -----voting
+			// -----need to add a mutex lock here
+			synchronized (lock1) {
+
+				// -----voter vote for the candidate
+				Session session = HibernateUtil.getSessionFactory()
+						.openSession();
+				session.beginTransaction();
+				Candidate candidate = (Candidate) session.get(Candidate.class,
+						dataArray[2]);
+				Voter voter = (Voter) session.get(Voter.class, dataArray[1]);
+				if (voter.getCandidateName() != null) {
+
+					candidate.setPolls(candidate.getPolls() + 1);
+					session.update(candidate);
+					voter.setCandidateName(dataArray[2]);
+					session.update(voter);
+					tran.replyData("2:Sucess", port, host);
+
+				} else {
+
+					tran.replyData("1:Voter already voted", port, host);
+
+				}
+				session.getTransaction().commit();
+				session.close();
+
+			}
 
 		} else if (dataArray[0].compareTo("3") == 0) {
 
-			// -----login
+			// -----login, only user belong to this district can login to this
+			// server, login can't have same user login the same time
+			String userName = dataArray[1];
+			try {
+
+				Session session = HibernateUtil.getSessionFactory()
+						.openSession();
+				session.beginTransaction();
+				Voter voter = (Voter) session.get(Voter.class, userName);
+
+				// lock these lines of code in case same user name login at the
+				// same time
+				synchronized (lock2) {
+					if (!checkExist(voter)) {
+						if (voter.getDistrictName().compareTo(district) == 0) {
+
+							tran.replyData("2:Success", port, host);
+							activeUsers.add(voter);
+
+						} else {
+
+							tran.replyData(
+									"1:Voter doesn't belong to this destrict",
+									port, host);
+
+						}
+					} else {
+
+						tran.replyData("1:Voter already login", port, host);
+
+					}
+				}
+				session.getTransaction().commit();
+				session.close();
+
+			} catch (JDBCException e) {
+
+				tran.replyData(
+						"1:Can't find the voter name, please regist an account or login as a voter",
+						port, host);
+			}
 
 		} else if (dataArray[0].compareTo("4") == 0) {
 
 			// -----get the candidate list
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			session.beginTransaction();
+			@SuppressWarnings("unchecked")
+			List<Candidate> candidates = session
+					.createCriteria(Candidate.class).list();
+			String candidateData = "";
+			for (int i = 0; i < candidates.size(); i++) {
+				if (i == (candidates.size() - 1)) {
+					candidateData = candidateData
+							+ candidates.get(i).getUserName() + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName();
 
+				} else {
+					candidateData = candidateData
+							+ candidates.get(i).getUserName() + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName() + ":";
+				}
+
+			}
+			tran.replyData(candidateData, port, host);
+			session.getTransaction().commit();
+			session.close();
+			
 		} else if (dataArray[0].compareTo("5") == 0) {
 
 			// -----user logout the server
+			
 		}
 	}
+	
+	public boolean checkExist(User user) {
 
+		for (int i = 0; i < activeUsers.size(); i++) {
+
+			if (user.getUserName().compareTo(activeUsers.get(i).getUserName()) == 0) {
+
+				// the user already login
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	}
 }
