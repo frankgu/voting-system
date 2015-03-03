@@ -50,7 +50,7 @@ public class ClientLogin {
 	/**
 	 * Create contents of the window.
 	 */
-	public void handler(){
+	public void loginHandler(){
 		str = "edited";
 		System.out.println("login btn handler");
 	}
@@ -113,7 +113,7 @@ public class ClientLogin {
 		btnLogin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				//to do
-				handler();
+				loginHandler();
 			}
 		});
 		btnLogin.setBounds(242, 230, 95, 28);
