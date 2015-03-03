@@ -15,7 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 
 //login panel
 public class ClientLogin {
-
+    public String str = "init";
 	protected Shell shlLogin;
 	private Text text;
 
@@ -50,6 +50,11 @@ public class ClientLogin {
 	/**
 	 * Create contents of the window.
 	 */
+	public void handler(){
+		str = "edited";
+		System.out.println("login btn handler");
+	}
+	
 	protected void createContents() {
 		shlLogin = new Shell();
 		shlLogin.setSize(450, 300);
@@ -108,7 +113,7 @@ public class ClientLogin {
 		btnLogin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				//to do
-				System.out.println("test 1");
+				handler();
 			}
 		});
 		btnLogin.setBounds(242, 230, 95, 28);
