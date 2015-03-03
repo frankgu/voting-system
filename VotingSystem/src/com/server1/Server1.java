@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
@@ -302,6 +303,29 @@ public class Server1 {
 		} else if (dataArray[0].compareTo("4") == 0) {
 
 			// -----get the candidate list
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			session.beginTransaction();
+			@SuppressWarnings("unchecked")
+			List<Candidate> candidates = session
+					.createCriteria(Candidate.class).list();
+			String candidateData = "";
+			for (int i = 0; i < candidates.size(); i++) {
+				if (i == (candidates.size() - 1)) {
+					candidateData = candidateData
+							+ candidates.get(i).getUserName() + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName();
+
+				} else {
+					candidateData = candidateData
+							+ candidates.get(i).getUserName() + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName() + ":";
+				}
+
+			}
+			session.getTransaction().commit();
+			session.close();
 			
 		} else if (dataArray[0].compareTo("5") == 0) {
 
