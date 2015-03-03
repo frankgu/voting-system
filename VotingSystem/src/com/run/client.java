@@ -7,6 +7,7 @@ import com.object.Voter;
 import com.functions.*;
 import com.client.ClientGUI;
 import com.client.ClientLogin;
+import com.client.Client;
 
 public class client {
 
@@ -32,7 +33,8 @@ public class client {
 		}
 		
 		
-		
+		//client do not need any database operation
+		/*
 		User user = new Voter("gdf1992803", "dongfeng","gu","ottawa","k1g4a7");
 		Voter voter = (Voter)user;
 		voter.setCandidateName("hello");
@@ -42,7 +44,7 @@ public class client {
 		session.beginTransaction();
 		session.save(voter);
 		session.getTransaction().commit();
-		session.close();
+		session.close();*/
 		
 	}
 }
