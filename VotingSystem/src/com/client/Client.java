@@ -35,15 +35,16 @@ public class Client {
 			InetAddress host = InetAddress.getByName("localhost");
 			String replyMessage = tran.sendData(data, 8080, host);
 			int flag = Integer.parseInt(replyMessage.split(":")[0]);
-			if (flag == 1) {
 
-				// error
-
-			} else if (flag == 2) {
-
-				// success
-				System.out.print("success");
-
+			if(flag == 1){
+				
+				System.out.println("flag 1 error");//error
+				
+			} else if(flag == 2){
+				
+				//success
+				System.out.println("flag 2 success");
+			
 			}
 			// -----test end
 
@@ -61,7 +62,7 @@ public class Client {
 		// -----client should pop up a dialog to let the customer to fulfill the
 		// server port (have several option, for different districts)
 
-		// -----client should grap the candidate information from the server
+		// -----client should grab the candidate information from the server
 		// belong to the specific district
 
 		/*
@@ -100,6 +101,7 @@ public class Client {
 		// ---[flag] = 2 , [value] = success
 		// ---[flag] = 3 , [value] = [candidate name]:[candidate name]:...
 		// (candidate name consist of [userName]:[FirstName]:[LastName])
+
 
 		// for the lab
 		// sendDataToServer("hello world", "60009", "134.117.28.81");

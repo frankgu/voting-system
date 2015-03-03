@@ -324,15 +324,17 @@ public class Server1 {
 				}
 
 			}
+			tran.replyData(candidateData, port, host);
 			session.getTransaction().commit();
 			session.close();
 			
 		} else if (dataArray[0].compareTo("5") == 0) {
 
 			// -----user logout the server
+			
 		}
 	}
-
+	
 	public boolean checkExist(User user) {
 
 		for (int i = 0; i < activeUsers.size(); i++) {
