@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 
 //login panel
@@ -61,17 +63,17 @@ public class ClientLogin {
 		lblSelectDistrict.setText("Select District:");
 		
 		List list = new List(shlLogin, SWT.BORDER);
-		list.setBounds(50, 110, 117, 83);
+		list.setBounds(86, 101, 117, 83);
 		
 		Label lblCandidates = new Label(shlLogin, SWT.NONE);
 		lblCandidates.setText("Candidates:");
-		lblCandidates.setBounds(50, 91, 97, 14);
+		lblCandidates.setBounds(85, 81, 97, 14);
 		
 		Composite composite = new Composite(shlLogin, SWT.NONE);
-		composite.setBounds(269, 110, 110, 83);
+		composite.setBounds(256, 101, 110, 83);
 		
 		Label lblName = new Label(composite, SWT.NONE);
-		lblName.setBounds(10, 10, 60, 14);
+		lblName.setBounds(10, 5, 60, 14);
 		lblName.setText("name");
 		
 		Label lblInfo = new Label(composite, SWT.NONE);
@@ -84,7 +86,7 @@ public class ClientLogin {
 		
 		Label lblCandidateInfo = new Label(shlLogin, SWT.NONE);
 		lblCandidateInfo.setText("Candidate Info");
-		lblCandidateInfo.setBounds(269, 91, 97, 14);
+		lblCandidateInfo.setBounds(256, 81, 97, 14);
 		
 		text = new Text(shlLogin, SWT.BORDER);
 		text.setBounds(191, 205, 86, 19);
@@ -94,10 +96,21 @@ public class ClientLogin {
 		lblUsername.setText("Username:");
 		
 		Button btnRegister = new Button(shlLogin, SWT.NONE);
+		btnRegister.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				//to do
+			}
+		});
 		btnRegister.setBounds(138, 230, 95, 28);
 		btnRegister.setText("Register");
 		
 		Button btnLogin = new Button(shlLogin, SWT.NONE);
+		btnLogin.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				//to do
+				System.out.println("test 1");
+			}
+		});
 		btnLogin.setBounds(242, 230, 95, 28);
 		btnLogin.setText("Login");
 
