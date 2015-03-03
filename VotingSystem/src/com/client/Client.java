@@ -21,8 +21,22 @@ public class Client {
 		
 	}
 	
-	public void run(){
-		
+	public void run() {
+		// client login panel
+		try {
+			ClientLogin window = new ClientLogin();
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// client main panel
+		try {
+			ClientGUI window = new ClientGUI();
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
