@@ -6,9 +6,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
 
@@ -44,17 +44,18 @@ public class Server1 {
 	private Transmission tran = null;
 
 	// -----the host and the port for the server 2
-	private static String host = "localhost";
-	private static String port = "8081";
+	private static String server2host = "localhost";
+	private static String server2port = "8081";
 
 	// -----district for this server
 	private String district = null;
 
 	// -----active user list
-	private User[] activeUsers = null;
+	private ArrayList<User> activeUsers = null;
 
 	// -----lock
 	private Object lock1;
+	private Object lock2;
 
 	// for the lab
 	// private static String host = "134.117.59.109";
@@ -71,7 +72,8 @@ public class Server1 {
 			int userNumber = Integer.parseInt(new Property()
 					.loadProperties("activeUserForServer1"));
 			aSocket = new DatagramSocket(portNumber, aHost);
-			activeUsers = new User[userNumber];
+			activeUsers = new ArrayList<User>(userNumber);
+
 			tran = new Transmission(aSocket);
 
 			// for the lab in HP4115
@@ -225,7 +227,7 @@ public class Server1 {
 
 		} else if (dataArray[0].compareTo("2") == 0) {
 
-			// -----need to add a mutex lock here 
+			// -----need to add a mutex lock here
 			synchronized (lock1) {
 
 				// -----voter vote for the candidate
@@ -257,14 +259,70 @@ public class Server1 {
 
 			// -----login, only user belong to this district can login to this
 			// server, login can't have same user login the same time
+			String userName = dataArray[1];
+			try {
+
+				Session session = HibernateUtil.getSessionFactory()
+						.openSession();
+				session.beginTransaction();
+				Voter voter = (Voter) session.get(Voter.class, userName);
+
+				// lock these lines of code in case same user name login at the
+				// same time
+				synchronized (lock2) {
+					if (!checkExist(voter)) {
+						if (voter.getDistrictName().compareTo(district) == 0) {
+
+							tran.replyData("2:Success", port, host);
+							activeUsers.add(voter);
+
+						} else {
+
+							tran.replyData(
+									"1:Voter doesn't belong to this destrict",
+									port, host);
+
+						}
+					} else {
+
+						tran.replyData("1:Voter already login", port, host);
+
+					}
+				}
+				session.getTransaction().commit();
+				session.close();
+
+			} catch (JDBCException e) {
+
+				tran.replyData(
+						"1:Can't find the voter name, please regist an account or login as a voter",
+						port, host);
+			}
 
 		} else if (dataArray[0].compareTo("4") == 0) {
 
 			// -----get the candidate list
-
+			
 		} else if (dataArray[0].compareTo("5") == 0) {
 
 			// -----user logout the server
 		}
+	}
+
+	public boolean checkExist(User user) {
+
+		for (int i = 0; i < activeUsers.size(); i++) {
+
+			if (user.getUserName().compareTo(activeUsers.get(i).getUserName()) == 0) {
+
+				// the user already login
+				return true;
+
+			}
+
+		}
+
+		return false;
+
 	}
 }
