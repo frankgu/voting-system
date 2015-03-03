@@ -11,7 +11,7 @@ public class client {
 	public static void main(String[] arg) {
 
 		//Client client = new Client();
-		//abc
+		//abcdef
 		// hibernate test
 		User user = new Voter("gdf1992803", "dongfeng","gu","ottawa","k1g4a7");
 		Voter voter = (Voter)user;
