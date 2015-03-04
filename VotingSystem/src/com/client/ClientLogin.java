@@ -61,43 +61,17 @@ public class ClientLogin {
 		shlLogin.setText("Login");
 		
 		Combo combo = new Combo(shlLogin, SWT.NONE);
-		combo.setBounds(50, 48, 117, 22);
+		combo.setBounds(184, 71, 117, 22);
 		
 		Label lblSelectDistrict = new Label(shlLogin, SWT.NONE);
-		lblSelectDistrict.setBounds(50, 28, 97, 14);
+		lblSelectDistrict.setBounds(90, 75, 97, 14);
 		lblSelectDistrict.setText("Select District:");
 		
-		List list = new List(shlLogin, SWT.BORDER);
-		list.setBounds(86, 101, 117, 83);
-		
-		Label lblCandidates = new Label(shlLogin, SWT.NONE);
-		lblCandidates.setText("Candidates:");
-		lblCandidates.setBounds(85, 81, 97, 14);
-		
-		Composite composite = new Composite(shlLogin, SWT.NONE);
-		composite.setBounds(256, 101, 110, 83);
-		
-		Label lblName = new Label(composite, SWT.NONE);
-		lblName.setBounds(10, 5, 60, 14);
-		lblName.setText("name");
-		
-		Label lblInfo = new Label(composite, SWT.NONE);
-		lblInfo.setBounds(10, 25, 60, 14);
-		lblInfo.setText("info1");
-		
-		Label lblInfo_1 = new Label(composite, SWT.NONE);
-		lblInfo_1.setBounds(10, 42, 60, 14);
-		lblInfo_1.setText("info2");
-		
-		Label lblCandidateInfo = new Label(shlLogin, SWT.NONE);
-		lblCandidateInfo.setText("Candidate Info");
-		lblCandidateInfo.setBounds(256, 81, 97, 14);
-		
 		text = new Text(shlLogin, SWT.BORDER);
-		text.setBounds(191, 205, 86, 19);
+		text.setBounds(184, 138, 86, 19);
 		
 		Label lblUsername = new Label(shlLogin, SWT.NONE);
-		lblUsername.setBounds(128, 208, 65, 16);
+		lblUsername.setBounds(113, 141, 65, 16);
 		lblUsername.setText("Username:");
 		
 		Button btnRegister = new Button(shlLogin, SWT.NONE);
@@ -106,7 +80,7 @@ public class ClientLogin {
 				//to do
 			}
 		});
-		btnRegister.setBounds(138, 230, 95, 28);
+		btnRegister.setBounds(90, 186, 95, 28);
 		btnRegister.setText("Register");
 		
 		Button btnLogin = new Button(shlLogin, SWT.NONE);
@@ -116,7 +90,7 @@ public class ClientLogin {
 				loginHandler();
 			}
 		});
-		btnLogin.setBounds(242, 230, 95, 28);
+		btnLogin.setBounds(224, 186, 95, 28);
 		btnLogin.setText("Login");
 
 	}
