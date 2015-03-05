@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
@@ -22,7 +23,7 @@ import com.object.Candidate;
 import com.object.User;
 import com.object.Voter;
 
-public class Server1 {
+public class Server1 implements Runnable{
 
 	/*
 	 * Server 1 functionality
@@ -48,9 +49,9 @@ public class Server1 {
 	private ArrayList<User> activeUsers = null;
 
 	// -----lock for the critical section
-	private Lock lock1;
-	private Lock lock2;
-	private Lock lock3;
+	private Lock lock1 = new ReentrantLock();
+	private Lock lock2 = new ReentrantLock();
+	private Lock lock3 = new ReentrantLock();
 
 	// for the lab
 	// private static String host = "134.117.59.109";
@@ -96,7 +97,8 @@ public class Server1 {
 
 	}
 
-	public void start() {
+	@Override
+	public void run() {
 
 		System.out.println("server1 has started");
 		// ------receive the datagram packet from the client and simulate
@@ -291,7 +293,7 @@ public class Server1 {
 		} else if (dataArray[0].compareTo("2") == 0) {
 
 			// -----need to add a mutex lock here
-			// lock1.tryLock();
+			lock1.tryLock();
 
 			// -----voter vote for the candidate
 			Session session = HibernateUtil.getSessionFactory().openSession();
@@ -317,7 +319,7 @@ public class Server1 {
 			session.getTransaction().commit();
 			session.close();
 
-			// lock1.unlock();
+			lock1.unlock();
 
 		} else if (dataArray[0].compareTo("3") == 0) {
 
@@ -333,7 +335,7 @@ public class Server1 {
 
 				// lock these lines of code in case same user name login at the
 				// same time
-				// lock2.tryLock();
+				lock2.tryLock();
 
 				if (!checkExist(voter)) {
 					if (voter.getDistrictName().compareTo(district) == 0) {
@@ -353,7 +355,7 @@ public class Server1 {
 					tran.replyData("1:Voter already login", port, host);
 
 				}
-				// lock2.unlock();
+				lock2.unlock();
 				session.getTransaction().commit();
 				session.close();
 
@@ -398,11 +400,11 @@ public class Server1 {
 			String userName = dataArray[1];
 
 			// ------onely one user can logout at a time
-			// lock3.tryLock();
+			lock3.tryLock();
 
 			removeActiveUser(userName);
 
-			// lock3.unlock();
+			lock3.unlock();
 
 			tran.replyData("2:Successfully logout", port, host);
 		}
@@ -439,4 +441,6 @@ public class Server1 {
 		return false;
 
 	}
+
+	
 }

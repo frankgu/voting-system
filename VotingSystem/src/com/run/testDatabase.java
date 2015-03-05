@@ -40,17 +40,17 @@ public class testDatabase {
 			
 			
 			System.out.println(tran.sendData("1:2:candidate:dongfeng:gu:1591 riverside", 8080, host));
-			Thread.sleep(1000);
+			System.out.println(tran.sendData("1:2:candidate2:dongfeng:gu:1591 riverside", 8080, host));
 			System.out.println(tran.sendData("1:1:voter:tom:liu:1591 riverside", 8080, host));
-			Thread.sleep(1000);
+			
 			System.out.println(tran.sendData("2:voter:candidate", 8080, host));
-			Thread.sleep(1000);
+			
 			System.out.println(tran.sendData("3:voter", 8080, host));
-			Thread.sleep(1000);
+			
 			System.out.println(tran.sendData("4:", 8080, host));
-			Thread.sleep(1000);
+		
 			System.out.println(tran.sendData("5:voter", 8080, host));
-			Thread.sleep(1000);
+			
 			
 			
 			
@@ -63,12 +63,7 @@ public class testDatabase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
-		} catch (InterruptedException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
+		} 
 
 		/*
 		 * test the hibernate operation
