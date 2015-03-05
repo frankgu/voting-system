@@ -9,9 +9,11 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 
 import com.functions.HibernateUtil;
 import com.functions.Property;
@@ -26,15 +28,6 @@ public class Server1 {
 	 * Server 1 functionality
 	 */
 
-	// -----1. server 1 should have the district information, each server 1
-	// corresponds to only one district.
-	// -----2. server 1 contain the user and the candidate information belongs
-	// to one specific server1
-	// -----3. when voter or candidate create account from client side and send
-	// the information to server 1, server 1 should record the information to
-	// the txt file.
-	// -----4. when the voter voter for one candidate, the candidate information
-	// should change (care for the conflict problem)
 	// -----5. after a certain amount of time, the information of this server
 	// will be sent to the server 2
 
@@ -54,9 +47,10 @@ public class Server1 {
 	// -----active user list
 	private ArrayList<User> activeUsers = null;
 
-	// -----lock
-	private Object lock1;
-	private Object lock2;
+	// -----lock for the critical section
+	private Lock lock1;
+	private Lock lock2;
+	private Lock lock3;
 
 	// for the lab
 	// private static String host = "134.117.59.109";
@@ -76,25 +70,13 @@ public class Server1 {
 			activeUsers = new ArrayList<User>(userNumber);
 
 			tran = new Transmission(aSocket);
+			// initial the hibernate factory
+			HibernateUtil.getSessionFactory();
 
 			// for the lab in HP4115
 			// int socket_no = 60009; // server 1 port number
 			// InetAddress temp = InetAddress.getByName("134.117.59.109");
 			// aSocket = new DatagramSocket(socket_no, temp);
-
-			// ------receive the datagram packet from the client and simulate
-			// the loss and modification
-			byte[] buffer = new byte[10000];
-			while (true) {
-
-				DatagramPacket request = new DatagramPacket(buffer,
-						buffer.length);
-				aSocket.receive(request);
-				// -----every time the server 1 receive a packet, it start a new
-				// thread to handle this
-				new Thread(new Responder(aSocket, request)).start();
-
-			}
 
 		} catch (SocketException e) {
 
@@ -104,10 +86,34 @@ public class Server1 {
 
 			System.out.println("IO: " + e.getMessage());
 
-		} finally {
+		}
 
-			if (aSocket != null)
-				aSocket.close();
+	}
+
+	public void stop() {
+
+		aSocket.close();
+
+	}
+
+	public void start() {
+
+		System.out.println("server1 has started");
+		// ------receive the datagram packet from the client and simulate
+		// the loss and modification
+		byte[] buffer = new byte[10000];
+		while (true) {
+
+			DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+			try {
+				aSocket.receive(request);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// -----every time the server 1 receive a packet, it start a new
+			// thread to handle this
+			new Thread(new Responder(aSocket, request)).start();
 
 		}
 	}
@@ -177,14 +183,36 @@ public class Server1 {
 				Voter voter = new Voter(dataArray[2], dataArray[3],
 						dataArray[4], district, dataArray[5]);
 
-				String replyMessage = new String("2:success");
+				String replyMessage = new String(
+						"2:Successfully regist for voter");
+
 				try {
+
+					// -----get the restrict number for the voter
+					int userNumber = Integer.parseInt(new Property()
+							.loadProperties("totalVoterNumberForOneDistrict"));
 
 					// store the voter information to the database
 					Session session = HibernateUtil.getSessionFactory()
 							.openSession();
 					session.beginTransaction();
-					session.save(voter);
+
+					int existUserNumber = ((Long) session
+							.createCriteria(Voter.class)
+							.setProjection(Projections.rowCount())
+							.uniqueResult()).intValue();
+
+					if (existUserNumber < userNumber) {
+
+						session.save(voter);
+
+					} else {
+
+						replyMessage = new String(
+								"1:Voter number reach the limits for this district");
+
+					}
+
 					session.getTransaction().commit();
 					session.close();
 
@@ -193,6 +221,13 @@ public class Server1 {
 					// fail to insert the voter because the userName already
 					// being used
 					replyMessage = new String("1:Voter user name already exist");
+
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				// reply to the client
@@ -203,15 +238,36 @@ public class Server1 {
 				Candidate candidate = new Candidate(dataArray[2], dataArray[3],
 						dataArray[4], district, dataArray[5]);
 
-				String replyMessage = new String("2:Sucess");
+				String replyMessage = new String(
+						"2:Sucessfully regist for candidate");
 
 				try {
+
+					// -----get the restrict number for the voter
+					int userNumber = Integer.parseInt(new Property()
+							.loadProperties("totalVoterNumberForOneDistrict"));
 
 					// store the candidate information to the database
 					Session session = HibernateUtil.getSessionFactory()
 							.openSession();
 					session.beginTransaction();
-					session.save(candidate);
+
+					int existUserNumber = ((Long) session
+							.createCriteria(Candidate.class)
+							.setProjection(Projections.rowCount())
+							.uniqueResult()).intValue();
+
+					if (existUserNumber < userNumber) {
+
+						session.save(candidate);
+
+					} else {
+
+						replyMessage = new String(
+								"1:Candidate number reach the limits for this district");
+
+					}
+
 					session.getTransaction().commit();
 					session.close();
 
@@ -220,6 +276,12 @@ public class Server1 {
 					replyMessage = new String(
 							"1:Candidate user name already exist");
 
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				tran.replyData(replyMessage, port, host);
@@ -229,32 +291,33 @@ public class Server1 {
 		} else if (dataArray[0].compareTo("2") == 0) {
 
 			// -----need to add a mutex lock here
-			synchronized (lock1) {
+			// lock1.tryLock();
 
-				// -----voter vote for the candidate
-				Session session = HibernateUtil.getSessionFactory()
-						.openSession();
-				session.beginTransaction();
-				Candidate candidate = (Candidate) session.get(Candidate.class,
-						dataArray[2]);
-				Voter voter = (Voter) session.get(Voter.class, dataArray[1]);
-				if (voter.getCandidateName() != null) {
+			// -----voter vote for the candidate
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			session.beginTransaction();
+			Candidate candidate = (Candidate) session.get(Candidate.class,
+					dataArray[2]);
+			Voter voter = (Voter) session.get(Voter.class, dataArray[1]);
+			
+			if (voter.getCandidateName().isEmpty()) {
 
-					candidate.setPolls(candidate.getPolls() + 1);
-					session.update(candidate);
-					voter.setCandidateName(dataArray[2]);
-					session.update(voter);
-					tran.replyData("2:Sucess", port, host);
+				candidate.setPolls(candidate.getPolls() + 1);
+				session.update(candidate);
+				voter.setCandidateName(dataArray[2]);
+				session.update(voter);
+				tran.replyData("2:Sucessfully vote", port, host);
 
-				} else {
+			} else {
 
-					tran.replyData("1:Voter already voted", port, host);
-
-				}
-				session.getTransaction().commit();
-				session.close();
+				tran.replyData("1:Voter already voted", port, host);
 
 			}
+			
+			session.getTransaction().commit();
+			session.close();
+
+			// lock1.unlock();
 
 		} else if (dataArray[0].compareTo("3") == 0) {
 
@@ -270,26 +333,27 @@ public class Server1 {
 
 				// lock these lines of code in case same user name login at the
 				// same time
-				synchronized (lock2) {
-					if (!checkExist(voter)) {
-						if (voter.getDistrictName().compareTo(district) == 0) {
+				// lock2.tryLock();
 
-							tran.replyData("2:Success", port, host);
-							activeUsers.add(voter);
+				if (!checkExist(voter)) {
+					if (voter.getDistrictName().compareTo(district) == 0) {
 
-						} else {
+						tran.replyData("2:Successfully login", port, host);
+						activeUsers.add(voter);
 
-							tran.replyData(
-									"1:Voter doesn't belong to this destrict",
-									port, host);
-
-						}
 					} else {
 
-						tran.replyData("1:Voter already login", port, host);
+						tran.replyData(
+								"1:Voter doesn't belong to this destrict",
+								port, host);
 
 					}
+				} else {
+
+					tran.replyData("1:Voter already login", port, host);
+
 				}
+				// lock2.unlock();
 				session.getTransaction().commit();
 				session.close();
 
@@ -327,14 +391,38 @@ public class Server1 {
 			tran.replyData(candidateData, port, host);
 			session.getTransaction().commit();
 			session.close();
-			
+
 		} else if (dataArray[0].compareTo("5") == 0) {
 
 			// -----user logout the server
-			
+			String userName = dataArray[1];
+
+			// ------onely one user can logout at a time
+			// lock3.tryLock();
+
+			removeActiveUser(userName);
+
+			// lock3.unlock();
+
+			tran.replyData("2:Successfully logout", port, host);
 		}
 	}
-	
+
+	public void removeActiveUser(String userName) {
+
+		for (int i = 0; i < activeUsers.size(); i++) {
+
+			if (activeUsers.get(i).getUserName().compareTo(userName) == 0) {
+
+				activeUsers.remove(i);
+				return;
+
+			}
+
+		}
+
+	}
+
 	public boolean checkExist(User user) {
 
 		for (int i = 0; i < activeUsers.size(); i++) {

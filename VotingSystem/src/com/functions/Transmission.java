@@ -97,11 +97,8 @@ public class Transmission {
 
 			System.out.println("IO: " + e.getMessage());
 
-		} finally {
-			if (aSocket != null)
-				aSocket.close();
-		}
-
+		} 
+		
 		return null;
 	}
 

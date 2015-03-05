@@ -15,6 +15,7 @@ public class Candidate extends User {
 	public Candidate(String userName, String lastName, String firstName,
 			String districtName, String address) {
 		super(userName, lastName, firstName, districtName, address);
+		polls = 0;
 		// TODO Auto-generated constructor stub
 	}
 

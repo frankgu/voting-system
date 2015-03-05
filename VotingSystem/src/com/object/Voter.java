@@ -15,7 +15,7 @@ public class Voter extends User {
 	public Voter(String userName, String lastName, String firstName,
 			String districtName, String address) {
 		super(userName, lastName, firstName, districtName, address);
-		
+		candidateName = "";
 	}
 
 	@Column(name = "CANDIDATE_NAME")
