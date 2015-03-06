@@ -1,5 +1,7 @@
 package com.client;
 
+import java.io.*;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Combo;
@@ -18,11 +20,18 @@ public class ClientLogin {
     public String str = "init";
 	protected Shell shlLogin;
 	private Text text;
-
+	private Text text_1;
+	private String abc = "";
+	private String abc2 = "";
 	/**
 	 * Launch the application.
 	 * @param args
 	 */
+    
+    public ClientLogin(){
+    	
+    }
+    
 	public static void main(String[] args) {
 		try {
 			ClientLogin window = new ClientLogin();
@@ -53,6 +62,8 @@ public class ClientLogin {
 	public void loginHandler(){
 		str = "edited";
 		System.out.println("login btn handler");
+		abc = "asdf";
+		abc2 = "sdfdfe";
 	}
 	
 	protected void createContents() {
@@ -60,18 +71,38 @@ public class ClientLogin {
 		shlLogin.setSize(450, 300);
 		shlLogin.setText("Login");
 		
-		Combo combo = new Combo(shlLogin, SWT.NONE);
+		String abc = "";
+		Combo combo = new Combo(shlLogin, SWT.READ_ONLY);
 		combo.setBounds(184, 71, 117, 22);
+		
+		
+		File newFile = new File("/Users/Shawn/Documents/server1List.txt");
+		try(BufferedReader br = new BufferedReader(new FileReader(newFile))) {
+		    for(String line; (line = br.readLine()) != null; ) {
+		        combo.add(line.split(":")[0]);// process the line.
+		    }
+		    // line is not visible here.
+		}
+		//read server1 list from txt file
+		//replyMessage.split(":")[0]
+		//combo.add("");
+ catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		Label lblSelectDistrict = new Label(shlLogin, SWT.NONE);
 		lblSelectDistrict.setBounds(90, 75, 97, 14);
 		lblSelectDistrict.setText("Select District:");
 		
 		text = new Text(shlLogin, SWT.BORDER);
-		text.setBounds(184, 138, 86, 19);
+		text.setBounds(117, 138, 86, 19);
 		
 		Label lblUsername = new Label(shlLogin, SWT.NONE);
-		lblUsername.setBounds(113, 141, 65, 16);
+		lblUsername.setBounds(46, 141, 65, 16);
 		lblUsername.setText("Username:");
 		
 		Button btnRegister = new Button(shlLogin, SWT.NONE);
@@ -88,10 +119,18 @@ public class ClientLogin {
 			public void widgetSelected(SelectionEvent e) {
 				//to do
 				loginHandler();
+				
 			}
 		});
 		btnLogin.setBounds(224, 186, 95, 28);
 		btnLogin.setText("Login");
+		
+		Label lblPassword = new Label(shlLogin, SWT.NONE);
+		lblPassword.setBounds(216, 141, 70, 22);
+		lblPassword.setText("Password:");
+		
+		text_1 = new Text(shlLogin, SWT.PASSWORD | SWT.BORDER);
+		text_1.setBounds(284, 138, 86, 19);
 
 	}
 }

@@ -103,9 +103,8 @@ public class Client {
 
 // -----request form : "[flag]:[value]"
 // ---[flag] = 1 , [value] =
-// [flag2]:[userName]:[lastName]:[firstName]:[address]:[password] (regist
-// account,
-// flag2 = 1 is voter, flag2 = 2 is candidate)
+// [flag2]:[userName]:[lastName]:[firstName]:[address]:[password] (regist account, flag2 = 1 is voter, flag2 = 2 is candidate)
+
 // ---[flag] = 2 , [value] = [userName]:[candidateUserName] (voting)
 // ---[flag] = 3 , [value] = [userName]:[password] (login)
 // ---[flag] = 4 , [value] = null (get candidate list)
