@@ -1,6 +1,7 @@
 package com.client;
 
 import java.io.*;
+import java.net.*;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -76,7 +77,7 @@ public class ClientLogin {
 		combo.setBounds(184, 71, 117, 22);
 		
 		
-		File newFile = new File("/Users/Shawn/Documents/server1List.txt");
+		/*File newFile = new File("/Users/Shawn/Documents/server1List.txt");
 		try(BufferedReader br = new BufferedReader(new FileReader(newFile))) {
 		    for(String line; (line = br.readLine()) != null; ) {
 		        combo.add(line.split(":")[0]);// process the line.
@@ -84,12 +85,29 @@ public class ClientLogin {
 		    // line is not visible here.
 		}
 		//read server1 list from txt file
-		//replyMessage.split(":")[0]
-		//combo.add("");
  catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		
+		URL oracle;
+		try {
+			oracle = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_MZSXScINrUGNIhKwuCxIJBLNC-mks5VA0vswA%3D%3D");
+			BufferedReader in;
+			in = new BufferedReader(
+					new InputStreamReader(oracle.openStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null)
+			    System.out.println(inputLine);
+			
+			in.close();
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
