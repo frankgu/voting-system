@@ -20,13 +20,19 @@ public class testServer1Function {
 		// ---[flag] = 3 , [value] = [userName]:[password] (login)
 		// ---[flag] = 4 , [value] = null (get candidate list)
 		// ---[flag] = 5 , [value] = [userName] (logout the server1)
+		// ---[flag] = 6 , [value] = [userName] (check the voter
+		// vote state)
 
 		// -----reply form : "[flag]:[value]"
 		// ---[flag] = 1 , [value] = string (error message)
 		// ---[flag] = 2 , [value] = success
 		// ---[flag] = 3 , [value] = [candidate name]:[candidate name]:...
 		// (candidate name consist of [userName]:[FirstName]:[LastName])
-
+		// ---[flag] = 4 , [value] =
+		// [flag2]:[candidateFirstName]:[candidateLastName] (check the voter
+		// vote state)
+		// [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter already vote and
+		// return the candidate name)
 		/*
 		 * test the server1 functionality
 		 */
@@ -39,9 +45,11 @@ public class testServer1Function {
 			InetAddress host = InetAddress.getByName("localhost");
 
 			System.out.println(tran.sendData(
-					"1:2:candidate:dongfeng:gu:1591 riverside:hyfgdf", 8080, host));
+					"1:2:candidate:dongfeng:gu:1591 riverside:hyfgdf", 8080,
+					host));
 			System.out.println(tran.sendData(
-					"1:2:candidate2:dongfeng:gu:1591 riverside:hyfgdf", 8080, host));
+					"1:2:candidate2:dongfeng:gu:1591 riverside:hyfgdf", 8080,
+					host));
 			System.out.println(tran.sendData(
 					"1:1:voter:tom:liu:1591 riverside:hyfgdf", 8080, host));
 
@@ -63,34 +71,6 @@ public class testServer1Function {
 			e.printStackTrace();
 
 		}
-
-		/*
-		 * test the hibernate operation
-		 * 
-		 * //Client client = new Client(); // hibernate test User user = new
-		 * Voter("gdf1992803", "dongfeng","gu","ottawa","k1g4a7"); Voter voter =
-		 * (Voter)user;
-		 * 
-		 * try{
-		 * 
-		 * Session session = HibernateUtil.getSessionFactory().openSession();
-		 * session.beginTransaction(); session.save(voter);
-		 * 
-		 * voter = (Voter)session.get(Voter.class, "gdf1992803");
-		 * if(voter.getCandidateName() == null){
-		 * 
-		 * System.out.println("hello");
-		 * 
-		 * }
-		 * 
-		 * session.getTransaction().commit(); session.close();
-		 * 
-		 * } catch(JDBCException e){
-		 * 
-		 * System.out.print("false");
-		 * 
-		 * }
-		 */
 
 	}
 }
