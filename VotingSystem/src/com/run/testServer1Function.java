@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 
 import com.functions.Transmission;
 
-public class testDatabase {
+public class testServer1Function {
 
 	public static void main(String[] arg) {
 

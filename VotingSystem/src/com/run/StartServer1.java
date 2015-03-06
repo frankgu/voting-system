@@ -2,7 +2,7 @@ package com.run;
 
 import com.server1.Server1;
 
-public class Main {
+public class StartServer1 {
 
 	public static void main(String[] arg){
 		
