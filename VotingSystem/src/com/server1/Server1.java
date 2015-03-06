@@ -23,7 +23,7 @@ import com.object.Candidate;
 import com.object.User;
 import com.object.Voter;
 
-public class Server1 implements Runnable{
+public class Server1 implements Runnable {
 
 	/*
 	 * Server 1 functionality
@@ -71,6 +71,7 @@ public class Server1 implements Runnable{
 			activeUsers = new ArrayList<User>(userNumber);
 
 			tran = new Transmission(aSocket);
+			
 			// initial the hibernate factory
 			HibernateUtil.getSessionFactory();
 
@@ -158,10 +159,11 @@ public class Server1 implements Runnable{
 
 		// -----request form : "[flag]:[value]"
 		// ---[flag] = 1 , [value] =
-		// [flag2]:[userName]:[lastName]:[firstName]:[address] (regist account,
+		// [flag2]:[userName]:[lastName]:[firstName]:[address]:[password]
+		// (regist account,
 		// flag2 = 1 is voter, flag2 = 2 is candidate)
 		// ---[flag] = 2 , [value] = [userName]:[candidateUserName] (voting)
-		// ---[flag] = 3 , [value] = [userName] (login)
+		// ---[flag] = 3 , [value] = [userName]:[password] (login)
 		// ---[flag] = 4 , [value] = null (get candidate list)
 		// ---[flag] = 5 , [value] = [userName] (logout the server1)
 
@@ -183,7 +185,7 @@ public class Server1 implements Runnable{
 			if (dataArray[1].compareTo("1") == 0) {
 
 				Voter voter = new Voter(dataArray[2], dataArray[3],
-						dataArray[4], district, dataArray[5]);
+						dataArray[4], district, dataArray[5], dataArray[6]);
 
 				String replyMessage = new String(
 						"2:Successfully regist for voter");
@@ -238,7 +240,7 @@ public class Server1 implements Runnable{
 			} else if (dataArray[1].compareTo("2") == 0) {
 
 				Candidate candidate = new Candidate(dataArray[2], dataArray[3],
-						dataArray[4], district, dataArray[5]);
+						dataArray[4], district, dataArray[5], dataArray[6]);
 
 				String replyMessage = new String(
 						"2:Sucessfully regist for candidate");
@@ -301,7 +303,7 @@ public class Server1 implements Runnable{
 			Candidate candidate = (Candidate) session.get(Candidate.class,
 					dataArray[2]);
 			Voter voter = (Voter) session.get(Voter.class, dataArray[1]);
-			
+
 			if (voter.getCandidateName().isEmpty()) {
 
 				candidate.setPolls(candidate.getPolls() + 1);
@@ -315,7 +317,7 @@ public class Server1 implements Runnable{
 				tran.replyData("1:Voter already voted", port, host);
 
 			}
-			
+
 			session.getTransaction().commit();
 			session.close();
 
@@ -326,6 +328,8 @@ public class Server1 implements Runnable{
 			// -----login, only user belong to this district can login to this
 			// server, login can't have same user login the same time
 			String userName = dataArray[1];
+			String password = dataArray[2];
+
 			try {
 
 				Session session = HibernateUtil.getSessionFactory()
@@ -337,23 +341,33 @@ public class Server1 implements Runnable{
 				// same time
 				lock2.tryLock();
 
-				if (!checkExist(voter)) {
-					if (voter.getDistrictName().compareTo(district) == 0) {
+				if (password.compareTo(voter.getPassword()) == 0) {
 
-						tran.replyData("2:Successfully login", port, host);
-						activeUsers.add(voter);
+					if (!checkExist(voter)) {
+
+						if (voter.getDistrictName().compareTo(district) == 0) {
+
+							tran.replyData("2:Successfully login", port, host);
+							activeUsers.add(voter);
+
+						} else {
+
+							tran.replyData(
+									"1:Voter doesn't belong to this destrict",
+									port, host);
+
+						}
 
 					} else {
 
-						tran.replyData(
-								"1:Voter doesn't belong to this destrict",
-								port, host);
+						tran.replyData("1:Voter already login", port, host);
 
 					}
+					
 				} else {
-
-					tran.replyData("1:Voter already login", port, host);
-
+					
+					tran.replyData("1:Invalid Password", port, host);
+				
 				}
 				lock2.unlock();
 				session.getTransaction().commit();
@@ -442,5 +456,4 @@ public class Server1 implements Runnable{
 
 	}
 
-	
 }

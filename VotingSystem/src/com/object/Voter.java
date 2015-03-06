@@ -10,11 +10,12 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name = "USER_NAME")
 public class Voter extends User {
 
-	public Voter(){}
-	
+	public Voter() {
+	}
+
 	public Voter(String userName, String lastName, String firstName,
-			String districtName, String address) {
-		super(userName, lastName, firstName, districtName, address);
+			String districtName, String address, String password) {
+		super(userName, lastName, firstName, districtName, address, password);
 		candidateName = "";
 	}
 

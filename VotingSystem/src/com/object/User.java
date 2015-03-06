@@ -25,18 +25,31 @@ public class User {
 	private String districtName;
 	@Column(name = "ADDRESS")
 	private String address;
+	@Column(name = "PASS_WORD", 
+			nullable = false, length = 60)
+	private String password;
+	
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	//------default constructor
 	public User(){}
 	
 	public User(String userName, String lastName, String firstName,
-			String districtName, String address) {
+			String districtName, String address, String password) {
 		super();
 		this.userName = userName;
 		LastName = lastName;
 		FirstName = firstName;
 		this.districtName = districtName;
 		this.address = address;
+		this.password = password;
 	}
 
 	public String getUserName() {
