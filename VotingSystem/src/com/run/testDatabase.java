@@ -6,7 +6,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.functions.Transmission;
-import com.server1.Server1;
 
 public class testDatabase {
 
@@ -44,11 +43,11 @@ public class testDatabase {
 			System.out.println(tran.sendData(
 					"1:2:candidate2:dongfeng:gu:1591 riverside:hyfgdf", 8080, host));
 			System.out.println(tran.sendData(
-					"1:1:voter:tom:liu:1591 riverside", 8080, host));
+					"1:1:voter:tom:liu:1591 riverside:hyfgdf", 8080, host));
 
 			System.out.println(tran.sendData("2:voter:candidate", 8080, host));
 
-			System.out.println(tran.sendData("3:voter:hyfgdf", 8080, host));
+			System.out.println(tran.sendData("3:voter:hyfgf", 8080, host));
 
 			System.out.println(tran.sendData("4:", 8080, host));
 

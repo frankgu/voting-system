@@ -71,7 +71,7 @@ public class Server1 implements Runnable {
 			activeUsers = new ArrayList<User>(userNumber);
 
 			tran = new Transmission(aSocket);
-			
+
 			// initial the hibernate factory
 			HibernateUtil.getSessionFactory();
 
@@ -101,7 +101,6 @@ public class Server1 implements Runnable {
 	@Override
 	public void run() {
 
-		System.out.println("server1 has started");
 		// ------receive the datagram packet from the client and simulate
 		// the loss and modification
 		byte[] buffer = new byte[10000];
@@ -363,11 +362,11 @@ public class Server1 implements Runnable {
 						tran.replyData("1:Voter already login", port, host);
 
 					}
-					
+
 				} else {
-					
+
 					tran.replyData("1:Invalid Password", port, host);
-				
+
 				}
 				lock2.unlock();
 				session.getTransaction().commit();
@@ -413,29 +412,39 @@ public class Server1 implements Runnable {
 			// -----user logout the server
 			String userName = dataArray[1];
 
-			// ------onely one user can logout at a time
+			// ------only one user can logout at a time
 			lock3.tryLock();
 
-			removeActiveUser(userName);
+			boolean success = removeActiveUser(userName);
 
 			lock3.unlock();
 
-			tran.replyData("2:Successfully logout", port, host);
+			if (success) {
+				
+				tran.replyData("2:Successfully logout", port, host);
+
+			} else {
+
+				tran.replyData("1:Voter already logout", port, host);
+			
+			}
 		}
 	}
 
-	public void removeActiveUser(String userName) {
+	public boolean removeActiveUser(String userName) {
 
 		for (int i = 0; i < activeUsers.size(); i++) {
 
 			if (activeUsers.get(i).getUserName().compareTo(userName) == 0) {
 
 				activeUsers.remove(i);
-				return;
+				return true;
 
 			}
 
 		}
+
+		return false;
 
 	}
 
