@@ -85,7 +85,7 @@ public class ClientLogin {
 		    // line is not visible here.
 		}
 		//read server1 list from txt file
- catch (FileNotFoundException e1) {
+        catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -93,12 +93,12 @@ public class ClientLogin {
 			e1.printStackTrace();
 		}*/
 		
-		URL oracle;
+		URL serverList;
 		try {
-			oracle = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_MZSXScINrUGNIhKwuCxIJBLNC-mks5VA0vswA%3D%3D");
+			serverList = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_MZSXScINrUGNIhKwuCxIJBLNC-mks5VA0vswA%3D%3D");
 			BufferedReader in;
 			in = new BufferedReader(
-					new InputStreamReader(oracle.openStream()));
+					new InputStreamReader(serverList.openStream()));
 			String inputLine;
 			while ((inputLine = in.readLine()) != null)
 			    System.out.println(inputLine);
