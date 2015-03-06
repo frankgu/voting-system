@@ -47,7 +47,8 @@ public class Server1 implements Runnable {
 
 	// -----active user list
 	private ArrayList<User> activeUsers = null;
-
+	private int availableUserNum = 0;
+	
 	// -----lock for the critical section
 	private Lock lock1 = new ReentrantLock();
 	private Lock lock2 = new ReentrantLock();
@@ -65,10 +66,10 @@ public class Server1 implements Runnable {
 			InetAddress aHost = InetAddress.getByName(host);
 
 			// -----initialization
-			int userNumber = Integer.parseInt(new Property()
+			availableUserNum = Integer.parseInt(new Property()
 					.loadProperties("activeUserForServer1"));
 			aSocket = new DatagramSocket(portNumber, aHost);
-			activeUsers = new ArrayList<User>(userNumber);
+			activeUsers = new ArrayList<User>(availableUserNum);
 
 			tran = new Transmission(aSocket);
 
@@ -165,12 +166,17 @@ public class Server1 implements Runnable {
 		// ---[flag] = 3 , [value] = [userName]:[password] (login)
 		// ---[flag] = 4 , [value] = null (get candidate list)
 		// ---[flag] = 5 , [value] = [userName] (logout the server1)
+		// ---[flag] = 6 , [value] = [userName] (check the voter
+		// vote state)
 
 		// -----reply form : "[flag]:[value]"
 		// ---[flag] = 1 , [value] = string (error message)
 		// ---[flag] = 2 , [value] = success
 		// ---[flag] = 3 , [value] = [candidate name]:[candidate name]:...
 		// (candidate name consist of [userName]:[FirstName]:[LastName])
+		// ---[flag] = 4 , [value] = [flag2]:[candidateFirstName]:[candidateLastName] (check the voter vote state)
+		// 	  [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter already vote and
+		// return the candidate name)
 
 		// -----get the data exclude check sum value
 		byte[] dataByte = Arrays.copyOfRange(data, 9, length);
@@ -180,6 +186,10 @@ public class Server1 implements Runnable {
 
 		if (dataArray[0].compareTo("1") == 0) {
 
+			String userName = dataArray[2];
+			String lastName = dataArray[3];
+			String firstName = dataArray[4];
+			
 			// -----regist an account
 			if (dataArray[1].compareTo("1") == 0) {
 
@@ -344,19 +354,28 @@ public class Server1 implements Runnable {
 
 					if (!checkExist(voter)) {
 
-						if (voter.getDistrictName().compareTo(district) == 0) {
-
-							tran.replyData("2:Successfully login", port, host);
-							activeUsers.add(voter);
-
+						if(activeUsers.size() == availableUserNum)
+						{
+							
+							tran.replyData("1:Active users reach the limits in this server", port, host);
+							
 						} else {
 
-							tran.replyData(
-									"1:Voter doesn't belong to this destrict",
-									port, host);
+							if (voter.getDistrictName().compareTo(district) == 0) {
 
+								tran.replyData("2:Successfully login", port, host);
+								activeUsers.add(voter);
+
+							} else {
+
+								tran.replyData(
+										"1:Voter doesn't belong to this destrict",
+										port, host);
+
+							}
+	
 						}
-
+						
 					} else {
 
 						tran.replyData("1:Voter already login", port, host);
@@ -420,17 +439,17 @@ public class Server1 implements Runnable {
 			lock3.unlock();
 
 			if (success) {
-				
+
 				tran.replyData("2:Successfully logout", port, host);
 
 			} else {
 
 				tran.replyData("1:Voter already logout", port, host);
-			
+
 			}
 		}
 	}
-
+	
 	public boolean removeActiveUser(String userName) {
 
 		for (int i = 0; i < activeUsers.size(); i++) {
