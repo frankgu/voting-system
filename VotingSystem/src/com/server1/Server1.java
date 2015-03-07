@@ -48,7 +48,7 @@ public class Server1 implements Runnable {
 	// -----active user list
 	private ArrayList<User> activeUsers = null;
 	private int availableUserNum = 0;
-	
+
 	// -----lock for the critical section
 	private Lock lock1 = new ReentrantLock();
 	private Lock lock2 = new ReentrantLock();
@@ -154,7 +154,7 @@ public class Server1 implements Runnable {
 		}
 	}
 
-	public void analyseDataFromClient(byte[] data, int length, int port,
+	private void analyseDataFromClient(byte[] data, int length, int port,
 			InetAddress host) {
 
 		// -----request form : "[flag]:[value]"
@@ -174,8 +174,10 @@ public class Server1 implements Runnable {
 		// ---[flag] = 2 , [value] = success
 		// ---[flag] = 3 , [value] = [candidate name]:[candidate name]:...
 		// (candidate name consist of [userName]:[FirstName]:[LastName])
-		// ---[flag] = 4 , [value] = [flag2]:[candidateFirstName]:[candidateLastName] (check the voter vote state)
-		// 	  [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter already vote and
+		// ---[flag] = 4 , [value] =
+		// [flag2]:[candidateFirstName]:[candidateLastName] (check the voter
+		// vote state)
+		// [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter already vote and
 		// return the candidate name)
 
 		// -----get the data exclude check sum value
@@ -189,268 +191,307 @@ public class Server1 implements Runnable {
 			String userName = dataArray[2];
 			String lastName = dataArray[3];
 			String firstName = dataArray[4];
-			
+			String address = dataArray[5];
+			String password = dataArray[6];
+
 			// -----regist an account
 			if (dataArray[1].compareTo("1") == 0) {
 
-				Voter voter = new Voter(dataArray[2], dataArray[3],
-						dataArray[4], district, dataArray[5], dataArray[6]);
-
-				String replyMessage = new String(
-						"2:Successfully regist for voter");
-
-				try {
-
-					// -----get the restrict number for the voter
-					int userNumber = Integer.parseInt(new Property()
-							.loadProperties("totalVoterNumberForOneDistrict"));
-
-					// store the voter information to the database
-					Session session = HibernateUtil.getSessionFactory()
-							.openSession();
-					session.beginTransaction();
-
-					int existUserNumber = ((Long) session
-							.createCriteria(Voter.class)
-							.setProjection(Projections.rowCount())
-							.uniqueResult()).intValue();
-
-					if (existUserNumber < userNumber) {
-
-						session.save(voter);
-
-					} else {
-
-						replyMessage = new String(
-								"1:Voter number reach the limits for this district");
-
-					}
-
-					session.getTransaction().commit();
-					session.close();
-
-				} catch (JDBCException e) {
-
-					// fail to insert the voter because the userName already
-					// being used
-					replyMessage = new String("1:Voter user name already exist");
-
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				// reply to the client
-				tran.replyData(replyMessage, port, host);
+				voterRegistration(userName, lastName, firstName, address,
+						password, port, host);
 
 			} else if (dataArray[1].compareTo("2") == 0) {
 
-				Candidate candidate = new Candidate(dataArray[2], dataArray[3],
-						dataArray[4], district, dataArray[5], dataArray[6]);
-
-				String replyMessage = new String(
-						"2:Sucessfully regist for candidate");
-
-				try {
-
-					// -----get the restrict number for the voter
-					int userNumber = Integer.parseInt(new Property()
-							.loadProperties("totalVoterNumberForOneDistrict"));
-
-					// store the candidate information to the database
-					Session session = HibernateUtil.getSessionFactory()
-							.openSession();
-					session.beginTransaction();
-
-					int existUserNumber = ((Long) session
-							.createCriteria(Candidate.class)
-							.setProjection(Projections.rowCount())
-							.uniqueResult()).intValue();
-
-					if (existUserNumber < userNumber) {
-
-						session.save(candidate);
-
-					} else {
-
-						replyMessage = new String(
-								"1:Candidate number reach the limits for this district");
-
-					}
-
-					session.getTransaction().commit();
-					session.close();
-
-				} catch (JDBCException e) {
-
-					replyMessage = new String(
-							"1:Candidate user name already exist");
-
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				tran.replyData(replyMessage, port, host);
+				candidateRegistration(userName, lastName, firstName, address,
+						password, port, host);
 
 			}
 
 		} else if (dataArray[0].compareTo("2") == 0) {
 
-			// -----need to add a mutex lock here
-			lock1.tryLock();
+			String voterUserName = dataArray[1];
+			String candidateUserName = dataArray[2];
 
 			// -----voter vote for the candidate
+			voterVote(voterUserName, candidateUserName, port, host);
+
+		} else if (dataArray[0].compareTo("3") == 0) {
+
+			String userName = dataArray[1];
+			String password = dataArray[2];
+
+			// -----voter login
+			login(userName, password, port, host);
+
+		} else if (dataArray[0].compareTo("4") == 0) {
+
+			//-----get the candidate list
+			getCandidateList(port, host);
+			
+		} else if (dataArray[0].compareTo("5") == 0) {
+
+			String userName = dataArray[1];
+			
+			// -----user logout the server	
+			logout(userName, port, host);
+		
+		}
+	}
+
+	private void voterRegistration(String userName, String lastName,
+			String firstName, String address, String password, int port,
+			InetAddress host) {
+
+		Voter voter = new Voter(userName, lastName, firstName, district,
+				address, password);
+
+		String replyMessage = new String("2:Successfully regist for voter");
+
+		try {
+
+			// -----get the restrict number for the voter
+			int userNumber = Integer.parseInt(new Property()
+					.loadProperties("totalVoterNumberForOneDistrict"));
+
+			// store the voter information to the database
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
-			Candidate candidate = (Candidate) session.get(Candidate.class,
-					dataArray[2]);
-			Voter voter = (Voter) session.get(Voter.class, dataArray[1]);
 
-			if (voter.getCandidateName().isEmpty()) {
+			int existUserNumber = ((Long) session.createCriteria(Voter.class)
+					.setProjection(Projections.rowCount()).uniqueResult())
+					.intValue();
 
-				candidate.setPolls(candidate.getPolls() + 1);
-				session.update(candidate);
-				voter.setCandidateName(dataArray[2]);
-				session.update(voter);
-				tran.replyData("2:Sucessfully vote", port, host);
+			if (existUserNumber < userNumber) {
+
+				session.save(voter);
 
 			} else {
 
-				tran.replyData("1:Voter already voted", port, host);
+				replyMessage = new String(
+						"1:Voter number reach the limits for this district");
 
 			}
 
 			session.getTransaction().commit();
 			session.close();
 
-			lock1.unlock();
+		} catch (JDBCException e) {
 
-		} else if (dataArray[0].compareTo("3") == 0) {
+			// fail to insert the voter because the userName already
+			// being used
+			replyMessage = new String("1:Voter user name already exist");
 
-			// -----login, only user belong to this district can login to this
-			// server, login can't have same user login the same time
-			String userName = dataArray[1];
-			String password = dataArray[2];
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-			try {
+		// reply to the client
+		tran.replyData(replyMessage, port, host);
 
-				Session session = HibernateUtil.getSessionFactory()
-						.openSession();
-				session.beginTransaction();
-				Voter voter = (Voter) session.get(Voter.class, userName);
+	}
 
-				// lock these lines of code in case same user name login at the
-				// same time
-				lock2.tryLock();
+	private void candidateRegistration(String userName, String lastName,
+			String firstName, String address, String password, int port,
+			InetAddress host) {
 
-				if (password.compareTo(voter.getPassword()) == 0) {
+		Candidate candidate = new Candidate(userName, lastName, firstName,
+				district, address, password);
 
-					if (!checkExist(voter)) {
+		String replyMessage = new String("2:Sucessfully regist for candidate");
 
-						if(activeUsers.size() == availableUserNum)
-						{
-							
-							tran.replyData("1:Active users reach the limits in this server", port, host);
-							
-						} else {
+		try {
 
-							if (voter.getDistrictName().compareTo(district) == 0) {
+			// -----get the restrict number for the voter
+			int userNumber = Integer.parseInt(new Property()
+					.loadProperties("totalCandidateNumberForOneDistrict"));
 
-								tran.replyData("2:Successfully login", port, host);
-								activeUsers.add(voter);
+			// store the candidate information to the database
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			session.beginTransaction();
 
-							} else {
+			int existUserNumber = ((Long) session
+					.createCriteria(Candidate.class)
+					.setProjection(Projections.rowCount()).uniqueResult())
+					.intValue();
 
-								tran.replyData(
-										"1:Voter doesn't belong to this destrict",
-										port, host);
+			if (existUserNumber < userNumber) {
 
-							}
-	
-						}
-						
+				session.save(candidate);
+
+			} else {
+
+				replyMessage = new String(
+						"1:Candidate number reach the limits for this district");
+
+			}
+
+			session.getTransaction().commit();
+			session.close();
+
+		} catch (JDBCException e) {
+
+			replyMessage = new String("1:Candidate user name already exist");
+
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		tran.replyData(replyMessage, port, host);
+
+	}
+
+	private void voterVote(String voterUserName, String candidateUserName,
+			int port, InetAddress host) {
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		session.beginTransaction();
+		// -----need to add a mutex lock here
+		lock1.tryLock();
+		Candidate candidate = (Candidate) session.get(Candidate.class,
+				candidateUserName);
+		Voter voter = (Voter) session.get(Voter.class, voterUserName);
+
+		if (voter.getCandidateName().isEmpty()) {
+
+			candidate.setPolls(candidate.getPolls() + 1);
+			session.update(candidate);
+			voter.setCandidateName(candidateUserName);
+			session.update(voter);
+			tran.replyData("2:Sucessfully vote", port, host);
+
+		} else {
+
+			tran.replyData("1:Voter already voted", port, host);
+
+		}
+		lock1.unlock();
+		session.getTransaction().commit();
+		session.close();
+
+	}
+
+	private void login(String userName, String password, int port,
+			InetAddress host) {
+
+		try {
+
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			session.beginTransaction();
+			Voter voter = (Voter) session.get(Voter.class, userName);
+
+			// lock these lines of code in case same user name login at the
+			// same time
+			lock2.tryLock();
+
+			if (password.compareTo(voter.getPassword()) == 0) {
+
+				if (!checkExist(voter)) {
+
+					if (activeUsers.size() == availableUserNum) {
+
+						tran.replyData(
+								"1:Active users reach the limits in this server",
+								port, host);
+
 					} else {
 
-						tran.replyData("1:Voter already login", port, host);
+						if (voter.getDistrictName().compareTo(district) == 0) {
+
+							tran.replyData("2:Successfully login", port, host);
+							activeUsers.add(voter);
+
+						} else {
+
+							tran.replyData(
+									"1:Voter doesn't belong to this destrict",
+									port, host);
+
+						}
 
 					}
 
 				} else {
 
-					tran.replyData("1:Invalid Password", port, host);
+					tran.replyData("1:Voter already login", port, host);
 
 				}
-				lock2.unlock();
-				session.getTransaction().commit();
-				session.close();
-
-			} catch (JDBCException e) {
-
-				tran.replyData(
-						"1:Can't find the voter name, please regist an account or login as a voter",
-						port, host);
-			}
-
-		} else if (dataArray[0].compareTo("4") == 0) {
-
-			// -----get the candidate list
-			Session session = HibernateUtil.getSessionFactory().openSession();
-			session.beginTransaction();
-			@SuppressWarnings("unchecked")
-			List<Candidate> candidates = session
-					.createCriteria(Candidate.class).list();
-			String candidateData = "";
-			for (int i = 0; i < candidates.size(); i++) {
-				if (i == (candidates.size() - 1)) {
-					candidateData = candidateData
-							+ candidates.get(i).getUserName() + ":"
-							+ candidates.get(i).getFirstName() + ":"
-							+ candidates.get(i).getLastName();
-
-				} else {
-					candidateData = candidateData
-							+ candidates.get(i).getUserName() + ":"
-							+ candidates.get(i).getFirstName() + ":"
-							+ candidates.get(i).getLastName() + ":";
-				}
-
-			}
-			tran.replyData(candidateData, port, host);
-			session.getTransaction().commit();
-			session.close();
-
-		} else if (dataArray[0].compareTo("5") == 0) {
-
-			// -----user logout the server
-			String userName = dataArray[1];
-
-			// ------only one user can logout at a time
-			lock3.tryLock();
-
-			boolean success = removeActiveUser(userName);
-
-			lock3.unlock();
-
-			if (success) {
-
-				tran.replyData("2:Successfully logout", port, host);
 
 			} else {
 
-				tran.replyData("1:Voter already logout", port, host);
+				tran.replyData("1:Invalid Password", port, host);
 
 			}
+			lock2.unlock();
+			session.getTransaction().commit();
+			session.close();
+
+		} catch (JDBCException e) {
+
+			tran.replyData(
+					"1:Can't find the voter name, please regist an account or login as a voter",
+					port, host);
 		}
+
 	}
-	
-	public boolean removeActiveUser(String userName) {
+
+	private void getCandidateList(int port, InetAddress host) {
+
+		// -----get the candidate list
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		session.beginTransaction();
+		@SuppressWarnings("unchecked")
+		List<Candidate> candidates = session.createCriteria(Candidate.class)
+				.list();
+		String candidateData = "";
+		for (int i = 0; i < candidates.size(); i++) {
+			if (i == (candidates.size() - 1)) {
+				candidateData = candidateData + candidates.get(i).getUserName()
+						+ ":" + candidates.get(i).getFirstName() + ":"
+						+ candidates.get(i).getLastName();
+
+			} else {
+				candidateData = candidateData + candidates.get(i).getUserName()
+						+ ":" + candidates.get(i).getFirstName() + ":"
+						+ candidates.get(i).getLastName() + ":";
+			}
+
+		}
+		tran.replyData(candidateData, port, host);
+		session.getTransaction().commit();
+		session.close();
+
+	}
+
+	private void logout(String userName, int port, InetAddress host) {
+
+		// ------only one user can logout at a time
+		lock3.tryLock();
+
+		boolean success = removeActiveUser(userName);
+
+		lock3.unlock();
+
+		if (success) {
+
+			tran.replyData("2:Successfully logout", port, host);
+
+		} else {
+
+			tran.replyData("1:Voter already logout", port, host);
+
+		}
+
+	}
+
+	private boolean removeActiveUser(String userName) {
 
 		for (int i = 0; i < activeUsers.size(); i++) {
 
@@ -467,7 +508,7 @@ public class Server1 implements Runnable {
 
 	}
 
-	public boolean checkExist(User user) {
+	private boolean checkExist(User user) {
 
 		for (int i = 0; i < activeUsers.size(); i++) {
 
