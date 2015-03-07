@@ -60,7 +60,9 @@ public class testServer1Function {
 			System.out.println(tran.sendData("4:", 8080, host));
 
 			System.out.println(tran.sendData("5:voter", 8080, host));
-
+			
+			System.out.println(tran.sendData("6:voter", 8080, host));
+			
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
