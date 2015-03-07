@@ -11,5 +11,8 @@ public class StartServer1 {
 		Thread thread = new Thread(server1);
 		thread.start();
 		//on termination, search name:ip:port on remote list, delete line
+		
+		
+		//test
 	}
 }
