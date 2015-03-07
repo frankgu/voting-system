@@ -176,10 +176,9 @@ public class Server1 implements Runnable {
 		// (candidate name consist of [userName]:[FirstName]:[LastName])
 		// ---[flag] = 4 , [value] =
 		// [flag2]:[candidateFirstName]:[candidateLastName] (check the voter
-		// vote state)
-		// [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter already vote and
-		// return the candidate name)
-
+		// vote state) [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter
+		// already vote and return the candidate name)
+		
 		// -----get the data exclude check sum value
 		byte[] dataByte = Arrays.copyOfRange(data, 9, length);
 		String message = new String(dataByte);
@@ -225,17 +224,47 @@ public class Server1 implements Runnable {
 
 		} else if (dataArray[0].compareTo("4") == 0) {
 
-			//-----get the candidate list
+			// -----get the candidate list
 			getCandidateList(port, host);
-			
+
 		} else if (dataArray[0].compareTo("5") == 0) {
 
 			String userName = dataArray[1];
-			
-			// -----user logout the server	
+
+			// -----user logout the server
 			logout(userName, port, host);
-		
+
+		} else if (dataArray[0].compareTo("6") == 0) {
+
+			String userName = dataArray[1];
+
+			// -----check the voter vote state
+			checkVoteState(userName, port, host);
+
 		}
+	}
+
+	private void checkVoteState(String userName, int port, InetAddress host) {
+
+		// ---[flag] = 4 , [value] =
+		// [flag2]:[candidateFirstName]:[candidateLastName] (check the voter
+		// vote state) [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter
+		// already vote and return the candidate name)
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		session.beginTransaction();
+		Voter voter = (Voter) session.get(Voter.class, userName);
+		if (voter.getCandidateName().isEmpty()) {
+
+			tran.replyData("4:1", port, host);
+
+		} else {
+
+			tran.replyData("4:2:" + voter.getCandidateName(), port, host);
+
+		}
+		session.getTransaction().commit();
+		session.close();
+
 	}
 
 	private void voterRegistration(String userName, String lastName,
