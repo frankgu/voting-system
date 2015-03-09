@@ -22,18 +22,19 @@ public class Client {
 
 	public void run() {
 		// client login panel
-		ClientLogin login = new ClientLogin();
+		/*ClientLogin login = new ClientLogin();
 		try {
 			login.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(login.str);// the var keeps after closing the window
+		System.out.println(login.str);// the var keeps after closing the window*/
 
-		// client main panel
-		ClientGUI client = new ClientGUI();
+		
+		ClientConfig config = new ClientConfig();
 		try {
-			client.open();
+			config.open();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

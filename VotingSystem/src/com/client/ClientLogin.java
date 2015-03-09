@@ -73,8 +73,8 @@ public class ClientLogin {
 		shlLogin.setText("Login");
 		
 		String abc = "";
-		Combo combo = new Combo(shlLogin, SWT.READ_ONLY);
-		combo.setBounds(184, 71, 117, 22);
+		//Combo combo = new Combo(shlLogin, SWT.READ_ONLY);
+		//combo.setBounds(184, 71, 117, 22);
 		
 		
 		/*File newFile = new File("/Users/Shawn/Documents/server1List.txt");
@@ -93,24 +93,7 @@ public class ClientLogin {
 			e1.printStackTrace();
 		}*/
 		
-		URL serverList;
-		try {
-			serverList = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_MZSXScINrUGNIhKwuCxIJBLNC-mks5VA0vswA%3D%3D");
-			BufferedReader in;
-			in = new BufferedReader(
-					new InputStreamReader(serverList.openStream()));
-			String inputLine;
-			while ((inputLine = in.readLine()) != null)
-			    System.out.println(inputLine);
-			
-			in.close();
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
 		
 		Label lblSelectDistrict = new Label(shlLogin, SWT.NONE);
 		lblSelectDistrict.setBounds(90, 75, 97, 14);
