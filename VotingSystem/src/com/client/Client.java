@@ -14,30 +14,33 @@ public class Client {
 	private User user = null; // the user who login to the client
 	private DatagramSocket aSocket = null;
 	private Transmission tran = null;
+	
+	public String ip;
+	public String name;
+	public int    port;
 
 	// client ctr
 	public Client() {
-
+		ip   = "0.0.0.0";
+		name = "null";
+		port = 0;
 	}
 
 	public void run() {
-		// client login panel
-		/*ClientLogin login = new ClientLogin();
-		try {
-			login.open();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println(login.str);// the var keeps after closing the window*/
-
-		
+		//config window
 		ClientConfig config = new ClientConfig();
 		try {
 			config.open();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		name = config.name;
+		ip   = config.ip;
+		port = config.port;
+		
+		System.out.println("ServerName: "+ name +"\nServer IP: " + ip +"\nServer Port: "+port);
+		
+		//login window
 	}
 
 }

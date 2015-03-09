@@ -93,7 +93,7 @@ public class ClientConfig {
 			while ((inputLine = in.readLine()) != null){
 				combo.add(inputLine.split(":")[0]);
 				serverInfo srv = new serverInfo(inputLine.split(":")[0], inputLine.split(":")[1], Integer.parseInt(inputLine.split(":")[2]));
-				//serverList.add(srv);
+				serverList.add(srv);
 				//serverList.get(num).ip = inputLine.split(":")[1];
 				//System.out.println(inputLine.split(":")[2]);
 			}
@@ -125,16 +125,17 @@ public class ClientConfig {
 		btnOk.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				int n = 0;
-				while(serverList[n] != null){
-					if( combo.getText().equals(serverList[n].name) ){
-						name = serverList.get(num).name;
-						ip   = serverList.get(num).ip;
-						port = serverList.get(num).port;
+				while(serverList.get(n) != null){
+					if( combo.getText().equals(serverList.get(n).name) ){
+						name = serverList.get(n).name;
+						ip   = serverList.get(n).ip;
+						port = serverList.get(n).port;
 						break;
 					}
 					n++;
 				}
 				System.out.println("ServerName: "+ name +"\nServer IP: " + ip +"\nServer Port: "+port);
+				shlClientConfiguration.dispose();
 			}
 		});
 		btnOk.setBounds(162, 161, 95, 28);
