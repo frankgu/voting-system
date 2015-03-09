@@ -28,10 +28,7 @@ public class Server1 implements Runnable {
 	/*
 	 * Server 1 functionality
 	 */
-
-	// -----5. after a certain amount of time, the information of this server
-	// will be sent to the server 2
-
+	
 	// -----the socket and the port number for this server
 	private DatagramSocket aSocket = null;
 
