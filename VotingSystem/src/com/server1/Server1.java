@@ -183,10 +183,10 @@ public class Server1 implements Runnable {
 			InetAddress host) {
 
 		// -----request form : "[flag]:[value]"
-		// ---[flag] = 1 , [value] =
-		// [flag2]:[userName]:[lastName]:[firstName]:[address]:[password]
-		// (regist account,
-		// flag2 = 1 is voter, flag2 = 2 is candidate)
+		// ---[flag] = 1 , [value] = [flag2]:[userName]:[lastName]:[firstName]:[address]:[password]
+		// (regist account, flag2 = 1 is voter, flag2 = 2 is candidate)
+		//1:1:usrName:ln:fn:addr:pwd//voter
+		//1:2:usrName:ln:fn:addr:pwd//candidate
 		// ---[flag] = 2 , [value] = [userName]:[candidateUserName] (voting)
 		// ---[flag] = 3 , [value] = [userName]:[password] (login)
 		// ---[flag] = 4 , [value] = null (get candidate list)
@@ -216,18 +216,18 @@ public class Server1 implements Runnable {
 			String lastName = dataArray[3];
 			String firstName = dataArray[4];
 			String address = dataArray[5];
-			String password = dataArray[6];
 
 			// -----regist an account
 			if (dataArray[1].compareTo("1") == 0) {
 
+				String password = dataArray[6];
 				voterRegistration(userName, lastName, firstName, address,
 						password, port, host);
 
 			} else if (dataArray[1].compareTo("2") == 0) {
 
 				candidateRegistration(userName, lastName, firstName, address,
-						password, port, host);
+						"", port, host);
 
 			}
 

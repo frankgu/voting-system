@@ -12,7 +12,5 @@ public class StartServer1 {
 		thread.start();
 		//on termination, search name:ip:port on remote list, delete line
 		
-		
-		//test
 	}
 }
