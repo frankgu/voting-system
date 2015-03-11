@@ -11,13 +11,13 @@ import com.object.User;
 
 public class Client {
 
-	private User user = null; // the user who login to the client
+	//private User user = null; // the user who login to the client
 	private DatagramSocket aSocket = null;
 	private Transmission tran = null;
 	
-	public String ip;
-	public String name;
-	public int    port;
+	public String ip;//server ip
+	public String name;//server name
+	public int    port;//server port
 
 	// client ctr
 	public Client() {
