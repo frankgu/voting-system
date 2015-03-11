@@ -7,10 +7,13 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Arrays;
+import java.util.List;
+
+import org.hibernate.Session;
 
 import com.functions.HibernateUtil;
 import com.functions.Transmission;
-import com.server1.Server1.Responder;
+import com.object.Candidate;
 
 public class Server2 implements Runnable {
 
@@ -101,7 +104,6 @@ public class Server2 implements Runnable {
 						packet.getPort(), packet.getAddress());
 
 			}
-
 		}
 	}
 
@@ -130,61 +132,50 @@ public class Server2 implements Runnable {
 
 		if (dataArray[0].compareTo("1") == 0) {
 
-			String userName = dataArray[2];
-			String lastName = dataArray[3];
-			String firstName = dataArray[4];
-			String address = dataArray[5];
-			String password = dataArray[6];
-
-			// -----regist an account
-			if (dataArray[1].compareTo("1") == 0) {
-
-				voterRegistration(userName, lastName, firstName, address,
-						password, port, host);
-
-			} else if (dataArray[1].compareTo("2") == 0) {
-
-				candidateRegistration(userName, lastName, firstName, address,
-						password, port, host);
-
-			}
+			getCandidatePolls("", port, host);
 
 		} else if (dataArray[0].compareTo("2") == 0) {
 
-			String voterUserName = dataArray[1];
-			String candidateUserName = dataArray[2];
-
-			// -----voter vote for the candidate
-			voterVote(voterUserName, candidateUserName, port, host);
-
-		} else if (dataArray[0].compareTo("3") == 0) {
-
-			String userName = dataArray[1];
-			String password = dataArray[2];
-
-			// -----voter login
-			login(userName, password, port, host);
-
-		} else if (dataArray[0].compareTo("4") == 0) {
-
-			// -----get the candidate list
-			getCandidateList(port, host);
-
-		} else if (dataArray[0].compareTo("5") == 0) {
-
-			String userName = dataArray[1];
-
-			// -----user logout the server
-			logout(userName, port, host);
-
-		} else if (dataArray[0].compareTo("6") == 0) {
-
-			String userName = dataArray[1];
-
-			// -----check the voter vote state
-			checkVoteState(userName, port, host);
+			String distrctName = dataArray[1];
+			getCandidatePolls(distrctName, port, host);
 
 		}
+	}
+
+	private void getCandidatePolls(String distrct, int port, InetAddress host) {
+
+		// -----get the candidate list
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		session.beginTransaction();
+		@SuppressWarnings("unchecked")
+		List<Candidate> candidates = session.createCriteria(Candidate.class)
+				.list();
+
+		String candidatePollsData = "";
+		for (int i = 0; i < candidates.size(); i++) {
+
+			if (distrct.isEmpty()
+					|| candidates.get(i).getDistrictName().compareTo(distrct) == 0) {
+
+				if (i == (candidates.size() - 1)) {
+					candidatePollsData = candidatePollsData + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName() + ":"
+							+ candidates.get(i).getPolls();
+
+				} else {
+					candidatePollsData = candidatePollsData + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName() + ":"
+							+ candidates.get(i).getPolls() + ":";
+				}
+			}
+		}
+		tran.replyData(candidatePollsData, port, host);
+
+		session.getTransaction().commit();
+		session.close();
+
 	}
 
 	public void stop() {
