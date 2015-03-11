@@ -27,6 +27,7 @@ public class Client {
 	}
 
 	public void run() {
+		
 		//config window
 		ClientConfig config = new ClientConfig();
 		try {
@@ -41,6 +42,13 @@ public class Client {
 		System.out.println("ServerName: "+ name +"\nServer IP: " + ip +"\nServer Port: "+port);
 		
 		//login window
+		ClientLogin login = new ClientLogin(name);
+		try {
+			login.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

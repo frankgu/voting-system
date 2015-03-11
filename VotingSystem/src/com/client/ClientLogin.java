@@ -14,23 +14,26 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 //login panel
 public class ClientLogin {
-    public String str = "init";
 	protected Shell shlLogin;
 	private Text text;
 	private Text text_1;
-	private String abc = "";
-	private String abc2 = "";
+	public String district;
 	/**
 	 * Launch the application.
 	 * @param args
 	 */
     
     public ClientLogin(){
-    	
+    	district = "null";
+    }
+    
+    public ClientLogin(String d){
+    	district = d;
     }
     
 	public static void main(String[] args) {
@@ -61,43 +64,14 @@ public class ClientLogin {
 	 * Create contents of the window.
 	 */
 	public void loginHandler(){
-		str = "edited";
 		System.out.println("login btn handler");
-		abc = "asdf";
-		abc2 = "sdfdfe";
 	}
 	
 	protected void createContents() {
 		shlLogin = new Shell();
 		shlLogin.setSize(450, 300);
 		shlLogin.setText("Login");
-		
-		String abc = "";
-		//Combo combo = new Combo(shlLogin, SWT.READ_ONLY);
-		//combo.setBounds(184, 71, 117, 22);
-		
-		
-		/*File newFile = new File("/Users/Shawn/Documents/server1List.txt");
-		try(BufferedReader br = new BufferedReader(new FileReader(newFile))) {
-		    for(String line; (line = br.readLine()) != null; ) {
-		        combo.add(line.split(":")[0]);// process the line.
-		    }
-		    // line is not visible here.
-		}
-		//read server1 list from txt file
-        catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
-		
-		
-		
-		Label lblSelectDistrict = new Label(shlLogin, SWT.NONE);
-		lblSelectDistrict.setBounds(90, 75, 97, 14);
-		lblSelectDistrict.setText("Select District:");
+	  
 		
 		text = new Text(shlLogin, SWT.BORDER);
 		text.setBounds(117, 138, 86, 19);
@@ -109,21 +83,21 @@ public class ClientLogin {
 		Button btnRegister = new Button(shlLogin, SWT.NONE);
 		btnRegister.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				//to do
+				//to do register
 			}
 		});
-		btnRegister.setBounds(90, 186, 95, 28);
+		btnRegister.setBounds(104, 186, 95, 28);
 		btnRegister.setText("Register");
 		
 		Button btnLogin = new Button(shlLogin, SWT.NONE);
 		btnLogin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				//to do
+				//to do login
 				loginHandler();
 				
 			}
 		});
-		btnLogin.setBounds(224, 186, 95, 28);
+		btnLogin.setBounds(244, 186, 95, 28);
 		btnLogin.setText("Login");
 		
 		Label lblPassword = new Label(shlLogin, SWT.NONE);
@@ -132,6 +106,18 @@ public class ClientLogin {
 		
 		text_1 = new Text(shlLogin, SWT.PASSWORD | SWT.BORDER);
 		text_1.setBounds(284, 138, 86, 19);
+		
+		Label lblDistrictElection = new Label(shlLogin, SWT.NONE);
+		lblDistrictElection.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 13, SWT.NORMAL));
+		lblDistrictElection.setBounds(253, 69, 86, 28);
+		lblDistrictElection.setText("2015 Election");
+		
+		Label lblDistrict = new Label(shlLogin, SWT.CENTER);
+		lblDistrict.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 16, SWT.BOLD));
+		lblDistrict.setAlignment(SWT.CENTER);
+		lblDistrict.setBounds(46, 35, 337, 62);
+		//lblDistrict.setSize(14);
+		lblDistrict.setText(district);
 
 	}
 }
