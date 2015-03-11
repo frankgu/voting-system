@@ -9,6 +9,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -28,7 +30,7 @@ public class Server1 implements Runnable {
 	/*
 	 * Server 1 functionality
 	 */
-	
+
 	// -----the socket and the port number for this server
 	private DatagramSocket aSocket = null;
 
@@ -51,6 +53,9 @@ public class Server1 implements Runnable {
 	private Lock lock2 = new ReentrantLock();
 	private Lock lock3 = new ReentrantLock();
 
+	// ------queue for the datagramepacket in order to deal with the FIFO
+	private Queue<DatagramPacket> queue = null;
+
 	// for the lab
 	// private static String host = "134.117.59.109";
 	// private static String port = "60010";
@@ -66,7 +71,13 @@ public class Server1 implements Runnable {
 			availableUserNum = Integer.parseInt(new Property()
 					.loadProperties("activeUserForServer1"));
 			aSocket = new DatagramSocket(portNumber, aHost);
+
 			activeUsers = new ArrayList<User>(availableUserNum);
+
+			// FIFO order
+			queue = new ArrayBlockingQueue<DatagramPacket>(
+					Integer.parseInt(new Property()
+							.loadProperties("server1PacketQueueSize")), true);
 
 			tran = new Transmission(aSocket);
 
@@ -102,52 +113,69 @@ public class Server1 implements Runnable {
 		// ------receive the datagram packet from the client and simulate
 		// the loss and modification
 		byte[] buffer = new byte[10000];
+		
+		// -----run another thread the process the packet queue
+		new Thread(new Responder(aSocket)).start();
+
+		// -----the main thread for the server1 is to add packet to the queue for processing
 		while (true) {
 
 			DatagramPacket request = new DatagramPacket(buffer, buffer.length);
 			try {
-				aSocket.receive(request);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// -----every time the server 1 receive a packet, it start a new
-			// thread to handle this
-			new Thread(new Responder(aSocket, request)).start();
 
+				aSocket.receive(request);
+				queue.add(request);
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			} catch (IllegalStateException e) {
+
+				// -----queue capacity reach the limit
+				tran.replyData("1:server is busy, please try again later",
+						request.getPort(), request.getAddress());
+			}
 		}
 	}
 
 	public class Responder implements Runnable {
 
 		DatagramSocket socket = null;
-		DatagramPacket packet = null;
 
-		public Responder(DatagramSocket socket, DatagramPacket packet) {
+		public Responder(DatagramSocket socket) {
 			this.socket = socket;
-			this.packet = packet;
 		}
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 
-			// -----check if the data is valid or not, if the data is
-			// invalid, tell the client to send the message again
-			if (!tran.dataVlidated(packet.getData(), packet.getLength())) {
+			while (true) {
+				if (!queue.isEmpty()) {
 
-				String resendMessage = new String("resend");
-				tran.replyData(resendMessage, packet.getPort(),
-						packet.getAddress());
+					// -----poll a packet from the queue
+					DatagramPacket packet = queue.poll();
+					// -----check if the data is valid or not, if the data is
+					// invalid, tell the client to send the message again
+					if (!tran
+							.dataVlidated(packet.getData(), packet.getLength())) {
 
-			} else {
+						String resendMessage = new String("resend");
+						tran.replyData(resendMessage, packet.getPort(),
+								packet.getAddress());
 
-				// -----data is valid, process the data
-				analyseDataFromClient(packet.getData(), packet.getLength(),
-						packet.getPort(), packet.getAddress());
+					} else {
+
+						// -----data is valid, process the data
+						analyseDataFromClient(packet.getData(),
+								packet.getLength(), packet.getPort(),
+								packet.getAddress());
+
+					}
+
+				}
 
 			}
-
 		}
 	}
 
@@ -175,7 +203,7 @@ public class Server1 implements Runnable {
 		// [flag2]:[candidateFirstName]:[candidateLastName] (check the voter
 		// vote state) [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter
 		// already vote and return the candidate name)
-		
+
 		// -----get the data exclude check sum value
 		byte[] dataByte = Arrays.copyOfRange(data, 9, length);
 		String message = new String(dataByte);
