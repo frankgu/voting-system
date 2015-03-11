@@ -39,7 +39,15 @@ public class User {
 	}
 
 	//------default constructor
-	public User(){}
+	public User(){
+		super();
+		this.userName = "null";
+		LastName = "null";
+		FirstName = "null";
+		this.districtName = "null";
+		this.address = "null";
+		this.password = "null";
+	}
 	
 	public User(String userName, String lastName, String firstName,
 			String districtName, String address, String password) {
@@ -50,6 +58,10 @@ public class User {
 		this.districtName = districtName;
 		this.address = address;
 		this.password = password;
+	}
+	
+	public String toString(){
+		return userName + ":" + LastName + ":" + FirstName + ":" +address + ":" + password;
 	}
 
 	public String getUserName() {

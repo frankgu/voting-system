@@ -19,6 +19,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.object.User;
+
 
 //login panel
 public class ClientLogin {
@@ -28,6 +30,9 @@ public class ClientLogin {
 	public String district;
 	private String usr;
 	private String pwd;
+	private User user;
+	
+	
 	/**
 	 * Launch the application.
 	 * @param args
@@ -37,6 +42,7 @@ public class ClientLogin {
     	district = "null";
     	usr      = "null";
     	pwd      = "null";
+    	user     = new User();
     	
     }
     
@@ -44,6 +50,7 @@ public class ClientLogin {
     	district = d;
     	usr      = "null";
     	pwd      = "null";
+    	user     = new User();
     }
     
 	public static void main(String[] args) {
@@ -103,9 +110,19 @@ public class ClientLogin {
 		btnLogin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				//to do login
-				//urs = text.getText();
-				loginHandler();
-				
+				usr = text.getText();
+				pwd = text_1.getText();
+				System.out.println();
+				if(usr.length() == 0 || pwd.length() == 0){
+					System.out.println("sdf");
+					int style = SWT.ICON_ERROR;
+					MessageBox noInfo = new MessageBox(shlLogin, style);
+			        noInfo.setMessage("Invalid login information!");
+			        noInfo.open();
+				}else{
+					
+				}
+				loginHandler();	
 			}
 		});
 		btnLogin.setBounds(244, 186, 95, 28);
