@@ -7,9 +7,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,6 +26,8 @@ public class ClientLogin {
 	private Text text;
 	private Text text_1;
 	public String district;
+	private String usr;
+	private String pwd;
 	/**
 	 * Launch the application.
 	 * @param args
@@ -30,10 +35,15 @@ public class ClientLogin {
     
     public ClientLogin(){
     	district = "null";
+    	usr      = "null";
+    	pwd      = "null";
+    	
     }
     
     public ClientLogin(String d){
     	district = d;
+    	usr      = "null";
+    	pwd      = "null";
     }
     
 	public static void main(String[] args) {
@@ -93,6 +103,7 @@ public class ClientLogin {
 		btnLogin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				//to do login
+				//urs = text.getText();
 				loginHandler();
 				
 			}
@@ -116,8 +127,17 @@ public class ClientLogin {
 		lblDistrict.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 16, SWT.BOLD));
 		lblDistrict.setAlignment(SWT.CENTER);
 		lblDistrict.setBounds(46, 35, 337, 62);
-		//lblDistrict.setSize(14);
 		lblDistrict.setText(district);
+		
+		shlLogin.addListener(SWT.Close, new Listener() {
+		      public void handleEvent(Event event) {
+		        int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+		        MessageBox messageBox = new MessageBox(shlLogin, style);
+		        messageBox.setText("Exit");
+		        messageBox.setMessage("Are You Sure to Exit?");
+		        event.doit = messageBox.open() == SWT.YES;
+		      }
+		    });
 
 	}
 }

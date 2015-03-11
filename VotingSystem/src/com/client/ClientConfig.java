@@ -7,14 +7,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
-//import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionEvent;
+
 import java.util.ArrayList;
 
 public class ClientConfig {
@@ -140,6 +144,16 @@ public class ClientConfig {
 		});
 		btnOk.setBounds(162, 161, 95, 28);
 		btnOk.setText("OK");
+		
+		shlClientConfiguration.addListener(SWT.Close, new Listener() {
+		      public void handleEvent(Event event) {
+		        int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+		        MessageBox messageBox = new MessageBox(shlClientConfiguration, style);
+		        messageBox.setText("Exit");
+		        messageBox.setMessage("Are You Sure to Exit?");
+		        event.doit = messageBox.open() == SWT.YES;
+		      }
+		    });
 
 	}
 }
