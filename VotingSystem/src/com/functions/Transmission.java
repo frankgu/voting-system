@@ -39,6 +39,13 @@ public class Transmission {
 	// send the data, with valid crc32 code.
 	public String sendData(String data, int port, InetAddress host) {
 
+		sendData(data, port, host, 1);
+		
+		return null;
+	}
+
+	public String sendData(String data, int port, InetAddress host, int count) {
+		
 		try {
 
 			// ------set the time out of the socket to 1000 ms
@@ -79,16 +86,21 @@ public class Transmission {
 			} else {
 
 				// ------send the data again, because the data is invalid
-				System.out.println("Invalid data, data being resent!");
+				System.out.println("Broken data, data being resent!");
 				sendData(data, port, host);
+				
 			}
 
 		} catch (SocketTimeoutException e) {
 
 			// Resends the data
-			System.out.println("Timeout, data being resent!");
-			sendData(data, port, host);
-
+			if(count <= 2){
+				count++;
+				System.out.println("Timeout, data being resent!");
+				sendData(data, port, host, count);
+	
+			}
+			
 		} catch (SocketException e) {
 
 			System.out.println("Socket: " + e.getMessage());
@@ -97,11 +109,12 @@ public class Transmission {
 
 			System.out.println("IO: " + e.getMessage());
 
-		} 
+		}
 		
-		return null;
+		return null; 
+	
 	}
-
+	
 	public boolean dataVlidated(byte[] value, int length) {
 
 		// ------check the checksum value to see if it matches
