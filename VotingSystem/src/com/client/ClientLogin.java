@@ -108,6 +108,9 @@ public class ClientLogin {
 		btnRegister.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				//to do register
+				//1.pop register window
+				//2.disable login window
+				//3.back from register window, enable login window
 			}
 		});
 		btnRegister.setBounds(104, 186, 95, 28);
@@ -119,7 +122,6 @@ public class ClientLogin {
 				//to do login
 				usr = text.getText();
 				pwd = text_1.getText();
-				
 
 				if(usr.length() == 0 || pwd.length() == 0){
 					int style = SWT.ICON_ERROR;
