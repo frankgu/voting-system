@@ -128,18 +128,27 @@ public class ClientConfig {
 		Button btnOk = new Button(shlClientConfiguration, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				int n = 0;
-				while(serverList.get(n) != null){
-					if( combo.getText().equals(serverList.get(n).name) ){
-						name = serverList.get(n).name;
-						ip   = serverList.get(n).ip;
-						port = serverList.get(n).port;
-						break;
+				if( combo.getText().length() == 0){
+					int style = SWT.ICON_ERROR;
+					MessageBox noInfo = new MessageBox(shlClientConfiguration, style);
+					noInfo.setMessage("Please select a district!");
+					shlClientConfiguration.setEnabled(false);
+					noInfo.open();
+					shlClientConfiguration.setEnabled(true);
+				}else{
+					int n = 0;
+					while(serverList.get(n) != null){
+						if( combo.getText().equals(serverList.get(n).name) ){
+							name = serverList.get(n).name;
+							ip   = serverList.get(n).ip;
+							port = serverList.get(n).port;
+							break;
+						}
+						n++;
 					}
-					n++;
-				}
-				System.out.println("ServerName: "+ name +"\nServer IP: " + ip +"\nServer Port: "+port);
-				shlClientConfiguration.dispose();
+					System.out.println("ServerName: "+ name +"\nServer IP: " + ip +"\nServer Port: "+port);
+					shlClientConfiguration.dispose();
+				}	
 			}
 		});
 		btnOk.setBounds(162, 161, 95, 28);
