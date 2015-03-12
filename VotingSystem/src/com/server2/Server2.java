@@ -110,20 +110,6 @@ public class Server2 implements Runnable {
 	private void analyseDataFromClient(byte[] data, int length, int port,
 			InetAddress host) {
 
-		// -----request form : "[flag]:[value]"
-		// ---[flag] = 1 , [value] = null (get all the candidate polls)
-		// ---[flag] = 2 , [value] = [district name] (get the candidate polls
-		// depends on the district)
-
-		// -----reply form : "[flag]:[value]"
-		// ---[flag] = 1 , [value] = string (error message)
-		// ---[flag] = 2 , [value] =
-		// [candidateFirstName]:[candidateLastName]:[polls]:...... (get all the
-		// candidate polls)
-		// ---[flag] = 3 , [value] =
-		// [candidateFirstName]:[candidateLastName]:[polls]:...... (get the
-		// candidate polls depends on the district)
-
 		// -----get the data exclude check sum value
 		byte[] dataByte = Arrays.copyOfRange(data, 9, length);
 		String message = new String(dataByte);

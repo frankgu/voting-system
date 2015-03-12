@@ -182,28 +182,6 @@ public class Server1 implements Runnable {
 	private void analyseDataFromClient(byte[] data, int length, int port,
 			InetAddress host) {
 
-		// -----request form : "[flag]:[value]"
-		// ---[flag] = 1 , [value] = [flag2]:[userName]:[lastName]:[firstName]:[address]:[password]
-		// (regist account, flag2 = 1 is voter, flag2 = 2 is candidate)
-		//1:1:usrName:ln:fn:addr:pwd//voter
-		//1:2:usrName:ln:fn:addr:pwd//candidate
-		// ---[flag] = 2 , [value] = [userName]:[candidateUserName] (voting)
-		// ---[flag] = 3 , [value] = [userName]:[password] (login)
-		// ---[flag] = 4 , [value] = null (get candidate list)
-		// ---[flag] = 5 , [value] = [userName] (logout the server1)
-		// ---[flag] = 6 , [value] = [userName] (check the voter
-		// vote state)
-
-		// -----reply form : "[flag]:[value]"
-		// ---[flag] = 1 , [value] = string (error message)
-		// ---[flag] = 2 , [value] = success
-		// ---[flag] = 3 , [value] = [candidate name]:[candidate name]:...
-		// (candidate name consist of [userName]:[FirstName]:[LastName])
-		// ---[flag] = 4 , [value] =
-		// [flag2]:[candidateFirstName]:[candidateLastName] (check the voter
-		// vote state) [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter
-		// already vote and return the candidate name)
-
 		// -----get the data exclude check sum value
 		byte[] dataByte = Arrays.copyOfRange(data, 9, length);
 		String message = new String(dataByte);
