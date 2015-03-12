@@ -42,7 +42,7 @@ public class Client {
 		System.out.println("ServerName: "+ name +"\nServer IP: " + ip +"\nServer Port: "+port);
 		
 		//login window
-		ClientLogin login = new ClientLogin(name);
+		ClientLogin login = new ClientLogin(name, name, ip, port);
 		try {
 			login.open();
 		} catch (Exception e) {
