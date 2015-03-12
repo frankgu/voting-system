@@ -39,9 +39,8 @@ public class Transmission {
 	// send the data, with valid crc32 code.
 	public String sendData(String data, int port, InetAddress host) {
 
-		sendData(data, port, host, 1);
-		
-		return null;
+		return sendData(data, port, host, 1);
+	
 	}
 
 	public String sendData(String data, int port, InetAddress host, int count) {

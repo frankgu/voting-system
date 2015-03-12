@@ -22,6 +22,7 @@ public class testServer1Function {
 			// -----test
 			InetAddress host = InetAddress.getByName("localhost");
 
+
 			System.out.println(tran.sendData(
 					"1:2:candidate:dongfeng:gu:1591 riverside:hyfgdf", 8080,
 					host));
@@ -34,7 +35,7 @@ public class testServer1Function {
 
 			System.out.println(tran.sendData("2:voter:candidate", 8080, host));
 
-			System.out.println(tran.sendData("3:voter:hyfgdf", 8080, host));
+			System.out.println(tran.sendData("3:votr:hyfgdf", 8080, host));
 
 			System.out.println(tran.sendData("4:", 8080, host));
 

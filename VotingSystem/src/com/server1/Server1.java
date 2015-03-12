@@ -113,11 +113,12 @@ public class Server1 implements Runnable {
 		// ------receive the datagram packet from the client and simulate
 		// the loss and modification
 		byte[] buffer = new byte[10000];
-		
+
 		// -----run another thread the process the packet queue
 		new Thread(new Responder(aSocket)).start();
 
-		// -----the main thread for the server1 is to add packet to the queue for processing
+		// -----the main thread for the server1 is to add packet to the queue
+		// for processing
 		while (true) {
 
 			DatagramPacket request = new DatagramPacket(buffer, buffer.length);
@@ -413,16 +414,16 @@ public class Server1 implements Runnable {
 	private void login(String userName, String password, int port,
 			InetAddress host) {
 
-		try {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		session.beginTransaction();
+		Voter voter = (Voter) session.get(Voter.class, userName);
 
-			Session session = HibernateUtil.getSessionFactory().openSession();
-			session.beginTransaction();
-			Voter voter = (Voter) session.get(Voter.class, userName);
+		// lock these lines of code in case same user name login at the
+		// same time
+		lock2.tryLock();
 
-			// lock these lines of code in case same user name login at the
-			// same time
-			lock2.tryLock();
-
+		if (voter != null) {
+			
 			if (password.compareTo(voter.getPassword()) == 0) {
 
 				if (!checkExist(voter)) {
@@ -465,7 +466,7 @@ public class Server1 implements Runnable {
 			session.getTransaction().commit();
 			session.close();
 
-		} catch (JDBCException e) {
+		} else {
 
 			tran.replyData(
 					"1:Can't find the voter name, please regist an account or login as a voter",
