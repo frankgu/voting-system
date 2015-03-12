@@ -19,6 +19,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.functions.Transmission;
 import com.object.User;
 
 
@@ -120,6 +121,26 @@ public class ClientLogin {
 			        noInfo.setMessage("Invalid login information!");
 			        noInfo.open();
 				}else{
+					DatagramSocket aSocket = null;
+					try {
+						aSocket = new DatagramSocket();
+					} catch (SocketException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					Transmission tran = new Transmission(aSocket);
+					// -----test
+					InetAddress host;
+					try {
+						host = InetAddress.getByName("localhost");
+						System.out.println(tran.sendData(
+								"1:1:csdfdsfte:dongfeng:gu:1591 riverside:hyfgdf", 8080,
+								host));
+					} catch (UnknownHostException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
 					
 				}
 				loginHandler();	

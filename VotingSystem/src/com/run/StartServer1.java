@@ -6,7 +6,7 @@ public class StartServer1 {
 
 	public static void main(String[] arg){
 		
-		Server1 server1 = new Server1("ottawa", 8080, "localhost");
+		Server1 server1 = new Server1("Ottawa East", 8080, "127.0.0.1");
 		//addline name:ip:port to git remote server1List.txt
 		Thread thread = new Thread(server1);
 		thread.start();
