@@ -164,8 +164,7 @@ public class ClientRegister {
 						Transmission tran = new Transmission(aSocket);
 						InetAddress host = InetAddress.getByName("127.0.0.1");
 						String rtnMsg;
-						//rtnMsg = tran.sendData("1:1:" + usr + ":" + ln + ":" + fn + ":" + addr + ":" + pwd, port, host);
-						rtnMsg = tran.sendData("1:1:usrName:ln:fn:addr:pwd", port, host);
+						rtnMsg = tran.sendData("1:1:" + usr + ":" + ln + ":" + fn + ":" + addr + ":" + pwd, port, host);
 						noInfo.setMessage(rtnMsg.split(":")[1]);
 						shlRegistration.setEnabled(false);
 						noInfo.open();

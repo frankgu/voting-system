@@ -35,7 +35,7 @@ public class testServer1Function {
 
 			System.out.println(tran.sendData("2:voter:candidate", 8080, host));
 
-			System.out.println(tran.sendData("3:votr:hyfgdf", 8080, host));
+			System.out.println(tran.sendData("3:voter:hyfgdf", 8080, host));
 
 			System.out.println(tran.sendData("4:", 8080, host));
 
