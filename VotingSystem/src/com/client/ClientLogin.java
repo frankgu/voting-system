@@ -32,6 +32,9 @@ public class ClientLogin {
 	private String usr;
 	private String pwd;
 	private User user;
+	private String servName;
+	private String ip;
+	private int port;
 	
 	
 	/**
@@ -44,14 +47,19 @@ public class ClientLogin {
     	usr      = "null";
     	pwd      = "null";
     	user     = new User();
-    	
+    	servName = "null";
+    	ip       = "null";
+    	port     = 0;
     }
     
-    public ClientLogin(String d){
+    public ClientLogin(String d, String n, String i, int p){
     	district = d;
     	usr      = "null";
     	pwd      = "null";
     	user     = new User();
+    	servName = n;
+    	ip       = i;
+    	port     = p;
     }
     
 	public static void main(String[] args) {
@@ -113,7 +121,8 @@ public class ClientLogin {
 				//to do login
 				usr = text.getText();
 				pwd = text_1.getText();
-				System.out.println();
+				
+
 				if(usr.length() == 0 || pwd.length() == 0){
 					System.out.println("sdf");
 					int style = SWT.ICON_ERROR;
@@ -121,27 +130,26 @@ public class ClientLogin {
 			        noInfo.setMessage("Invalid login information!");
 			        noInfo.open();
 				}else{
-					DatagramSocket aSocket = null;
-					try {
-						aSocket = new DatagramSocket();
-					} catch (SocketException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					Transmission tran = new Transmission(aSocket);
-					// -----test
-					InetAddress host;
-					try {
-						host = InetAddress.getByName("localhost");
-						System.out.println(tran.sendData(
-								"1:1:csdfdsfte:dongfeng:gu:1591 riverside:hyfgdf", 8080,
-								host));
-					} catch (UnknownHostException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
+					int style = SWT.ICON_INFORMATION;
+					MessageBox noInfo = new MessageBox(shlLogin, style);
 					
+					try {
+						DatagramSocket aSocket = new DatagramSocket();
+					
+					Transmission tran = new Transmission(aSocket);
+					InetAddress host = InetAddress.getByName("127.0.0.1");
+					
+						System.out.println(host+"\n"+port);
+						System.out.println(tran.sendData(
+								"3:sdfds:dsdd", port,
+								host));
+						//noInfo.setMessage("Invalid login information!");
+				        //noInfo.open();
+					}catch (SocketException e1) {
+						e1.printStackTrace();
+					}catch (UnknownHostException e1) {
+						e1.printStackTrace();
+					}
 				}
 				loginHandler();	
 			}
