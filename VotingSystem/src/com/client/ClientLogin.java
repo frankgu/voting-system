@@ -89,9 +89,7 @@ public class ClientLogin {
 	/**
 	 * Create contents of the window.
 	 */
-	public void loginHandler(){
-		System.out.println("login btn handler");
-	}
+	
 	
 	protected void createContents() {
 		shlLogin = new Shell();
@@ -124,7 +122,6 @@ public class ClientLogin {
 				
 
 				if(usr.length() == 0 || pwd.length() == 0){
-					System.out.println("sdf");
 					int style = SWT.ICON_ERROR;
 					MessageBox noInfo = new MessageBox(shlLogin, style);
 			        noInfo.setMessage("Invalid login information!");
@@ -132,26 +129,23 @@ public class ClientLogin {
 				}else{
 					int style = SWT.ICON_INFORMATION;
 					MessageBox noInfo = new MessageBox(shlLogin, style);
-					
 					try {
-						DatagramSocket aSocket = new DatagramSocket();
-					
+				    DatagramSocket aSocket = new DatagramSocket();
 					Transmission tran = new Transmission(aSocket);
 					InetAddress host = InetAddress.getByName("127.0.0.1");
 					
-						System.out.println(host+"\n"+port);
-						System.out.println(tran.sendData(
-								"3:sdfds:dsdd", port,
+						noInfo.setMessage(tran.sendData(
+								"3:"+usr+":"+pwd, port,
 								host));
-						//noInfo.setMessage("Invalid login information!");
-				        //noInfo.open();
+						shlLogin.setEnabled(false);
+				        noInfo.open();
+						shlLogin.setEnabled(true);
 					}catch (SocketException e1) {
 						e1.printStackTrace();
 					}catch (UnknownHostException e1) {
 						e1.printStackTrace();
 					}
 				}
-				loginHandler();	
 			}
 		});
 		btnLogin.setBounds(244, 186, 95, 28);

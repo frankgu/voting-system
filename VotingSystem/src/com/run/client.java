@@ -8,7 +8,5 @@ public class client {
 
 		Client cli = new Client();
 		cli.run();
-		
-		
 	}
 }
