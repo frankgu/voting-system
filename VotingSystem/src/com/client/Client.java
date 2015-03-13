@@ -49,6 +49,14 @@ public class Client {
 			e.printStackTrace();
 		}
 		
+		//voting window
+		try {
+			ClientVote window = new ClientVote(name, ip, port);
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
