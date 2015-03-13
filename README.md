@@ -20,6 +20,9 @@ The server 1 Request/Reply form
 // -----reply form : "[flag]:[value]"
 // ---[flag] = 1 , [value] = string (error message)
 // ---[flag] = 2 , [value] = success
+	when the voter successfully login, it will return the [value] = [FristName]:[LastName]:[Address]:[CandidateFirstname]:[CandidateLastName] (2:dongfeng:gu:1591 riverside:CAFirsatName:CALastName)
+	if the voter haven't voter, it will return (2:dongfeng:gu:1591 riverside:)
+
 // ---[flag] = 3 , [value] = [candidate name]:[candidate name]:... (candidate name consist of [userName]:[FirstName]:[LastName])
 // ---[flag] = 4 , [value] = [flag2]:[candidateFirstName]:[candidateLastName] (check the voter vote state) [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter already vote and return the candidate name)
 
