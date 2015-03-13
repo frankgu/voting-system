@@ -37,10 +37,6 @@ public class Server1 implements Runnable {
 	// -----data transimission
 	private Transmission tran = null;
 
-	// -----the host and the port for the server 2
-	private static String server2host = "localhost";
-	private static String server2port = "8081";
-
 	// -----district for this server
 	private String district = null;
 
@@ -423,7 +419,7 @@ public class Server1 implements Runnable {
 		lock2.tryLock();
 
 		if (voter != null) {
-			
+
 			if (password.compareTo(voter.getPassword()) == 0) {
 
 				if (!checkExist(voter)) {
@@ -438,7 +434,23 @@ public class Server1 implements Runnable {
 
 						if (voter.getDistrictName().compareTo(district) == 0) {
 
-							tran.replyData("2:Successfully login", port, host);
+							Candidate candidate = (Candidate) session.get(
+									Candidate.class, voter.getCandidateName());
+							String voterString = "";
+							if (!voter.getCandidateName().isEmpty()) {
+								voterString = voter.getFirstName() + ":"
+										+ voter.getLastName() + ":"
+										+ voter.getAddress() + ":"
+										+ candidate.getFirstName() + ":"
+										+ candidate.getLastName();
+							} else {
+
+								voterString = voter.getFirstName() + ":"
+										+ voter.getLastName() + ":"
+										+ voter.getAddress() + ":";
+
+							}
+							tran.replyData("2:" + voterString, port, host);
 							activeUsers.add(voter);
 
 						} else {
@@ -483,19 +495,22 @@ public class Server1 implements Runnable {
 		@SuppressWarnings("unchecked")
 		List<Candidate> candidates = session.createCriteria(Candidate.class)
 				.list();
-		String candidateData = "";
+		String candidateData = "3:";
 		for (int i = 0; i < candidates.size(); i++) {
-			if (i == (candidates.size() - 1)) {
-				candidateData = candidateData + candidates.get(i).getUserName()
-						+ ":" + candidates.get(i).getFirstName() + ":"
-						+ candidates.get(i).getLastName();
+			if (candidates.get(i).getDistrictName().compareTo(district) == 0) {
+				if (i == (candidates.size() - 1)) {
+					candidateData = candidateData
+							+ candidates.get(i).getUserName() + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName();
 
-			} else {
-				candidateData = candidateData + candidates.get(i).getUserName()
-						+ ":" + candidates.get(i).getFirstName() + ":"
-						+ candidates.get(i).getLastName() + ":";
+				} else {
+					candidateData = candidateData
+							+ candidates.get(i).getUserName() + ":"
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getLastName() + ":";
+				}
 			}
-
 		}
 		tran.replyData(candidateData, port, host);
 		session.getTransaction().commit();
