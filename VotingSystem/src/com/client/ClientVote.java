@@ -134,6 +134,8 @@ public class ClientVote {
 		
 		List list = new List(shlVoting, SWT.BORDER);
 		list.setBounds(199, 170, 140, 151);
+		String candis = tran.sendData("4:", port, host);
+		
 		
 		Button btnVote = new Button(shlVoting, SWT.NONE);
 		btnVote.setBounds(221, 339, 95, 28);
