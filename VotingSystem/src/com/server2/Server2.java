@@ -39,7 +39,7 @@ public class Server2 implements Runnable {
 			// for the lab in HP4115
 			// int socket_no = 60009; // server 1 port number
 			// InetAddress temp = InetAddress.getByName("134.117.59.109");
-			// aSocket = new DatagramSocket(socket_no, temp);
+			// aSocket = new DatagramSocket(socket_no, temp)
 
 		} catch (SocketException e) {
 
