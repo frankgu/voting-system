@@ -20,7 +20,7 @@ public class testServer1Function {
 			Transmission tran = new Transmission(aSocket);
 
 			// -----test
-			InetAddress host = InetAddress.getByName("localhost");
+			InetAddress host = InetAddress.getByName("go.joyclick.org");
 
 
 			System.out.println(tran.sendData(
