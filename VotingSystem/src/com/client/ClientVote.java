@@ -178,6 +178,7 @@ public class ClientVote {
 		if(votedInfo.split(":")[1].equals("2")){//voted
 			lblVoted.setText("Voted");
 			lblVoted.setForeground(new Color (Display.getCurrent (), 0, 255, 0));
+			//lblVotedName.setText(votedInfo.split(":")[2]+" "+votedInfo.split(":")[3]);
 			lblVotedName.setText(votedInfo.split(":")[2]+" "+votedInfo.split(":")[3]);
 			btnVote.setGrayed(true);
 			btnVote.setEnabled(false);
@@ -205,9 +206,8 @@ public class ClientVote {
 					lblVotedFor.setVisible(true);
 					lblVotedName.setVisible(true);
 					lblVoted.setText("Voted");
-					System.out.println(votedInfo2);
 					lblVoted.setForeground(new Color (Display.getCurrent (), 0, 255, 0));
-					lblVotedName.setText(votedInfo2.split(":")[2]+" "+votedInfo2.split(":")[3]);
+					//lblVotedName.setText(votedInfo2.split(":")[2]+" "+votedInfo2.split(":")[3]);
 					btnVote.setGrayed(true);
 					btnVote.setEnabled(false);
 				}else{//vote failed
@@ -239,11 +239,6 @@ public class ClientVote {
 		
 		shlVoting.addListener(SWT.Close, new Listener() {
 			public void handleEvent(Event event) {
-				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
-				MessageBox messageBox = new MessageBox(shlVoting, style);
-				messageBox.setText("Exit");
-				messageBox.setMessage("Are You Sure to Exit?");
-				event.doit = messageBox.open() == SWT.YES;
 				String rtnMsg;
 				rtnMsg = tran.sendData("5:"+voter.getUserName(), port, host);
 				int style2 = SWT.ICON_INFORMATION;
