@@ -89,7 +89,7 @@ public class ClientConfig {
 		
 		URL servers;
 		try {
-			servers = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_MZSXScINrUGNIhKwuCxIJBLNC-mks5VA0vswA%3D%3D");
+			servers = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_PaUfHr2oF_dqPREZCc4GsfyYNS4ks5VDa41wA%3D%3D");
 			BufferedReader in;
 			in = new BufferedReader(
 					new InputStreamReader(servers.openStream()));
