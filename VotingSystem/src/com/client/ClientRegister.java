@@ -162,7 +162,7 @@ public class ClientRegister {
 					try {
 						DatagramSocket aSocket = new DatagramSocket();
 						Transmission tran = new Transmission(aSocket);
-						InetAddress host = InetAddress.getByName("127.0.0.1");
+						InetAddress host = InetAddress.getByName(ip);
 						String rtnMsg;
 						rtnMsg = tran.sendData("1:1:" + usr + ":" + ln + ":" + fn + ":" + addr + ":" + pwd, port, host);
 						noInfo.setMessage(rtnMsg.split(":")[1]);
