@@ -34,6 +34,7 @@ public class ClientLogin {
 	private String ip;
 	private int port;
 	public  String usrInfo;
+	public boolean quit;
 
 	/**
 	 * Launch the application.
@@ -49,6 +50,7 @@ public class ClientLogin {
 		ip       = "null";
 		port     = 0;
 		usrInfo  = "";
+		quit     = false;
 	}
 
 	public ClientLogin(String d, String n, String i, int p) {
@@ -59,6 +61,7 @@ public class ClientLogin {
 		ip = i;
 		port = p;
 		usrInfo  = "";
+		quit     = false;
 	}
 
 	public static void main(String[] args) {
@@ -195,6 +198,8 @@ public class ClientLogin {
 				messageBox.setText("Exit");
 				messageBox.setMessage("Are You Sure to Exit?");
 				event.doit = messageBox.open() == SWT.YES;
+				if(event.doit)
+		        	quit = true;
 			}
 		});
 

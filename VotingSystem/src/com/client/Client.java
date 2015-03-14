@@ -24,19 +24,24 @@ public class Client {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		name = config.name;
-		ip   = config.ip;
-		port = config.port;
+		if(!config.quit){
+			name = config.name;
+			ip   = config.ip;
+			port = config.port;
+		}else{
+			System.exit(0);//quit program
+		}
 		
-		System.out.println("ServerName: "+ name +"\nServer IP: " + ip +"\nServer Port: "+port);
-		
-		//while(true){
+		while(true){
 			//login window
 			ClientLogin login = new ClientLogin(name, name, ip, port);
 			try {
 				login.open();
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+			if(login.quit){
+				break;
 			}
 
 			//voting window
@@ -57,7 +62,7 @@ public class Client {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		//}
+		}
 		
 	}
 

@@ -22,13 +22,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import java.util.ArrayList;
 
 public class ClientConfig {
+	
     public class serverInfo{
     	public String ip;
     	public int port;
     	public String name;
     	
     	public serverInfo(){
-    		ip = "";
+    		ip   = "";
     		port = 0;
     		name = "";
     	}
@@ -47,6 +48,7 @@ public class ClientConfig {
     public String ip;
 	public int port;
 	public String name;
+	public boolean quit;
 	
 	/**
 	 * Launch the application.
@@ -59,6 +61,10 @@ public class ClientConfig {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ClientConfig(){
+		quit = false;
 	}
 
 	/**
@@ -160,6 +166,8 @@ public class ClientConfig {
 		        messageBox.setText("Exit");
 		        messageBox.setMessage("Are You Sure to Exit?");
 		        event.doit = messageBox.open() == SWT.YES;
+		        if(event.doit)
+		        	quit = true;
 		      }
 		    });
 
