@@ -1,4 +1,4 @@
-test serv:go.joyclick.org:8088
+test serv:45.55.169.241:8080
 Ottawa East:127.0.0.1:8080
 Ottawa West:127.0.0.1:8081
 Nepean:127.0.0.1:8082
