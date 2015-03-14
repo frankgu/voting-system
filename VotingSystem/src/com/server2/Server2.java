@@ -134,6 +134,8 @@ public class Server2 implements Runnable {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 		@SuppressWarnings("unchecked")
+		//retrieve all the candidate data from the database and then store them as the candidate object
+		//into the list(below)
 		List<Candidate> candidates = session.createCriteria(Candidate.class)
 				.list();
 
