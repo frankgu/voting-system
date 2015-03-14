@@ -1,4 +1,11 @@
 
+TODO:
+-modify server1 db acc and pwd (not root w/o pwd)
+-voting window
+-server1 starter
+-candidate register
+
 
 2015/3/14
 -added the remote server1 on go.joyclick.org:8088
+
