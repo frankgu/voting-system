@@ -141,6 +141,7 @@ public class ClientLogin {
 					try {
 						DatagramSocket aSocket = new DatagramSocket();
 						Transmission tran = new Transmission(aSocket);
+						System.out.println(ip);
 						InetAddress host = InetAddress.getByName(ip);
 						String rtnMsg = tran.sendData("3:" + usr + ":" + pwd, port, host);
 						if(rtnMsg.split(":")[0].equals("2")){
