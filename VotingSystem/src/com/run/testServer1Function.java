@@ -24,7 +24,7 @@ public class testServer1Function {
 
 
 			System.out.println(tran.sendData(
-					"1:2:candidate:gu:dongfeng:1591 riverside", 8080,
+					"1:2:candidate:gu:dongfeng:1591 riverside", 8088,
 					host));
 			
 			System.out.println(tran.sendData(
