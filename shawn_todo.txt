@@ -8,6 +8,7 @@ TODO:
 -candidate register
 
 -serv1 xml database config addr 127.0.0.1 work, but not go.joyclick.org
+ may caused by local database privileges setting (from host for account)
 
 2015/3/14
 -added the remote server1 on go.joyclick.org:8088

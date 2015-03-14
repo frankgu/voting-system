@@ -85,10 +85,10 @@ public class ClientRegister {
 		text_5 = new Text(shlRegistration, SWT.BORDER);
 		text_5.setBounds(210, 50, 91, 19);
 		
-		text = new Text(shlRegistration, SWT.BORDER);
+		text = new Text(shlRegistration, SWT.PASSWORD);
 		text.setBounds(210, 75, 91, 19);
 		
-		text_1 = new Text(shlRegistration, SWT.BORDER);
+		text_1 = new Text(shlRegistration, SWT.PASSWORD);
 		text_1.setBounds(210, 100, 91, 19);
 		
 		text_2 = new Text(shlRegistration, SWT.BORDER);
