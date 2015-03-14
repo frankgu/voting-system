@@ -48,11 +48,22 @@ public class Client {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		//voting window
 		try {
-			ClientVote window = new ClientVote(name, ip, port);
-			window.open();
+			if(login.usrInfo.split(":")[3].equals("1")){// check if voted
+				ClientVote voting = new ClientVote(name, ip, port, login.usr, login.pwd, 
+						login.usrInfo.split(":")[0], 
+						login.usrInfo.split(":")[1], 
+						login.usrInfo.split(":")[2]);
+				voting.open();
+			}else{
+				ClientVote voting = new ClientVote(name, ip, port, login.usr, login.pwd, 
+						login.usrInfo.split(":")[0], 
+						login.usrInfo.split(":")[1], 
+						login.usrInfo.split(":")[2]);
+				voting.open();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

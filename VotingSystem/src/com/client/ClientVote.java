@@ -1,5 +1,10 @@
 package com.client;
 
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Label;
@@ -10,12 +15,20 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Button;
 
+import com.functions.Transmission;
+import com.object.Voter;
+
+
 public class ClientVote {
 
 	protected Shell shlVoting;
 	private String servName;
 	private String ip;
 	private int port;
+	private Voter voter;
+	private DatagramSocket aSocket;
+	private Transmission tran;
+	private InetAddress host;
 
 	/**
 	 * Launch the application.
@@ -30,18 +43,29 @@ public class ClientVote {
 		}
 	}
 	
-	public ClientVote(String n, String i, int p){
+	public ClientVote(String n, String i, int p, String u, String pwd, String fn, String ln, String addr){
 		servName = n;
 		ip       = i;
 		port     = p;
-		
+		voter      = new Voter(u, ln, fn, n, addr, pwd);
+		try {
+			aSocket = new DatagramSocket();
+			tran = new Transmission(aSocket);
+			host = InetAddress.getByName(ip);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public ClientVote(){
 		servName = "null";
 		ip       = "null";
 		port     = 0;
-		
+		voter    = new Voter();
 	}
 
 	/**
@@ -69,7 +93,7 @@ public class ClientVote {
 		
 		Label lblUsrName = new Label(shlVoting, SWT.NONE);
 		lblUsrName.setBounds(37, 84, 60, 14);
-		lblUsrName.setText("fn+ln");
+		lblUsrName.setText(voter.getFirstName()+" "+voter.getLastName());
 		
 		Label lblStatus = new Label(shlVoting, SWT.NONE);
 		lblStatus.setBounds(37, 116, 60, 14);
@@ -89,7 +113,7 @@ public class ClientVote {
 		label.setBounds(315, 63, 86, 28);
 		
 		Label label_1 = new Label(shlVoting, SWT.CENTER);
-		label_1.setText("null");
+		label_1.setText(voter.getDistrictName());
 		label_1.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 16, SWT.BOLD));
 		label_1.setAlignment(SWT.CENTER);
 		label_1.setBounds(112, 31, 337, 74);

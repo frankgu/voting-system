@@ -447,7 +447,7 @@ public class Server1 implements Runnable {
 
 								voterString = voter.getFirstName() + ":"
 										+ voter.getLastName() + ":"
-										+ voter.getAddress() + ":";
+										+ voter.getAddress() + ":1";
 
 							}
 							tran.replyData("2:" + voterString, port, host);

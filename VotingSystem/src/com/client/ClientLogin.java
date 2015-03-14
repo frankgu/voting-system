@@ -27,13 +27,13 @@ public class ClientLogin {
 	protected Shell shlLogin;
 	private Text text;
 	private Text text_1;
-	public String district;
-	private String usr;
-	private String pwd;
-	private User user;
+	public  String district;
+	public String usr;
+	public String pwd;
 	private String servName;
 	private String ip;
 	private int port;
+	public  String usrInfo;
 
 	/**
 	 * Launch the application.
@@ -43,22 +43,22 @@ public class ClientLogin {
 
 	public ClientLogin() {
 		district = "null";
-		usr = "null";
-		pwd = "null";
-		user = new User();
+		usr      = "null";
+		pwd      = "null";
 		servName = "null";
-		ip = "null";
-		port = 0;
+		ip       = "null";
+		port     = 0;
+		usrInfo  = "";
 	}
 
 	public ClientLogin(String d, String n, String i, int p) {
 		district = d;
 		usr = "null";
 		pwd = "null";
-		user = new User();
 		servName = n;
 		ip = i;
 		port = p;
+		usrInfo  = "";
 	}
 
 	public static void main(String[] args) {
@@ -143,13 +143,19 @@ public class ClientLogin {
 						Transmission tran = new Transmission(aSocket);
 						InetAddress host = InetAddress.getByName(ip);
 						String rtnMsg = tran.sendData("3:" + usr + ":" + pwd, port, host);
-						noInfo.setMessage(rtnMsg.split(":")[1]);
-						shlLogin.setEnabled(false);
-						noInfo.open();
-						shlLogin.setEnabled(true);
 						if(rtnMsg.split(":")[0].equals("2")){
+							noInfo.setMessage("Logged in successfully!");
+							shlLogin.setEnabled(false);
+							noInfo.open();
+							shlLogin.setEnabled(true);
+							usrInfo = rtnMsg.substring(2);
 							shlLogin.dispose();//end of login window, logged successfully
-						}	
+						}else{
+							noInfo.setMessage(rtnMsg.split(":")[1]);
+							shlLogin.setEnabled(false);
+							noInfo.open();
+							shlLogin.setEnabled(true);
+						}
 					} catch (SocketException e1) {
 						e1.printStackTrace();
 					} catch (UnknownHostException e1) {
