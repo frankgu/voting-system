@@ -6,6 +6,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
@@ -17,6 +20,9 @@ import org.eclipse.swt.widgets.Button;
 
 import com.functions.Transmission;
 import com.object.Voter;
+
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 
 public class ClientVote {
@@ -134,8 +140,37 @@ public class ClientVote {
 		btnVote.setText("Vote");
 		
 		Button btnLogOff = new Button(shlVoting, SWT.NONE);
+		btnLogOff.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				//logoff
+				String rtnMsg;
+				rtnMsg = tran.sendData("5:"+voter.getUserName(), port, host);
+				shlVoting.dispose();
+			}
+		});
 		btnLogOff.setBounds(488, 374, 95, 28);
 		btnLogOff.setText("Log Off");
+		
+		shlVoting.addListener(SWT.Close, new Listener() {
+			public void handleEvent(Event event) {
+				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+				MessageBox messageBox = new MessageBox(shlVoting, style);
+				messageBox.setText("Exit");
+				messageBox.setMessage("Are You Sure to Exit?");
+				event.doit = messageBox.open() == SWT.YES;
+				String rtnMsg;
+				rtnMsg = tran.sendData("5:"+voter.getUserName(), port, host);
+				int style2 = SWT.ICON_INFORMATION;
+				MessageBox noInfo = new MessageBox(shlVoting, style2);
+				noInfo.setMessage(rtnMsg.split(":")[1]);
+				shlVoting.setEnabled(false);
+				noInfo.open();
+				shlVoting.setEnabled(true);
+                if(!rtnMsg.split(":")[0].equals("2")){
+					//log out fail
+				}
+			}
+		});
 
 	}
 }

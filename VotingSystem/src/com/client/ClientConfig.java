@@ -98,8 +98,7 @@ public class ClientConfig {
 				combo.add(inputLine.split(":")[0]);
 				serverInfo srv = new serverInfo(inputLine.split(":")[0], inputLine.split(":")[1], Integer.parseInt(inputLine.split(":")[2]));
 				serverList.add(srv);
-				//serverList.get(num).ip = inputLine.split(":")[1];
-				//System.out.println(inputLine.split(":")[2]);
+				combo.select(0);
 			}
 			
 			in.close();
