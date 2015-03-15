@@ -138,13 +138,13 @@ public class ClientVote {
 		Label label = new Label(shlVoting, SWT.NONE);
 		label.setText("2015 Election");
 		label.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 13, SWT.NORMAL));
-		label.setBounds(315, 63, 86, 28);
+		label.setBounds(315, 63, 134, 28);
 		
 		Label label_1 = new Label(shlVoting, SWT.CENTER);
 		label_1.setText(voter.getDistrictName());
 		label_1.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 16, SWT.BOLD));
 		label_1.setAlignment(SWT.CENTER);
-		label_1.setBounds(112, 31, 337, 74);
+		label_1.setBounds(112, 31, 385, 74);
 		
 		
 		final List list = new List(shlVoting, SWT.BORDER);
