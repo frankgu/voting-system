@@ -189,14 +189,14 @@ public class ClientLogin {
 		Label lblDistrictElection = new Label(shlLogin, SWT.NONE);
 		lblDistrictElection.setFont(SWTResourceManager.getFont(
 				".Helvetica Neue DeskInterface", 13, SWT.NORMAL));
-		lblDistrictElection.setBounds(253, 69, 86, 28);
+		lblDistrictElection.setBounds(253, 69, 166, 28);
 		lblDistrictElection.setText("2015 Election");
 
 		Label lblDistrict = new Label(shlLogin, SWT.CENTER);
 		lblDistrict.setFont(SWTResourceManager.getFont(
 				".Helvetica Neue DeskInterface", 16, SWT.BOLD));
 		lblDistrict.setAlignment(SWT.CENTER);
-		lblDistrict.setBounds(46, 35, 337, 62);
+		lblDistrict.setBounds(46, 35, 373, 62);
 		lblDistrict.setText(district);
 
 		shlLogin.addListener(SWT.Close, new Listener() {
