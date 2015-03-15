@@ -19,6 +19,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionEvent;
 
+import com.testframework.testframework_launch;
+
 import java.util.ArrayList;
 
 public class ClientConfig {
@@ -159,6 +161,22 @@ public class ClientConfig {
 		btnOk.setBounds(162, 161, 95, 28);
 		btnOk.setText("OK");
 		shlClientConfiguration.setDefaultButton(btnOk);
+		
+		Button btnTestMode = new Button(shlClientConfiguration, SWT.NONE);
+		btnTestMode.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					shlClientConfiguration.setEnabled(false);
+					testframework_launch window = new testframework_launch();
+					window.open();
+				} catch (Exception ee) {
+					ee.printStackTrace();
+				}
+				shlClientConfiguration.setEnabled(true);
+			}
+		});
+		btnTestMode.setBounds(345, 240, 95, 28);
+		btnTestMode.setText("Test Mode");
 		
 		shlClientConfiguration.addListener(SWT.Close, new Listener() {
 		      public void handleEvent(Event event) {
