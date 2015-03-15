@@ -5,7 +5,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.server1.Server1;
+
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -92,8 +94,14 @@ public class Server1Starter_GUI {
 					Server1 server1 = new Server1(text.getText(), Integer.parseInt(text_2.getText()), text_1.getText());
 					Thread thread = new Thread(server1);
 					thread.start();
+					//shlServerStarter.dispose();
 				}else{
-					System.out.println("Invalid Inputs!\njava -jar name port ip");
+					int style = SWT.ICON_ERROR;
+					MessageBox noInfo = new MessageBox(shlServerStarter, style);
+					noInfo.setMessage("Invalid Inouts!");
+					shlServerStarter.setEnabled(false);
+					noInfo.open();
+					shlServerStarter.setEnabled(true);
 				}
 			}
 		});
