@@ -110,7 +110,7 @@ public class ClientVote {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shlVoting = new Shell();
+		shlVoting = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
 		shlVoting.setSize(593, 434);
 		shlVoting.setText("Voting");
 		

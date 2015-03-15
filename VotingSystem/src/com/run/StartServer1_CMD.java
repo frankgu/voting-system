@@ -6,7 +6,7 @@ public class StartServer1_CMD {
 
 	public static void main(String[] arg){
 		if(!arg[0].isEmpty() && !arg[1].isEmpty() && !arg[2].isEmpty()){
-			Server1 server1 = new Server1(arg[0], Integer.parseInt(arg[1]), arg[2]);
+			Server1 server1 = new Server1(arg[0], Integer.parseInt(arg[2]), arg[1]);
 			//addline name:ip:port to git remote server1List.txt
 			Thread thread = new Thread(server1);
 			thread.start();

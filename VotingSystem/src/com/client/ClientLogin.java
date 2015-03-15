@@ -93,7 +93,7 @@ public class ClientLogin {
 	 */
 
 	protected void createContents() {
-		shlLogin = new Shell();
+		shlLogin = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
 		shlLogin.setSize(450, 300);
 		shlLogin.setText("Login");
 
@@ -147,15 +147,22 @@ public class ClientLogin {
 						System.out.println(ip);
 						InetAddress host = InetAddress.getByName(ip);
 						String rtnMsg = tran.sendData("3:" + usr + ":" + pwd, port, host);
-						if(rtnMsg.split(":")[0].equals("2")){
-							noInfo.setMessage("Logged in successfully!");
-							shlLogin.setEnabled(false);
-							noInfo.open();
-							shlLogin.setEnabled(true);
-							usrInfo = rtnMsg.substring(2);
-							shlLogin.dispose();//end of login window, logged successfully
-						}else{
-							noInfo.setMessage(rtnMsg.split(":")[1]);
+						if(!rtnMsg.equals("null")){
+							if(rtnMsg.split(":")[0].equals("2")){
+								noInfo.setMessage("Logged in successfully!");
+								shlLogin.setEnabled(false);
+								noInfo.open();
+								shlLogin.setEnabled(true);
+								usrInfo = rtnMsg.substring(2);
+								shlLogin.dispose();//end of login window, logged successfully
+							}else{
+								noInfo.setMessage(rtnMsg.split(":")[1]);
+								shlLogin.setEnabled(false);
+								noInfo.open();
+								shlLogin.setEnabled(true);
+							}
+						}else{//no server response
+							noInfo.setMessage("Server no response!");
 							shlLogin.setEnabled(false);
 							noInfo.open();
 							shlLogin.setEnabled(true);
@@ -170,6 +177,7 @@ public class ClientLogin {
 		});
 		btnLogin.setBounds(244, 186, 95, 28);
 		btnLogin.setText("Login");
+		shlLogin.setDefaultButton(btnLogin);
 
 		Label lblPassword = new Label(shlLogin, SWT.NONE);
 		lblPassword.setBounds(216, 141, 70, 22);

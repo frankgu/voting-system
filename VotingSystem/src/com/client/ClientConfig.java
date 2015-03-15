@@ -86,7 +86,7 @@ public class ClientConfig {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shlClientConfiguration = new Shell();
+		shlClientConfiguration = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
 		shlClientConfiguration.setSize(450, 300);
 		shlClientConfiguration.setText("Client Configuration");
 		
@@ -158,6 +158,7 @@ public class ClientConfig {
 		});
 		btnOk.setBounds(162, 161, 95, 28);
 		btnOk.setText("OK");
+		shlClientConfiguration.setDefaultButton(btnOk);
 		
 		shlClientConfiguration.addListener(SWT.Close, new Listener() {
 		      public void handleEvent(Event event) {
