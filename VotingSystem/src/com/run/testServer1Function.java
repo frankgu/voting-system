@@ -9,11 +9,11 @@ import com.functions.Transmission;
 
 public class testServer1Function {
 
-	private static int port;
-	private static InetAddress host;
-	private static Transmission tran;
+	private int port;
+	private InetAddress host;
+	private Transmission tran;
 
-	public static void main(String[] arg) {
+	public void begin() {
 
 		/*
 		 * test the server1 functionality
@@ -72,7 +72,6 @@ public class testServer1Function {
 			System.out.println(tran.sendData("4:", port, host));
 
 			// -----test the logout of the system
-
 			new Thread(new testLogout("voter")).start();
 			new Thread(new testLogout("voter2")).start();
 			new Thread(new testLogout("voter3")).start();
@@ -94,25 +93,25 @@ public class testServer1Function {
 		}
 
 	}
-	
-	public static class testLogout implements Runnable{
+
+	public class testLogout implements Runnable {
 
 		private String name;
 
 		public testLogout(String name) {
 			this.name = name;
 		}
-		
+
 		@Override
 		public void run() {
-		
+
 			String data = "5:" + name;
 			System.out.println(tran.sendData(data, port, host));
 		}
-		
+
 	}
-	
-	public static class testLogin implements Runnable {
+
+	public class testLogin implements Runnable {
 
 		private String name;
 		private String password;
@@ -131,8 +130,8 @@ public class testServer1Function {
 		}
 
 	}
-	
-	public static class testVoting implements Runnable {
+
+	public class testVoting implements Runnable {
 
 		private String voter;
 		private String candidate;
