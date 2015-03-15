@@ -94,7 +94,7 @@ public class Server1Starter_GUI {
 					Server1 server1 = new Server1(text.getText(), Integer.parseInt(text_2.getText()), text_1.getText());
 					Thread thread = new Thread(server1);
 					thread.start();
-					shlServerStarter.dispose();
+					//shlServerStarter.dispose();
 				}else{
 					int style = SWT.ICON_ERROR;
 					MessageBox noInfo = new MessageBox(shlServerStarter, style);

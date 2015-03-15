@@ -15,3 +15,6 @@ TODO:
 
 
 test serv1 use database at same time with same db account
+
+sql acc permission
+http://blog.chinaunix.net/uid-23215128-id-2951624.html

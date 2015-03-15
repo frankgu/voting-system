@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,6 +124,10 @@ public class Server1 implements Runnable {
 				aSocket.receive(request);
 				queue.add(request);
 
+			} catch(SocketTimeoutException e){
+				
+				//do nothing
+				
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -391,6 +396,8 @@ public class Server1 implements Runnable {
 				candidateUserName);
 		Voter voter = (Voter) session.get(Voter.class, voterUserName);
 
+		System.out.println("candidateUserName" + " " + candidateUserName);
+		
 		if (voter.getCandidateName().isEmpty()) {
 
 			candidate.setPolls(candidate.getPolls() + 1);
