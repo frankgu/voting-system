@@ -186,12 +186,16 @@ public class CandidateReg {
 							InetAddress host = InetAddress.getByName(ip);
 							String rtnMsg;
 							rtnMsg = tran.sendData("1:2:" + usr + ":" + ln + ":" + fn + ":" + addr, port, host);
-							noInfo.setMessage(rtnMsg.split(":")[1]);
-							shlCandidateReg.setEnabled(false);
-							noInfo.open();
-							shlCandidateReg.setEnabled(true);
-							if(rtnMsg.split(":")[0].equals("2")){
-								//registered successfully
+							if(!rtnMsg.equals("null")){
+								noInfo.setMessage(rtnMsg.split(":")[1]);
+								shlCandidateReg.setEnabled(false);
+								noInfo.open();
+								shlCandidateReg.setEnabled(true);
+							}else{//server no response
+								noInfo.setMessage("Server no response!");
+								shlCandidateReg.setEnabled(false);
+								noInfo.open();
+								shlCandidateReg.setEnabled(true);
 							}
 						} catch (SocketException e1) {
 							e1.printStackTrace();
