@@ -78,7 +78,7 @@ public class ClientRegister {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shlRegistration = new Shell();
+		shlRegistration = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
 		shlRegistration.setSize(450, 300);
 		shlRegistration.setText("Registration");
 		
@@ -182,6 +182,7 @@ public class ClientRegister {
 		});
 		btnReg.setBounds(109, 220, 95, 28);
 		btnReg.setText("Register");
+		shlRegistration.setDefaultButton(btnReg);
 		
 		btnCancel = new Button(shlRegistration, SWT.NONE);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
