@@ -119,7 +119,8 @@ public class ClientVote {
 		lblUsrName.setText(voter.getFirstName()+" "+voter.getLastName());
 		
 		Label lblStatus = new Label(shlVoting, SWT.NONE);
-		lblStatus.setBounds(37, 116, 60, 14);
+		lblStatus.setAlignment(SWT.RIGHT);
+		lblStatus.setBounds(10, 116, 66, 14);
 		lblStatus.setText("Status:");
 		
 		final Label lblVotedFor = new Label(shlVoting, SWT.NONE);
