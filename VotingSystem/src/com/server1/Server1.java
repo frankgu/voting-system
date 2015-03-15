@@ -254,13 +254,15 @@ public class Server1 implements Runnable {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 		Voter voter = (Voter) session.get(Voter.class, userName);
+		Candidate cand = (Candidate) session.get(Candidate.class, voter.getCandidateName());//to fix reply msg
+		
 		if (voter.getCandidateName().isEmpty()) {
 
 			tran.replyData("4:1", port, host);
 
 		} else {
 
-			tran.replyData("4:2:" + voter.getCandidateName(), port, host);
+			tran.replyData("4:2:" + cand.getFirstName()+":"+cand.getLastName(), port, host);
 
 		}
 		session.getTransaction().commit();
@@ -448,7 +450,7 @@ public class Server1 implements Runnable {
 
 								voterString = voter.getFirstName() + ":"
 										+ voter.getLastName() + ":"
-										+ voter.getAddress() + ":";
+										+ voter.getAddress() + ":1";
 
 							}
 							tran.replyData("2:" + voterString, port, host);

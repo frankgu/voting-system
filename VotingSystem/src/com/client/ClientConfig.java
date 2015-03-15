@@ -22,13 +22,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import java.util.ArrayList;
 
 public class ClientConfig {
+	
     public class serverInfo{
     	public String ip;
     	public int port;
     	public String name;
     	
     	public serverInfo(){
-    		ip = "";
+    		ip   = "";
     		port = 0;
     		name = "";
     	}
@@ -47,6 +48,7 @@ public class ClientConfig {
     public String ip;
 	public int port;
 	public String name;
+	public boolean quit;
 	
 	/**
 	 * Launch the application.
@@ -59,6 +61,10 @@ public class ClientConfig {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ClientConfig(){
+		quit = false;
 	}
 
 	/**
@@ -89,7 +95,7 @@ public class ClientConfig {
 		
 		URL servers;
 		try {
-			servers = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_MZSXScINrUGNIhKwuCxIJBLNC-mks5VA0vswA%3D%3D");
+			servers = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_Jp7ANM1-WVg1W0z19o2HND1OT6Lks5VDbTKwA%3D%3D");
 			BufferedReader in;
 			in = new BufferedReader(
 					new InputStreamReader(servers.openStream()));
@@ -98,8 +104,7 @@ public class ClientConfig {
 				combo.add(inputLine.split(":")[0]);
 				serverInfo srv = new serverInfo(inputLine.split(":")[0], inputLine.split(":")[1], Integer.parseInt(inputLine.split(":")[2]));
 				serverList.add(srv);
-				//serverList.get(num).ip = inputLine.split(":")[1];
-				//System.out.println(inputLine.split(":")[2]);
+				combo.select(0);
 			}
 			
 			in.close();
@@ -161,6 +166,8 @@ public class ClientConfig {
 		        messageBox.setText("Exit");
 		        messageBox.setMessage("Are You Sure to Exit?");
 		        event.doit = messageBox.open() == SWT.YES;
+		        if(event.doit)
+		        	quit = true;
 		      }
 		    });
 

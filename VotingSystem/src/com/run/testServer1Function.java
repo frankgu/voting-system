@@ -20,15 +20,15 @@ public class testServer1Function {
 			Transmission tran = new Transmission(aSocket);
 
 			// -----test
-			InetAddress host = InetAddress.getByName("localhost");
+			InetAddress host = InetAddress.getByName("go.joyclick.org");
 
 
 			System.out.println(tran.sendData(
-					"1:2:candidate:gu:dongfeng:1591 riverside", 8080,
+					"1:2:candidate:gu:dongfeng:1591 riverside", 8088,
 					host));
 			
 			System.out.println(tran.sendData(
-					"1:2:candidate2:gu:dongfeng:1591 riverside", 8080,
+					"1:2:candidate22:gau:dodngfeng:1591 riverdside", 8088,
 					host));
 			System.out.println(tran.sendData(
 					"1:1:voter:tom:liu:1591 riverside:hyfgdf", 8080, host));
