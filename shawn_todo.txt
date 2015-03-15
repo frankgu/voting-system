@@ -1,8 +1,8 @@
 
 TODO:
--modify server1 db acc and pwd (not root w/o pwd)
--server1 starter
 -candidate register
+
+-modify server1 db acc and pwd (not root w/o pwd)
 -serv1 xml database config addr 127.0.0.1 work, but not go.joyclick.org
  may caused by local database privileges setting (from host for account)
 
@@ -10,5 +10,10 @@ TODO:
 -added the remote server1 on go.joyclick.org:8088
 -tweak ClientConfig
 -Client parts all done
+
+2015/3/15
+-server1 starter
+
+
 
 test serv1 use database at same time with same db account

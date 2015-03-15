@@ -110,7 +110,7 @@ public class Transmission {
 
 		}
 		
-		return null; 
+		return "null"; 
 	
 	}
 	
