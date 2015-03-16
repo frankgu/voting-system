@@ -10,7 +10,9 @@ import java.io.FileWriter;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.ArrayList;
+import java.util.*;
+
+import antlr.collections.impl.Vector;
 
 import com.functions.Transmission;
 import com.object.Candidate;
@@ -20,7 +22,8 @@ public class testframework {
 
 	private static ArrayList<User> users;
 	private static ArrayList<Candidate> candidates;
-	private static ArrayList<String> voted;
+	//private static ArrayList<String> voted;
+	private static Vector voted;
 	
 	private String ufPath;
 	private String cfPath;
@@ -44,8 +47,7 @@ public class testframework {
 		
 		outputFile = new File(opPath+"//VotingSystemTest.txt");
 		
-		voted = new ArrayList<String>();
-		
+		//voted = new ArrayList<String>();
 		try{
 			aSocket = new DatagramSocket();
 			tran = new Transmission(aSocket);
@@ -78,6 +80,7 @@ public class testframework {
 		//testframework run = new testframework(ufPath,cfPath);
 		readUserData();
 		readCandData();
+		voted = new Vector(users.size());
 		
 		try{
 //			DatagramSocket aSocket = new DatagramSocket();
@@ -104,7 +107,7 @@ public class testframework {
 				int random = (int)Math.random()*candidates.size();
 				String data = "2:"+temp.getUserName()+":"+candidates.get(random).getUserName();
 				//out.write(tran.sendData(data, 8088, host)+"\r\n");
-				new Thread(new testVoting(tran,out,temp.getUserName(),candidates.get(random).getUserName())).start();
+				new Thread(new testVoting(tran,out,temp,candidates.get(random).getUserName())).start();
 			}
 			
 //			out.flush();
@@ -174,14 +177,15 @@ public class testframework {
 	}
 	
 	public static class testVoting implements Runnable {
-		String voterName;
+		//String voterName;
+		User voter;
 		String candName;
 		String message;
 		Transmission tran;
 		BufferedWriter out;
 		
-		public testVoting(Transmission t, BufferedWriter o, String vn, String cn){
-			voterName=vn;
+		public testVoting(Transmission t, BufferedWriter o, User voter, String cn){
+			this.voter = voter;
 			candName=cn;
 			tran =t;
 			out =o;
@@ -190,13 +194,14 @@ public class testframework {
 
 		@Override
 		public void run() {
-			String data = "2:"+voterName+":"+candName;
+			String data = "2:"+voter.getUserName()+":"+candName;
 			try{
 				message = tran.sendData(data, 8088, host);
 				out.write(message+"\r\n");
 				//System.out.println(message);
 				//System.out.print(out.toString()+"\r\n");
-				voted.add(this.candName);
+				//voted.add(this.candName);
+				voted.setElementAt(this.candName, users.indexOf(voter));
 				out.flush();
 			}catch(Exception e){
 				e.printStackTrace();
