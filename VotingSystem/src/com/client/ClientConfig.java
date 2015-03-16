@@ -92,7 +92,7 @@ public class ClientConfig {
 		shlClientConfiguration.setText("Client Configuration");
 		
 		final Combo combo = new Combo(shlClientConfiguration, SWT.READ_ONLY);
-		combo.setBounds(183, 97, 131, 22);
+		combo.setBounds(183, 97, 152, 34);
 		
 		URL servers;
 		try {
@@ -129,7 +129,7 @@ public class ClientConfig {
 		
 		Label label = new Label(shlClientConfiguration, SWT.NONE);
 		label.setText("Select District:");
-		label.setBounds(87, 100, 97, 14);
+		label.setBounds(98, 106, 97, 14);
 		
 		Button btnOk = new Button(shlClientConfiguration, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
