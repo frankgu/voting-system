@@ -1,0 +1,5 @@
+run .jar files by
+java -jar filename
+
+if you run them on Mac OSX, use
+java -jar -XstartOnFirstThread filename
