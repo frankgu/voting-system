@@ -1,3 +1,4 @@
+
 package com.testframework;
 
 import java.io.File;  
@@ -20,6 +21,10 @@ public class testframework {
 	private static ArrayList<User> users;
 	private static ArrayList<Candidate> candidates;
 	private static ArrayList<String> voted;
+	
+	private String ufPath;
+	private String cfPath;
+	private String opPath;
 
 	private File useFile;
 	private File candFile;
@@ -31,21 +36,27 @@ public class testframework {
 	
 	BufferedWriter out;
 
-	public testframework(String ufPath, String cfPath) {
+	public testframework(String cfPath, String ufPath, String opPath) {
+		this.ufPath = ufPath;
+		this.cfPath = cfPath;
 		useFile = new File(ufPath);
 		candFile = new File(cfPath);
-		//outputFile = new File(opPath);
+		
+		outputFile = new File(opPath+"//VotingSystemTest.txt");
 		
 		voted = new ArrayList<String>();
 		
 		try{
 			aSocket = new DatagramSocket();
 			tran = new Transmission(aSocket);
-			host = InetAddress.getByName("127.0.0.1");
-			//host = InetAddress.getByName("go.joyclick.org");
+			//host = InetAddress.getByName("127.0.0.1");
+			host = InetAddress.getByName("go.joyclick.org");
 			
-			out = new BufferedWriter(new FileWriter("//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt"));
+			//String output = opPath + "//VotingSystemTest.txt";
 			
+			
+			//out = new BufferedWriter(new FileWriter("//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt"));
+			out = new BufferedWriter(new FileWriter(outputFile));
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -53,26 +64,20 @@ public class testframework {
 		
 		users = new ArrayList<User>();
 		candidates = new ArrayList<Candidate>();
-//		try{
-//		if(!outputFile.exists()){
-//			outputFile.createNewFile();
-//		}
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
 		
 	}
 
 	public void run() {
 		
-		String ufPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//user.txt";
-		String cfPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//candidate.txt";
-		String opPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt";
+		//String ufPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//user.txt";
+		//String cfPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//candidate.txt";
+		//String opPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt";
 		
+		//String output = opPath + "//VotingSystemTest.txt";
 		
-		testframework run = new testframework(ufPath,cfPath);
-		run.readUserData();
-		run.readCandData();
+		//testframework run = new testframework(ufPath,cfPath);
+		readUserData();
+		readCandData();
 		
 		try{
 //			DatagramSocket aSocket = new DatagramSocket();
@@ -162,9 +167,9 @@ public class testframework {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		for(int i=0; i<users.size();i++){
-//			System.out.println(users.get(i).toString());
-//		}
+		for(int i=0; i<users.size();i++){
+			System.out.println(users.get(i).toString());
+		}
 	}
 	
 	public static class testVoting implements Runnable {
@@ -196,7 +201,6 @@ public class testframework {
 				e.printStackTrace();
 			}
 		}
-
 	}
-	
 }
+
