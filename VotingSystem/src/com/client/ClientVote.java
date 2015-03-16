@@ -110,10 +110,10 @@ public class ClientVote {
 	protected void createContents() {
 		shlVoting = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
 		shlVoting.setSize(593, 434);
-		shlVoting.setText("Voting");
+		shlVoting.setText("2015 Carleton Voting");
 		
 		Label lblUsrName = new Label(shlVoting, SWT.NONE);
-		lblUsrName.setBounds(37, 84, 60, 14);
+		lblUsrName.setBounds(37, 75, 204, 28);
 		lblUsrName.setText(voter.getFirstName()+" "+voter.getLastName());
 		
 		Label lblStatus = new Label(shlVoting, SWT.NONE);
@@ -126,27 +126,22 @@ public class ClientVote {
 		lblVotedFor.setText("Voted For:");
 		
 		final Label lblVotedName = new Label(shlVoting, SWT.NONE);
-		lblVotedName.setBounds(60, 175, 108, 37);
+		lblVotedName.setBounds(63, 174, 181, 37);
 		lblVotedName.setText("Voted Name");
 		
 		Label lblCanditate = new Label(shlVoting, SWT.NONE);
-		lblCanditate.setBounds(199, 150, 60, 14);
-		lblCanditate.setText("Canditates:");
-		
-		Label label = new Label(shlVoting, SWT.NONE);
-		label.setText("2015 Election");
-		label.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 13, SWT.NORMAL));
-		label.setBounds(315, 63, 134, 28);
+		lblCanditate.setBounds(244, 143, 86, 14);
+		lblCanditate.setText("Candidates:");
 		
 		Label label_1 = new Label(shlVoting, SWT.CENTER);
 		label_1.setText(voter.getDistrictName());
 		label_1.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 16, SWT.BOLD));
 		label_1.setAlignment(SWT.CENTER);
-		label_1.setBounds(112, 31, 385, 74);
+		label_1.setBounds(97, 23, 385, 74);
 		
 		
 		final List list = new List(shlVoting, SWT.BORDER);
-		list.setBounds(199, 170, 140, 151);
+		list.setBounds(247, 164, 140, 151);
 		String candis = tran.sendData("4:", port, host);
 		int numOfCand = (candis.split(":").length - 1)/3;
 		if(candis.split(":").length == 4){//only one candidate
@@ -167,11 +162,11 @@ public class ClientVote {
 		
 		
 		final Button btnVote = new Button(shlVoting, SWT.NONE);
-		btnVote.setBounds(221, 339, 95, 28);
+		btnVote.setBounds(278, 333, 95, 28);
 		btnVote.setText("Vote");
 		
 		final Label lblVoted = new Label(shlVoting, SWT.NONE);
-		lblVoted.setBounds(82, 116, 86, 14);
+		lblVoted.setBounds(82, 116, 95, 22);
 		String votedInfo;
 		votedInfo = tran.sendData("6:"+voter.getUserName(), port, host);
 		if(votedInfo.split(":")[1].equals("2")){//voted
