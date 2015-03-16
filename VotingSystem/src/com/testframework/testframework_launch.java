@@ -62,6 +62,7 @@ public class testframework_launch {
 		shell = new Shell();
 		shell.setSize(482, 338);
 		shell.setText("TestFrameWork");
+		shell.setLocation(300, 300);;
 		
 		text = new Text(shell, SWT.BORDER);
 		text.setBounds(60, 46, 290, 19);
