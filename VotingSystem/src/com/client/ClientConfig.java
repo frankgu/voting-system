@@ -16,8 +16,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionEvent;
+
+import com.testframework.testframework_launch;
 
 import java.util.ArrayList;
 
@@ -91,7 +92,7 @@ public class ClientConfig {
 		shlClientConfiguration.setText("Client Configuration");
 		
 		final Combo combo = new Combo(shlClientConfiguration, SWT.READ_ONLY);
-		combo.setBounds(183, 97, 131, 22);
+		combo.setBounds(183, 97, 152, 34);
 		
 		URL servers;
 		try {
@@ -128,7 +129,7 @@ public class ClientConfig {
 		
 		Label label = new Label(shlClientConfiguration, SWT.NONE);
 		label.setText("Select District:");
-		label.setBounds(87, 100, 97, 14);
+		label.setBounds(98, 106, 97, 14);
 		
 		Button btnOk = new Button(shlClientConfiguration, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
@@ -159,6 +160,22 @@ public class ClientConfig {
 		btnOk.setBounds(162, 161, 95, 28);
 		btnOk.setText("OK");
 		shlClientConfiguration.setDefaultButton(btnOk);
+		
+		Button btnTestMode = new Button(shlClientConfiguration, SWT.NONE);
+		btnTestMode.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					shlClientConfiguration.setEnabled(false);
+					testframework_launch window = new testframework_launch();
+					window.open();
+				} catch (Exception ee) {
+					ee.printStackTrace();
+				}
+				shlClientConfiguration.setEnabled(true);
+			}
+		});
+		btnTestMode.setBounds(345, 240, 95, 28);
+		btnTestMode.setText("Test Mode");
 		
 		shlClientConfiguration.addListener(SWT.Close, new Listener() {
 		      public void handleEvent(Event event) {

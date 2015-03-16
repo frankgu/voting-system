@@ -139,6 +139,7 @@ public class testframework {
 				tempC.setAddress(temp[3]);
 				candidates.add(tempC);
 			}
+			reader.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

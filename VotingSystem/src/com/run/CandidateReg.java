@@ -102,7 +102,7 @@ public class CandidateReg {
 		shlCandidateReg.setText("Candidate Registration");
 		
 		final Combo combo = new Combo(shlCandidateReg, SWT.READ_ONLY);
-		combo.setBounds(176, 18, 131, 22);
+		combo.setBounds(203, 38, 138, 22);
 		
 		URL servers;
 		try {
@@ -138,8 +138,9 @@ public class CandidateReg {
 		    });*/
 		
 		Label label = new Label(shlCandidateReg, SWT.NONE);
+		label.setAlignment(SWT.RIGHT);
 		label.setText("Select District:");
-		label.setBounds(86, 21, 97, 14);
+		label.setBounds(100, 41, 97, 14);
 		
 		Button btnOk = new Button(shlCandidateReg, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {

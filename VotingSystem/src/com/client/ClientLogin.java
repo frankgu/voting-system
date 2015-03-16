@@ -1,16 +1,13 @@
 package com.client;
 
-import java.io.*;
+//import java.io.*;
 import java.net.*;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
@@ -20,7 +17,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.functions.Transmission;
-import com.object.User;
 
 //login panel
 public class ClientLogin {
@@ -30,7 +26,7 @@ public class ClientLogin {
 	public  String district;
 	public String usr;
 	public String pwd;
-	private String servName;
+	//private String servName;
 	private String ip;
 	private int port;
 	public  String usrInfo;
@@ -46,7 +42,7 @@ public class ClientLogin {
 		district = "null";
 		usr      = "null";
 		pwd      = "null";
-		servName = "null";
+		//servName = "null";
 		ip       = "null";
 		port     = 0;
 		usrInfo  = "";
@@ -57,7 +53,7 @@ public class ClientLogin {
 		district = d;
 		usr = "null";
 		pwd = "null";
-		servName = n;
+		//servName = n;
 		ip = i;
 		port = p;
 		usrInfo  = "";
@@ -98,7 +94,7 @@ public class ClientLogin {
 		shlLogin.setText("Login");
 
 		text = new Text(shlLogin, SWT.BORDER);
-		text.setBounds(117, 138, 86, 19);
+		text.setBounds(117, 138, 86, 25);
 
 		Label lblUsername = new Label(shlLogin, SWT.NONE);
 		lblUsername.setBounds(46, 141, 65, 16);
@@ -184,19 +180,19 @@ public class ClientLogin {
 		lblPassword.setText("Password:");
 
 		text_1 = new Text(shlLogin, SWT.PASSWORD | SWT.BORDER);
-		text_1.setBounds(284, 138, 86, 19);
+		text_1.setBounds(284, 138, 86, 25);
 
 		Label lblDistrictElection = new Label(shlLogin, SWT.NONE);
 		lblDistrictElection.setFont(SWTResourceManager.getFont(
 				".Helvetica Neue DeskInterface", 13, SWT.NORMAL));
-		lblDistrictElection.setBounds(253, 69, 166, 28);
+		lblDistrictElection.setBounds(284, 69, 166, 28);
 		lblDistrictElection.setText("2015 Election");
 
 		Label lblDistrict = new Label(shlLogin, SWT.CENTER);
 		lblDistrict.setFont(SWTResourceManager.getFont(
 				".Helvetica Neue DeskInterface", 16, SWT.BOLD));
 		lblDistrict.setAlignment(SWT.CENTER);
-		lblDistrict.setBounds(46, 35, 373, 62);
+		lblDistrict.setBounds(10, 23, 430, 62);
 		lblDistrict.setText(district);
 
 		shlLogin.addListener(SWT.Close, new Listener() {
