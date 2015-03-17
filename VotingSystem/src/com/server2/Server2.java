@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+
 import org.hibernate.Session;
 
 import com.functions.HibernateUtil;
@@ -23,6 +24,7 @@ public class Server2 extends JFrame implements Runnable{
 		HibernateUtil.getSessionFactory();
 		
 		//frame properties(visible, size, closeoperation)
+		//pack();
 		setVisible(true);
 		setSize(500,500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -30,6 +32,7 @@ public class Server2 extends JFrame implements Runnable{
 		//gui panel
 		panel = new Server2GUIPanel();
 		add(panel);
+		panel.setVisible(true);
 	}
 
 	@Override
