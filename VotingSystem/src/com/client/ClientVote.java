@@ -68,6 +68,7 @@ public class ClientVote {
 		port     = p;
 		voter      = new Voter(u, ln, fn, n, addr, pwd);
 		candList = new ArrayList<Candidate>();
+		//
 		try {
 			aSocket = new DatagramSocket();
 			tran = new Transmission(aSocket);
@@ -185,6 +186,7 @@ public class ClientVote {
 		}
 		
 		btnVote.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				System.out.println(candList.get(list.getSelectionIndex()).fn+" "+candList.get(list.getSelectionIndex()).ln);
 				String rtnMsg;
@@ -212,6 +214,7 @@ public class ClientVote {
 		
 		Button btnLogOff = new Button(shlVoting, SWT.NONE);
 		btnLogOff.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//logoff
 				String rtnMsg;
@@ -232,6 +235,7 @@ public class ClientVote {
 		btnLogOff.setText("Log Out");
 		
 		shlVoting.addListener(SWT.Close, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				String rtnMsg;
 				rtnMsg = tran.sendData("5:"+voter.getUserName(), port, host);

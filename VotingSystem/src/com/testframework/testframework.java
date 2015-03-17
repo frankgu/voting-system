@@ -2,6 +2,7 @@
 package com.testframework;
 
 import java.io.File;  
+import java.io.IOException;
 import java.io.InputStreamReader;  
 import java.io.BufferedReader;  
 import java.io.BufferedWriter;  
@@ -52,11 +53,7 @@ public class testframework {
 			aSocket = new DatagramSocket();
 			tran = new Transmission(aSocket);
 			//host = InetAddress.getByName("127.0.0.1");
-			host = InetAddress.getByName("go.joyclick.org");
-			
-			//String output = opPath + "//VotingSystemTest.txt";
-			
-			
+			host = InetAddress.getByName("go.joyclick.org");	
 			//out = new BufferedWriter(new FileWriter("//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt"));
 			out = new BufferedWriter(new FileWriter(outputFile));
 			
@@ -69,54 +66,49 @@ public class testframework {
 		
 	}
 
-	public void run() {
-		
-		//String ufPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//user.txt";
-		//String cfPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//candidate.txt";
-		//String opPath = "//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt";
-		
-		//String output = opPath + "//VotingSystemTest.txt";
-		
-		//testframework run = new testframework(ufPath,cfPath);
+	public void run(String chosenCase) {
 		readUserData();
 		readCandData();
 		voted = new Vector(users.size());
-		
 		try{
-//			DatagramSocket aSocket = new DatagramSocket();
-//			Transmission tran = new Transmission(aSocket);
-			//InetAddress host = InetAddress.getByName("go.joyclick.org");
-						
-			
-			for(int i=0; i<candidates.size();i++){	//register candidate
-				Candidate temp = candidates.get(i);
-				String data = "1:2:"+temp.getUserName()+":"+temp.getLastName()+":"+temp.getFirstName()+":"+temp.getAddress();
-				out.write(tran.sendData(data, 8088, host)+"\r\n");
-				out.flush();
-			}
-			
-			for(int j=0; j<users.size();j++){	//register users
-				User temp = users.get(j);
-				String data = "1:1:"+temp.getUserName()+":"+temp.getLastName()+":"+temp.getFirstName()+":"+temp.getAddress()+":"+temp.getPassword();
-				out.write(tran.sendData(data, 8088, host)+"\r\n");
-				out.flush();
-			}
-			
-			for(int k=0; k<users.size();k++){	//voting
-				User temp = users.get(k);
-				int random = (int)Math.random()*candidates.size();
-				String data = "2:"+temp.getUserName()+":"+candidates.get(random).getUserName();
-				//out.write(tran.sendData(data, 8088, host)+"\r\n");
-				new Thread(new testVoting(tran,out,temp,candidates.get(random).getUserName())).start();
-			}
-			
-//			out.flush();
-			if(voted.size()==users.size()){
+			if(chosenCase.equals("VR1") || chosenCase.equals("VR2") || chosenCase.equals("VR3")){	//the voters registration cases
+				System.out.print(123);
+				registerVoter(users);
 				out.close();
+				return;
+			}
+			if(chosenCase.equals("CR1") || chosenCase.equals("CR2") || chosenCase.equals("CR3")){	//the candidate registration cases
+				registerCandidate(candidates);
+				out.close();
+				return;
+			}
+			if(chosenCase.equals("V1") || chosenCase.equals("V1")){		//the voting cases 
+				registerCandidate(candidates);
+				registerVoter(users);
+				voterLogin(users);
+				voting(users, candidates);
+				voterLogout(users);
+				if(voted.size()==users.size()){
+					out.close();
+				}
+				return;
+			}
+			if(chosenCase.equals("LI1") || chosenCase.equals("LI2")||chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")){
+				registerCandidate(candidates);
+				registerVoter(users);
+				voterLogin(users);
+				out.close();
+				return;
+			}
+			if(chosenCase.equals("LO1")||chosenCase.equals("LO2")){
+				registerCandidate(candidates);
+				registerVoter(users);
+				voterLogin(users);
+				voterLogout(users);
+				out.close();
+				return;
 			}
 			
-		}catch(SocketException e){
-			e.printStackTrace();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -144,9 +136,9 @@ public class testframework {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for(int i=0; i<candidates.size();i++){
-			System.out.println(candidates.toString());
-		}
+//		for(int i=0; i<candidates.size();i++){
+//			System.out.println(candidates.toString());
+//		}
 	}
 
 	protected void readUserData() {
@@ -171,8 +163,59 @@ public class testframework {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for(int i=0; i<users.size();i++){
-			System.out.println(users.get(i).toString());
+//		for(int i=0; i<users.size();i++){
+//			System.out.println(users.get(i).toString());
+//		}
+	}
+	
+	public void registerVoter(ArrayList<User> users) throws IOException{
+		for(int j=0; j<users.size();j++){	//register users
+			User temp = users.get(j);
+			String data = "1:1:"+temp.getUserName()+":"+temp.getLastName()+":"+temp.getFirstName()+":"+temp.getAddress()+":"+temp.getPassword();
+			String output = tran.sendData(data, 8088, host)+"\r\n";
+			out.write(output);
+			System.out.print(output);
+			out.flush();
+		}
+	}
+	
+	public void registerCandidate(ArrayList<Candidate> candidates) throws IOException {
+		for(int i=0; i<candidates.size();i++){	//register candidate
+			Candidate temp = candidates.get(i);
+			String data = "1:2:"+temp.getUserName()+":"+temp.getLastName()+":"+temp.getFirstName()+":"+temp.getAddress();
+			out.write(tran.sendData(data, 8088, host)+"\r\n");
+			out.flush();
+		}
+	}
+	
+	public void voterLogin(ArrayList<User> users) throws IOException{
+		for(int i=0; i<users.size(); i++){
+			User temp = users.get(i);
+			String data = "3:"+temp.getUserName()+":"+temp.getPassword();
+			String output = tran.sendData(data, 8088, host)+"\r\n";
+			out.write(output);
+			out.flush();
+		}
+	}
+	
+	public void voterLogout(ArrayList<User> users) throws IOException{
+		for(int i=0; i<users.size(); i++){
+			User temp = users.get(i);
+			String data = "5:"+temp.getUserName();
+			String output = tran.sendData(data, 8088, host)+"\r\n";
+			System.out.println(output);
+			out.write(output);
+			out.flush();
+		}
+	}
+	
+	public void voting(ArrayList<User> users, ArrayList<Candidate> candidates){
+		for(int k=0; k<users.size();k++){	//voting
+			User temp = users.get(k);
+			int random = (int)Math.random()*candidates.size();
+			String data = "2:"+temp.getUserName()+":"+candidates.get(random).getUserName();
+			//out.write(tran.sendData(data, 8088, host)+"\r\n");
+			new Thread(new testVoting(tran,out,temp,candidates.get(random).getUserName())).start();
 		}
 	}
 	
@@ -198,9 +241,6 @@ public class testframework {
 			try{
 				message = tran.sendData(data, 8088, host);
 				out.write(message+"\r\n");
-				//System.out.println(message);
-				//System.out.print(out.toString()+"\r\n");
-				//voted.add(this.candName);
 				voted.setElementAt(this.candName, users.indexOf(voter));
 				out.flush();
 			}catch(Exception e){

@@ -132,6 +132,7 @@ public class ClientRegister {
 		
 		btnReg = new Button(shlRegistration, SWT.NONE);
 		btnReg.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//reg btn todo
 				String pwd     = text.getText();
@@ -186,6 +187,7 @@ public class ClientRegister {
 		
 		btnCancel = new Button(shlRegistration, SWT.NONE);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				shlRegistration.dispose();
 			}

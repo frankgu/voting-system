@@ -89,6 +89,7 @@ public class Server1Starter_GUI {
 		
 		Button btnStart = new Button(shlServerStarter, SWT.NONE);
 		btnStart.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(!text.getText().isEmpty() && !text_1.getText().isEmpty() && !text_2.getText().isEmpty()){
 					Server1 server1 = new Server1(text.getText(), Integer.parseInt(text_2.getText()), text_1.getText());
@@ -108,7 +109,8 @@ public class Server1Starter_GUI {
 		btnStart.setBounds(191, 209, 95, 28);
 		btnStart.setText("Start");
 		text_2.addListener(SWT.Verify, new Listener() {
-		      public void handleEvent(Event e) {
+		      @Override
+			public void handleEvent(Event e) {
 		        String string = e.text;
 		        char[] chars = new char[string.length()];
 		        string.getChars(0, chars.length, chars, 0);

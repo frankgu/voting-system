@@ -102,6 +102,7 @@ public class ClientLogin {
 
 		Button btnRegister = new Button(shlLogin, SWT.NONE);
 		btnRegister.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// to do register
 				// 1.pop register window
@@ -122,6 +123,7 @@ public class ClientLogin {
 
 		Button btnLogin = new Button(shlLogin, SWT.NONE);
 		btnLogin.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// to do login
 				usr = text.getText();
@@ -196,6 +198,7 @@ public class ClientLogin {
 		lblDistrict.setText(district);
 
 		shlLogin.addListener(SWT.Close, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 				MessageBox messageBox = new MessageBox(shlLogin, style);

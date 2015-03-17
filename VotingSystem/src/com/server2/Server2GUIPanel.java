@@ -30,6 +30,7 @@ public class Server2GUIPanel extends JPanel {
 		this.votes = votes;
 	}
 	
+	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		

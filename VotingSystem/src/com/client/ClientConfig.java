@@ -133,6 +133,7 @@ public class ClientConfig {
 		
 		Button btnOk = new Button(shlClientConfiguration, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if( combo.getText().length() == 0){
 					int style = SWT.ICON_ERROR;
@@ -163,6 +164,7 @@ public class ClientConfig {
 		
 		Button btnTestMode = new Button(shlClientConfiguration, SWT.NONE);
 		btnTestMode.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
 					shlClientConfiguration.setEnabled(false);
@@ -178,7 +180,8 @@ public class ClientConfig {
 		btnTestMode.setText("Test Mode");
 		
 		shlClientConfiguration.addListener(SWT.Close, new Listener() {
-		      public void handleEvent(Event event) {
+		      @Override
+			public void handleEvent(Event event) {
 		        int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 		        MessageBox messageBox = new MessageBox(shlClientConfiguration, style);
 		        messageBox.setText("Exit");

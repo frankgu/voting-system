@@ -144,6 +144,7 @@ public class CandidateReg {
 		
 		Button btnOk = new Button(shlCandidateReg, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if( combo.getText().length() == 0){
 					int style = SWT.ICON_ERROR;
@@ -245,7 +246,8 @@ public class CandidateReg {
 		lblAddress.setBounds(52, 161, 158, 22);
 		
 		shlCandidateReg.addListener(SWT.Close, new Listener() {
-		      public void handleEvent(Event event) {
+		      @Override
+			public void handleEvent(Event event) {
 		        int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
 		        MessageBox messageBox = new MessageBox(shlCandidateReg, style);
 		        messageBox.setText("Exit");

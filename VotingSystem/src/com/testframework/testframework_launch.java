@@ -121,15 +121,18 @@ public class testframework_launch {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(selectedDir1.compareTo("")!=1 && selectedDir2.compareTo("")!=1){
-					testframework tf = new testframework(selectedDir1, selectedDir2,selectedDir3);
-					System.out.println(selectedDir1);
-					System.out.println(selectedDir2);
-					tf.run();
+//					testframework tf = new testframework(selectedDir1, selectedDir2,selectedDir3);
+//					System.out.println(selectedDir1);
+//					System.out.println(selectedDir2);
+//					tf.run();
+				
+					testcases_window tw = new testcases_window();
+					tw.open(selectedDir1,selectedDir2,selectedDir3);
 				}
 			}
 		});
-		btnTest.setBounds(191, 254, 94, 28);
-		btnTest.setText("Test");
+		btnTest.setBounds(145, 255, 159, 28);
+		btnTest.setText("Choose Test Case");
 		
 		text_2 = new Text(shell, SWT.BORDER);
 		text_2.setBounds(60, 193, 290, 19);

@@ -2,8 +2,6 @@ package com.object;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -60,6 +58,7 @@ public class User {
 		this.password = password;
 	}
 	
+	@Override
 	public String toString(){
 		return userName + ":" + LastName + ":" + FirstName + ":" +address + ":" + password;
 	}
