@@ -124,10 +124,10 @@ public class Server1 implements Runnable {
 				aSocket.receive(request);
 				queue.add(request);
 
-			} catch(SocketTimeoutException e){
-				
-				//do nothing
-				
+			} catch (SocketTimeoutException e) {
+
+				// do nothing
+
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -154,10 +154,10 @@ public class Server1 implements Runnable {
 		public void run() {
 
 			while (true) {
-				if (!queue.isEmpty()) {
 
-					// -----poll a packet from the queue
-					DatagramPacket packet = queue.poll();
+				// -----poll a packet from the queue
+				DatagramPacket packet = queue.poll();
+				if (packet != null) {
 					// -----check if the data is valid or not, if the data is
 					// invalid, tell the client to send the message again
 					if (!tran
@@ -259,15 +259,18 @@ public class Server1 implements Runnable {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 		Voter voter = (Voter) session.get(Voter.class, userName);
-		Candidate cand = (Candidate) session.get(Candidate.class, voter.getCandidateName());//to fix reply msg
-		
+		Candidate cand = (Candidate) session.get(Candidate.class,
+				voter.getCandidateName());// to fix reply msg
+
 		if (voter.getCandidateName().isEmpty()) {
 
 			tran.replyData("4:1", port, host);
 
 		} else {
 
-			tran.replyData("4:2:" + cand.getFirstName()+":"+cand.getLastName(), port, host);
+			tran.replyData(
+					"4:2:" + cand.getFirstName() + ":" + cand.getLastName(),
+					port, host);
 
 		}
 		session.getTransaction().commit();
@@ -397,7 +400,7 @@ public class Server1 implements Runnable {
 		Voter voter = (Voter) session.get(Voter.class, voterUserName);
 
 		System.out.println("candidateUserName" + " " + candidateUserName);
-		
+
 		if (voter.getCandidateName().isEmpty()) {
 
 			candidate.setPolls(candidate.getPolls() + 1);
