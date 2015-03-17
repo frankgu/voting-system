@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="dependentJar/jboss-logging-annotations-1.2.0.Beta1.jar"/>
 	<classpathentry kind="lib" path="dependentJar/jboss-transaction-api_1.2_spec-1.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="dependentJar/swing2swt.jar"/>
-	<classpathentry kind="lib" path="/Users/xianchizou/Documents/workspace/voting-system/VotingSystem/dependentJar/swt-debug.jar"/>
-	<classpathentry kind="lib" path="/Users/xianchizou/Documents/workspace/voting-system/VotingSystem/dependentJar/swt.jar"/>
+	<classpathentry kind="lib" path="/Users/Shawn/Documents/git/voting-system/VotingSystem/dependentJar/swt-debug.jar"/>
+	<classpathentry kind="lib" path="/Users/Shawn/Documents/git/voting-system/VotingSystem/dependentJar/swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
