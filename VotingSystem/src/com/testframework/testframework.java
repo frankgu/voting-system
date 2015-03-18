@@ -41,8 +41,8 @@ public class testframework {
 	BufferedWriter out;
 
 	public testframework(String cfPath, String ufPath, String opPath) {
-		this.ufPath = ufPath;
 		this.cfPath = cfPath;
+		this.ufPath = ufPath;
 		useFile = new File(ufPath);
 		candFile = new File(cfPath);
 		
@@ -67,12 +67,11 @@ public class testframework {
 	}
 
 	public void run(String chosenCase) {
-		readUserData();
 		readCandData();
+		readUserData();		
 		voted = new Vector(users.size());
 		try{
 			if(chosenCase.equals("VR1") || chosenCase.equals("VR2") || chosenCase.equals("VR3")){	//the voters registration cases
-				System.out.print(123);
 				registerVoter(users);
 				out.close();
 				return;
@@ -83,8 +82,6 @@ public class testframework {
 				return;
 			}
 			if(chosenCase.equals("V1") || chosenCase.equals("V1")){		//the voting cases 
-				registerCandidate(candidates);
-				registerVoter(users);
 				voterLogin(users);
 				voting(users, candidates);
 				voterLogout(users);
@@ -94,14 +91,12 @@ public class testframework {
 				return;
 			}
 			if(chosenCase.equals("LI1") || chosenCase.equals("LI2")||chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")){
-				registerCandidate(candidates);
 				registerVoter(users);
 				voterLogin(users);
 				out.close();
 				return;
 			}
 			if(chosenCase.equals("LO1")||chosenCase.equals("LO2")){
-				registerCandidate(candidates);
 				registerVoter(users);
 				voterLogin(users);
 				voterLogout(users);
@@ -116,22 +111,25 @@ public class testframework {
 
 	private void readCandData() {
 		String data = "";
-		BufferedReader br;
-		Candidate tempC;
+		BufferedReader cr;
+		Candidate tempCa;
 		try {
 			InputStreamReader reader = new InputStreamReader(
 					new FileInputStream(candFile));
-			br = new BufferedReader(reader);
-			while((data=br.readLine())!=null){
-				tempC = new Candidate();
+			cr = new BufferedReader(reader);
+			data = cr.readLine();
+			while(data!=null){
+				//System.out.println(data);
+				tempCa = new Candidate();
 				String[] temp = data.split(":");
-				tempC.setUserName(temp[0]);
-				tempC.setLastName(temp[1]);
-				tempC.setFirstName(temp[2]);
-				tempC.setAddress(temp[3]);
-				candidates.add(tempC);
+				tempCa.setUserName(temp[0]);
+				tempCa.setLastName(temp[1]);
+				tempCa.setFirstName(temp[2]);
+				tempCa.setAddress(temp[3]);
+				candidates.add(tempCa);
+				data = cr.readLine();
 			}
-			reader.close();
+			System.out.println(candidates.size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,7 +157,7 @@ public class testframework {
 				tempU.setPassword(temp[4]);
 				users.add(tempU);
 			}
-
+			//br.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
