@@ -78,7 +78,7 @@ public class ClientRegister {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shlRegistration = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
+		shlRegistration = new Shell(SWT.CLOSE | SWT.TITLE);
 		shlRegistration.setSize(450, 300);
 		shlRegistration.setText("Registration");
 		

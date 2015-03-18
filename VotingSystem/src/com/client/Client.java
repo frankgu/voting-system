@@ -33,6 +33,8 @@ public class Client {
 		}
 		
 		while(true){
+			if(config.quit)
+				break;
 			//login window
 			ClientLogin login = new ClientLogin(name, name, ip, port);
 			try {

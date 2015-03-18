@@ -89,7 +89,7 @@ public class ClientLogin {
 	 */
 
 	protected void createContents() {
-		shlLogin = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
+		shlLogin = new Shell(SWT.CLOSE | SWT.TITLE);
 		shlLogin.setSize(450, 300);
 		shlLogin.setText("Login");
 

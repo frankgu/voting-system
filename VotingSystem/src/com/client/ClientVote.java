@@ -109,7 +109,7 @@ public class ClientVote {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shlVoting = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
+		shlVoting = new Shell(SWT.CLOSE | SWT.TITLE);
 		shlVoting.setSize(593, 434);
 		shlVoting.setText("2015 Carleton Voting");
 		

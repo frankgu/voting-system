@@ -97,7 +97,7 @@ public class CandidateReg {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shlCandidateReg = new Shell(SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
+		shlCandidateReg = new Shell(SWT.CLOSE | SWT.TITLE);
 		shlCandidateReg.setSize(450, 276);
 		shlCandidateReg.setText("Candidate Registration");
 		
