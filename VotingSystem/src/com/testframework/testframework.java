@@ -117,8 +117,7 @@ public class testframework {
 			InputStreamReader reader = new InputStreamReader(
 					new FileInputStream(candFile));
 			cr = new BufferedReader(reader);
-			data = cr.readLine();
-			while(data!=null){
+			while((data =cr.readLine())!=null){
 				//System.out.println(data);
 				tempCa = new Candidate();
 				String[] temp = data.split(":");
@@ -127,7 +126,6 @@ public class testframework {
 				tempCa.setFirstName(temp[2]);
 				tempCa.setAddress(temp[3]);
 				candidates.add(tempCa);
-				data = cr.readLine();
 			}
 			System.out.println(candidates.size());
 
