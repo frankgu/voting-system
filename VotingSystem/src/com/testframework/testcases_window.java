@@ -10,11 +10,11 @@ import org.eclipse.swt.widgets.Label;
 
 public class testcases_window {
 	
-	static String l1;
-
-	static String l2;
-
-	static String l3;
+//	static String l1;
+//
+//	static String l2;
+//
+//	static String l3;
 
 	protected Shell shell;
 
@@ -25,7 +25,7 @@ public class testcases_window {
 	public static void main(String[] args) {
 		try {
 			testcases_window window = new testcases_window();
-			window.open(l1,l2,l3);
+			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -34,10 +34,10 @@ public class testcases_window {
 	/**
 	 * Open the window.
 	 */
-	public void open(String l1, String l2, String l3) {
-		this.l1 = l1;
-		this.l2 = l2;
-		this.l3 = l3;
+	public void open() {
+//		this.l1 = l1;
+//		this.l2 = l2;
+//		this.l3 = l3;
 		Display display = Display.getDefault();
 		createContents();
 		shell.open();
@@ -61,8 +61,10 @@ public class testcases_window {
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("VR1");
+				//testframework tf = new testframework(l1, l2, l3);
+				//tf.run("VR1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("VR1");
 			}
 		});
 		btnNewButton.setBounds(37, 36, 90, 28);
@@ -72,8 +74,10 @@ public class testcases_window {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("VR2");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("VR2");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("VR2");
 			}
 		});
 		button.setBounds(155, 36, 138, 28);
@@ -83,8 +87,10 @@ public class testcases_window {
 		btnLargenumbervoters.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("VR3");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("VR3");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("VR3");
 			}
 		});
 		btnLargenumbervoters.setBounds(315, 36, 170, 28);
@@ -98,8 +104,10 @@ public class testcases_window {
 		btnRegister.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("CR1");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("CR1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("CR1");
 			}
 		});
 		btnRegister.setBounds(37, 109, 90, 28);
@@ -113,8 +121,10 @@ public class testcases_window {
 		btnDuplicatecandidates.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("CR2");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("CR2");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("CR2");
 			}
 		});
 		btnDuplicatecandidates.setBounds(133, 109, 172, 28);
@@ -124,8 +134,10 @@ public class testcases_window {
 		btnLargenumbercandidates.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("CR3");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("CR3");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("CR3");
 			}
 		});
 		btnLargenumbercandidates.setBounds(312, 109, 187, 28);
@@ -135,8 +147,10 @@ public class testcases_window {
 		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("V1");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("V1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("V1");
 			}
 		});
 		btnNewButton_1.setBounds(37, 163, 94, 28);
@@ -146,8 +160,10 @@ public class testcases_window {
 		btnAlreadyvoted.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("V2");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("V2");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("V2");
 			}
 		});
 		btnAlreadyvoted.setBounds(149, 163, 125, 28);
@@ -161,8 +177,10 @@ public class testcases_window {
 		btnActivatedlimit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("LI1");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LI1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("LI1");
 			}
 		});
 		btnActivatedlimit.setBounds(37, 220, 108, 28);
@@ -176,8 +194,10 @@ public class testcases_window {
 		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("LI2");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LI2");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("LI2");
 			}
 		});
 		btnNewButton_2.setBounds(149, 220, 175, 28);
@@ -187,8 +207,10 @@ public class testcases_window {
 		btnAlreadylogedin.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("LI3");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LI3");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("LI3");
 			}
 		});
 		btnAlreadylogedin.setBounds(354, 220, 131, 28);
@@ -198,8 +220,10 @@ public class testcases_window {
 		btnInvalidpassword.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("LI4");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LI4");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("LI4");
 			}
 		});
 		btnInvalidpassword.setBounds(37, 265, 115, 28);
@@ -209,8 +233,10 @@ public class testcases_window {
 		btnCannotfindusername.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("LI5");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LI5");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("LI5");
 			}
 		});
 		btnCannotfindusername.setBounds(173, 265, 170, 28);
@@ -224,8 +250,10 @@ public class testcases_window {
 		btnLogout.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("LO1");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LO1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("LO1");
 			}
 		});
 		btnLogout.setBounds(37, 335, 94, 28);
@@ -235,8 +263,10 @@ public class testcases_window {
 		btnAlreadylogout.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				testframework tf = new testframework(l1, l2, l3);
-				tf.run("LO2");
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LO2");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("LO2");
 			}
 		});
 		btnAlreadylogout.setBounds(152, 335, 111, 28);

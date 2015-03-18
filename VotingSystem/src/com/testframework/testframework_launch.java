@@ -26,6 +26,8 @@ public class testframework_launch {
 	private Text text_2;
 	private Button button_1;
 	private Label lblOutputFile;
+	
+	private static String chosenCase;
 
 	/**
 	 * Launch the application.
@@ -34,7 +36,7 @@ public class testframework_launch {
 	public static void main(String[] args) {
 		try {
 			testframework_launch window = new testframework_launch();
-			window.open();
+			window.open(chosenCase);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -43,8 +45,9 @@ public class testframework_launch {
 	/**
 	 * Open the window.
 	 */
-	public void open() {
+	public void open(String chosenCase) {
 		Display display = Display.getDefault();
+		this.chosenCase = chosenCase;
 		createContents();
 		shell.open();
 		shell.layout();
@@ -127,13 +130,15 @@ public class testframework_launch {
 //					System.out.println(selectedDir2);
 //					tf.run();
 				
-					testcases_window tw = new testcases_window();
-					tw.open(selectedDir1,selectedDir2,selectedDir3);
+					//testcases_window tw = new testcases_window();
+					//tw.open(selectedDir1,selectedDir2,selectedDir3);
+					testframework tf = new testframework(selectedDir1,selectedDir2,selectedDir3);
+					tf.run(chosenCase);
 				}
 			}
 		});
 		btnTest.setBounds(145, 255, 159, 28);
-		btnTest.setText("Choose Test Case");
+		btnTest.setText("Test");
 		
 		text_2 = new Text(shell, SWT.BORDER);
 		text_2.setBounds(60, 193, 290, 19);

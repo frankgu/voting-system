@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+import com.testframework.testcases_window;
 import com.testframework.testframework_launch;
 
 import java.util.ArrayList;
@@ -168,7 +169,9 @@ public class ClientConfig {
 			public void widgetSelected(SelectionEvent e) {
 				try {
 					shlClientConfiguration.setEnabled(false);
-					testframework_launch window = new testframework_launch();
+//					testframework_launch window = new testframework_launch();
+//					window.open();
+					testcases_window window = new testcases_window();
 					window.open();
 				} catch (Exception ee) {
 					ee.printStackTrace();

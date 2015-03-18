@@ -52,8 +52,8 @@ public class testframework {
 		try{
 			aSocket = new DatagramSocket();
 			tran = new Transmission(aSocket);
-			//host = InetAddress.getByName("127.0.0.1");
-			host = InetAddress.getByName("go.joyclick.org");	
+			host = InetAddress.getByName("127.0.0.1");
+			//host = InetAddress.getByName("go.joyclick.org");	
 			//out = new BufferedWriter(new FileWriter("//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt"));
 			out = new BufferedWriter(new FileWriter(outputFile));
 			
@@ -127,7 +127,7 @@ public class testframework {
 				tempCa.setAddress(temp[3]);
 				candidates.add(tempCa);
 			}
-			System.out.println(candidates.size());
+			//System.out.println(candidates.size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -179,7 +179,9 @@ public class testframework {
 		for(int i=0; i<candidates.size();i++){	//register candidate
 			Candidate temp = candidates.get(i);
 			String data = "1:2:"+temp.getUserName()+":"+temp.getLastName()+":"+temp.getFirstName()+":"+temp.getAddress();
-			out.write(tran.sendData(data, 8088, host)+"\r\n");
+			String message = tran.sendData(data, 8088, host)+"\r\n";
+			System.out.println(message);
+			out.write(message);
 			out.flush();
 		}
 	}
@@ -189,6 +191,7 @@ public class testframework {
 			User temp = users.get(i);
 			String data = "3:"+temp.getUserName()+":"+temp.getPassword();
 			String output = tran.sendData(data, 8088, host)+"\r\n";
+			System.out.println(output);
 			out.write(output);
 			out.flush();
 		}
@@ -236,6 +239,7 @@ public class testframework {
 			String data = "2:"+voter.getUserName()+":"+candName;
 			try{
 				message = tran.sendData(data, 8088, host);
+				System.out.println(message);
 				out.write(message+"\r\n");
 				voted.setElementAt(this.candName, users.indexOf(voter));
 				out.flush();
