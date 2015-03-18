@@ -119,6 +119,7 @@ public class Server1 implements Runnable {
 		while (true) {
 
 			DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+			
 			try {
 
 				aSocket.receive(request);
@@ -285,7 +286,7 @@ public class Server1 implements Runnable {
 		Voter voter = new Voter(userName, lastName, firstName, district,
 				address, password);
 
-		String replyMessage = new String("2:Successfully regist for voter");
+		String replyMessage = new String("2:(" + userName + ") has successfully registered");
 
 		try {
 
@@ -308,7 +309,7 @@ public class Server1 implements Runnable {
 			} else {
 
 				replyMessage = new String(
-						"1:Voter number reach the limits for this district");
+						"1:Voter number has reached the limit for this district");
 
 			}
 
@@ -319,7 +320,7 @@ public class Server1 implements Runnable {
 
 			// fail to insert the voter because the userName already
 			// being used
-			replyMessage = new String("1:Voter user name already exist");
+			replyMessage = new String("1:Voter username (" + userName + ") already exists");
 
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
@@ -341,7 +342,7 @@ public class Server1 implements Runnable {
 		Candidate candidate = new Candidate(userName, lastName, firstName,
 				district, address, password);
 
-		String replyMessage = new String("2:Sucessfully regist for candidate");
+		String replyMessage = new String("2:(" + userName + ") has sucessfully registered");
 
 		try {
 
@@ -365,7 +366,7 @@ public class Server1 implements Runnable {
 			} else {
 
 				replyMessage = new String(
-						"1:Candidate number reach the limits for this district");
+						"1:Candidate number has reached the limit for this district");
 
 			}
 
@@ -374,7 +375,7 @@ public class Server1 implements Runnable {
 
 		} catch (JDBCException e) {
 
-			replyMessage = new String("1:Candidate user name already exist");
+			replyMessage = new String("1:Candidate username (" + userName + ") already exists");
 
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
@@ -407,11 +408,11 @@ public class Server1 implements Runnable {
 			session.update(candidate);
 			voter.setCandidateName(candidateUserName);
 			session.update(voter);
-			tran.replyData("2:Sucessfully vote", port, host);
+			tran.replyData("2:(" + voterUserName + ") has sucessfully voted", port, host);
 
 		} else {
 
-			tran.replyData("1:Voter already voted", port, host);
+			tran.replyData("1:Voter (" + voterUserName + ") has already voted", port, host);
 
 		}
 		lock1.unlock();
@@ -440,7 +441,7 @@ public class Server1 implements Runnable {
 					if (activeUsers.size() == availableUserNum) {
 
 						tran.replyData(
-								"1:Active users reach the limits in this server",
+								"1:Active users have reached the limit for this server",
 								port, host);
 
 					} else {
@@ -469,7 +470,7 @@ public class Server1 implements Runnable {
 						} else {
 
 							tran.replyData(
-									"1:Voter doesn't belong to this destrict",
+									"1:Voter (" + userName + ") doesn't belong to this destrict",
 									port, host);
 
 						}
@@ -478,7 +479,7 @@ public class Server1 implements Runnable {
 
 				} else {
 
-					tran.replyData("1:Voter already login", port, host);
+					tran.replyData("1:Voter (" + userName + ") already login", port, host);
 
 				}
 
@@ -494,7 +495,7 @@ public class Server1 implements Runnable {
 		} else {
 
 			tran.replyData(
-					"1:Can't find the voter name, please regist an account or login as a voter",
+					"1:Can't find the voter username (" + userName + ") , please register an account or login as a voter",
 					port, host);
 		}
 
@@ -542,11 +543,11 @@ public class Server1 implements Runnable {
 
 		if (success) {
 
-			tran.replyData("2:Successfully logout", port, host);
+			tran.replyData("2:" + userName + " has successfully logged out", port, host);
 
 		} else {
 
-			tran.replyData("1:Voter already logout", port, host);
+			tran.replyData("1:Voter (" + userName + ") has already logged out", port, host);
 
 		}
 
