@@ -13,11 +13,13 @@ import com.object.Candidate;
 public class Server2GUIPanel extends JPanel {
 	
 	private List<Candidate> votes;
+	private ArrayList<Candidate> winner;
 	private ArrayList<Color> colors;
 	
 	public Server2GUIPanel(){
 		votes = new ArrayList<Candidate>();
 		colors = new ArrayList<Color>();
+		winner = new ArrayList<Candidate>();
 		colors.add(Color.blue);
 		colors.add(Color.green);
 		colors.add(Color.yellow);
@@ -30,13 +32,17 @@ public class Server2GUIPanel extends JPanel {
 		this.votes = votes;
 	}
 	
+	public void setWinner(ArrayList<Candidate> winner){
+		this.winner = winner;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		
 		//scale
 		g.setColor(Color.black);
-		for(int i = 0; i<6; i++){
+		for(int i = 0; i<5; i++){
 			//the number
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 			g.drawString(""+i*50, 15, 350-i*50);
@@ -47,7 +53,20 @@ public class Server2GUIPanel extends JPanel {
 		//title
 		g.setColor(Color.black);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-		g.drawString("Election Results", votes.size()*100/2, 50);
+		g.drawString("Election Results", 5, 50);
+		//display winner
+		if (winner.size()>1){
+			String leaders = "";
+			for(int i = 0; i<winner.size(); i++){
+				leaders = leaders + winner.get(i).getFirstName() + " " + winner.get(i).getLastName();
+				if (!(i+1==winner.size()))
+					leaders = leaders + ", ";
+			}
+			g.drawString("Poll Leaders: " + leaders, 5, 75);
+		}
+			
+		else g.drawString("Poll Leader: " + winner.get(0), 5, 75);
+		
 		
 		//vote bar graph
 		for(int i = 0; i<votes.size(); i++){
