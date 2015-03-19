@@ -46,9 +46,8 @@ public class Server1 implements Runnable {
 	private int availableUserNum = 0;
 
 	// -----lock for the critical section
-	private Lock lock1 = new ReentrantLock();
-	private Lock lock2 = new ReentrantLock();
-	private Lock lock3 = new ReentrantLock();
+	private Object lock1 = new Object();
+	private Object lock2 = new Object();
 
 	// ------queue for the datagramepacket in order to deal with the FIFO
 	private Queue<DatagramPacket> queue = null;
@@ -119,7 +118,7 @@ public class Server1 implements Runnable {
 		while (true) {
 
 			DatagramPacket request = new DatagramPacket(buffer, buffer.length);
-			
+
 			try {
 
 				aSocket.receive(request);
@@ -159,28 +158,45 @@ public class Server1 implements Runnable {
 				// -----poll a packet from the queue
 				DatagramPacket packet = queue.poll();
 				if (packet != null) {
-					// -----check if the data is valid or not, if the data is
-					// invalid, tell the client to send the message again
-					if (!tran
-							.dataVlidated(packet.getData(), packet.getLength())) {
-
-						String resendMessage = new String("resend");
-						tran.replyData(resendMessage, packet.getPort(),
-								packet.getAddress());
-
-					} else {
-
-						// -----data is valid, process the data
-						analyseDataFromClient(packet.getData(),
-								packet.getLength(), packet.getPort(),
-								packet.getAddress());
-
-					}
-
+					new Thread(new processPacket(packet)).start();
 				}
 
 			}
 		}
+	}
+
+	public class processPacket implements Runnable {
+
+		private DatagramPacket packet;
+
+		public processPacket(DatagramPacket packet) {
+
+			this.packet = packet;
+
+		}
+
+		@Override
+		public void run() {
+
+			// -----check if the data is valid or not, if the data is
+			// invalid, tell the client to send the message again
+
+			if (!tran.dataVlidated(packet.getData(), packet.getLength())) {
+
+				String resendMessage = new String("resend");
+				tran.replyData(resendMessage, packet.getPort(),
+						packet.getAddress());
+
+			} else {
+
+				// -----data is valid, process the data
+				analyseDataFromClient(packet.getData(), packet.getLength(),
+						packet.getPort(), packet.getAddress());
+
+			}
+
+		}
+
 	}
 
 	private void analyseDataFromClient(byte[] data, int length, int port,
@@ -286,7 +302,8 @@ public class Server1 implements Runnable {
 		Voter voter = new Voter(userName, lastName, firstName, district,
 				address, password);
 
-		String replyMessage = new String("2:(" + userName + ") has successfully registered");
+		String replyMessage = new String("2:(" + userName
+				+ ") has successfully registered");
 
 		try {
 
@@ -320,7 +337,8 @@ public class Server1 implements Runnable {
 
 			// fail to insert the voter because the userName already
 			// being used
-			replyMessage = new String("1:Voter username (" + userName + ") already exists");
+			replyMessage = new String("1:Voter username (" + userName
+					+ ") already exists");
 
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
@@ -342,7 +360,8 @@ public class Server1 implements Runnable {
 		Candidate candidate = new Candidate(userName, lastName, firstName,
 				district, address, password);
 
-		String replyMessage = new String("2:(" + userName + ") has sucessfully registered");
+		String replyMessage = new String("2:(" + userName
+				+ ") has sucessfully registered");
 
 		try {
 
@@ -375,7 +394,8 @@ public class Server1 implements Runnable {
 
 		} catch (JDBCException e) {
 
-			replyMessage = new String("1:Candidate username (" + userName + ") already exists");
+			replyMessage = new String("1:Candidate username (" + userName
+					+ ") already exists");
 
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
@@ -395,27 +415,30 @@ public class Server1 implements Runnable {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 		// -----need to add a mutex lock here
-		lock1.tryLock();
-		Candidate candidate = (Candidate) session.get(Candidate.class,
-				candidateUserName);
-		Voter voter = (Voter) session.get(Voter.class, voterUserName);
+		synchronized (lock1) {
 
-		System.out.println("candidateUserName" + " " + candidateUserName);
+			Candidate candidate = (Candidate) session.get(Candidate.class,
+					candidateUserName);
+			Voter voter = (Voter) session.get(Voter.class, voterUserName);
 
-		if (voter.getCandidateName().isEmpty()) {
+			System.out.println("candidateUserName" + " " + candidateUserName);
 
-			candidate.setPolls(candidate.getPolls() + 1);
-			session.update(candidate);
-			voter.setCandidateName(candidateUserName);
-			session.update(voter);
-			tran.replyData("2:(" + voterUserName + ") has sucessfully voted", port, host);
+			if (voter.getCandidateName().isEmpty()) {
 
-		} else {
+				candidate.setPolls(candidate.getPolls() + 1);
+				session.update(candidate);
+				voter.setCandidateName(candidateUserName);
+				session.update(voter);
+				tran.replyData("2:(" + voterUserName
+						+ ") has sucessfully voted", port, host);
 
-			tran.replyData("1:Voter (" + voterUserName + ") has already voted", port, host);
+			} else {
 
+				tran.replyData("1:Voter (" + voterUserName
+						+ ") has already voted", port, host);
+
+			}
 		}
-		lock1.unlock();
 		session.getTransaction().commit();
 		session.close();
 
@@ -428,74 +451,74 @@ public class Server1 implements Runnable {
 		session.beginTransaction();
 		Voter voter = (Voter) session.get(Voter.class, userName);
 
-		// lock these lines of code in case same user name login at the
-		// same time
-		lock2.tryLock();
-
 		if (voter != null) {
 
 			if (password.compareTo(voter.getPassword()) == 0) {
 
-				if (!checkExist(voter)) {
+				synchronized (activeUsers) {
 
-					if (activeUsers.size() == availableUserNum) {
+					if (!checkExist(voter)) {
 
-						tran.replyData(
-								"1:Active users have reached the limit for this server",
-								port, host);
+						if (activeUsers.size() == availableUserNum) {
 
-					} else {
-
-						if (voter.getDistrictName().compareTo(district) == 0) {
-
-							Candidate candidate = (Candidate) session.get(
-									Candidate.class, voter.getCandidateName());
-							String voterString = "";
-							if (!voter.getCandidateName().isEmpty()) {
-								voterString = voter.getFirstName() + ":"
-										+ voter.getLastName() + ":"
-										+ voter.getAddress() + ":"
-										+ candidate.getFirstName() + ":"
-										+ candidate.getLastName();
-							} else {
-
-								voterString = voter.getFirstName() + ":"
-										+ voter.getLastName() + ":"
-										+ voter.getAddress() + ":1";
-
-							}
-							tran.replyData("2:" + voterString, port, host);
-							activeUsers.add(voter);
+							tran.replyData(
+									"1:Active users have reached the limit for this server",
+									port, host);
 
 						} else {
 
-							tran.replyData(
-									"1:Voter (" + userName + ") doesn't belong to this destrict",
-									port, host);
+							if (voter.getDistrictName().compareTo(district) == 0) {
+
+								Candidate candidate = (Candidate) session.get(
+										Candidate.class,
+										voter.getCandidateName());
+								String voterString = "";
+								if (!voter.getCandidateName().isEmpty()) {
+									voterString = voter.getFirstName() + ":"
+											+ voter.getLastName() + ":"
+											+ voter.getAddress() + ":"
+											+ candidate.getFirstName() + ":"
+											+ candidate.getLastName();
+								} else {
+
+									voterString = voter.getFirstName() + ":"
+											+ voter.getLastName() + ":"
+											+ voter.getAddress() + ":1";
+
+								}
+								tran.replyData("2:" + voterString, port, host);
+								activeUsers.add(voter);
+
+							} else {
+
+								tran.replyData("1:Voter (" + userName
+										+ ") doesn't belong to this destrict",
+										port, host);
+
+							}
 
 						}
 
+					} else {
+
+						tran.replyData("1:Voter (" + userName
+								+ ") already login", port, host);
+
 					}
-
-				} else {
-
-					tran.replyData("1:Voter (" + userName + ") already login", port, host);
-
 				}
-
 			} else {
 
 				tran.replyData("1:Invalid Password", port, host);
 
 			}
-			lock2.unlock();
+
 			session.getTransaction().commit();
 			session.close();
 
 		} else {
 
-			tran.replyData(
-					"1:Can't find the voter username (" + userName + ") , please register an account or login as a voter",
+			tran.replyData("1:Can't find the voter username (" + userName
+					+ ") , please register an account or login as a voter",
 					port, host);
 		}
 
@@ -535,19 +558,22 @@ public class Server1 implements Runnable {
 	private void logout(String userName, int port, InetAddress host) {
 
 		// ------only one user can logout at a time
-		lock3.tryLock();
+		
+		boolean success;
+		synchronized (lock2) {
 
-		boolean success = removeActiveUser(userName);
-
-		lock3.unlock();
-
+			success = removeActiveUser(userName);
+		}
+		
 		if (success) {
 
-			tran.replyData("2:" + userName + " has successfully logged out", port, host);
+			tran.replyData("2:" + userName + " has successfully logged out",
+					port, host);
 
 		} else {
 
-			tran.replyData("1:Voter (" + userName + ") has already logged out", port, host);
+			tran.replyData("1:Voter (" + userName + ") has already logged out",
+					port, host);
 
 		}
 
