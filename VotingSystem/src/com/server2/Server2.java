@@ -74,13 +74,13 @@ public class Server2 extends JFrame implements Runnable{
 	}
 	
 	private void getWinner(){
-		List<Candidate> sortedVotes = new ArrayList(votes);
-		votes.sort(new PollComparator());
+		List<Candidate> sortedVotes = new ArrayList<Candidate>(votes);
+		sortedVotes.sort(new PollComparator());
 		winner = new ArrayList<Candidate>();
-		winner.add(votes.get(0));
-		for (int i=1; i<votes.size(); i++){
-			if (votes.get(i).getPolls()==winner.get(0).getPolls())
-				winner.add(votes.get(i));
+		winner.add(sortedVotes.get(0));
+		for (int i=1; i<sortedVotes.size(); i++){
+			if (sortedVotes.get(i).getPolls()==winner.get(0).getPolls())
+				winner.add(sortedVotes.get(i));
 		}
 	}
 }
