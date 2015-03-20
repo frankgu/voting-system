@@ -73,7 +73,7 @@ public class testframework_launch {
 		if(chosenCase.equals("CR1") || chosenCase.equals("CR2") || chosenCase.equals("CR3")){
 			loadCandidates(50);
 		}
-		if(chosenCase.equals("V1") || chosenCase.equals("V1")){
+		if(chosenCase.equals("V1") || chosenCase.equals("V2")){
 			loadCandidates(0);
 			loadVoters(0);
 		}

@@ -135,8 +135,6 @@ public class Transmission {
 		ByteBuffer buffer2 = ByteBuffer.wrap(checksumByte);
 		long checksumValue = buffer2.getLong();
 
-		System.out.print(checksumValue + " ");
-
 		// ------get the checksum value for the data.
 		byte[] dataByte = Arrays.copyOfRange(value, 9, length);
 		String data = null;
@@ -150,7 +148,7 @@ public class Transmission {
 		checksum.update(dataByte, 0, dataByte.length);
 		long newchecksumValue = checksum.getValue();
 
-		System.out.println(newchecksumValue + " " + data);
+		//System.out.println(newchecksumValue + " " + data);
 
 		if (checksumValue != newchecksumValue) {
 			return false;

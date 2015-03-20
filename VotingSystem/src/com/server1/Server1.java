@@ -2,6 +2,7 @@
 package com.server1;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -108,7 +109,6 @@ public class Server1 implements Runnable {
 
 		// ------receive the datagram packet from the client and simulate
 		// the loss and modification
-		byte[] buffer = new byte[10000];
 
 		// -----run another thread the process the packet queue
 		new Thread(new Responder(aSocket)).start();
@@ -117,6 +117,7 @@ public class Server1 implements Runnable {
 		// for processing
 		while (true) {
 
+			byte[] buffer = new byte[10000];
 			DatagramPacket request = new DatagramPacket(buffer, buffer.length);
 
 			try {
@@ -157,7 +158,9 @@ public class Server1 implements Runnable {
 
 				// -----poll a packet from the queue
 				DatagramPacket packet = queue.poll();
+				
 				if (packet != null) {
+					
 					new Thread(new processPacket(packet)).start();
 				}
 
@@ -169,18 +172,17 @@ public class Server1 implements Runnable {
 
 		private DatagramPacket packet;
 
-		public processPacket(DatagramPacket packet) {
 
-			this.packet = packet;
+		public processPacket(DatagramPacket p) {
 
+			packet = p;
+			
 		}
-
-		@Override
+		
 		public void run() {
 
 			// -----check if the data is valid or not, if the data is
 			// invalid, tell the client to send the message again
-
 			if (!tran.dataVlidated(packet.getData(), packet.getLength())) {
 
 				String resendMessage = new String("resend");
@@ -420,8 +422,6 @@ public class Server1 implements Runnable {
 			Candidate candidate = (Candidate) session.get(Candidate.class,
 					candidateUserName);
 			Voter voter = (Voter) session.get(Voter.class, voterUserName);
-
-			System.out.println("candidateUserName" + " " + candidateUserName);
 
 			if (voter.getCandidateName().isEmpty()) {
 

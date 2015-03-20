@@ -28,6 +28,7 @@ public class testframework {
 	private static ArrayList<User> users;
 	private static ArrayList<Candidate> candidates;
 	private static ArrayList<String> voted;
+	private static int port = 8088;
 	//private static Vector voted;
 	
 //	private String ufPath;
@@ -45,6 +46,7 @@ public class testframework {
 	BufferedWriter out;
 	ExecutorService executor;
 	ExecutorService executor2;
+	ExecutorService executor3;
 
 	public testframework(String cfPath, String ufPath, String opPath) {
 //		this.cfPath = cfPath;
@@ -112,7 +114,7 @@ public class testframework {
 				out.close();
 				return;
 			}
-			if(chosenCase.equals("V1") || chosenCase.equals("V1")){		//the voting cases 
+			if(chosenCase.equals("V1")){		//the voting cases 
 //				registerCandidate(candidates);
 //				registerVoter(users);
 //				voterLogin(users);
@@ -147,10 +149,46 @@ public class testframework {
 				out.close();
 				return;
 			}
-			if(chosenCase.equals("LI1") || chosenCase.equals("LI2")||chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")){
+			
+			if( chosenCase.equals("V2")){
+				outputFile = new File(opPath + "//VotingTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
+				executor = Executors.newFixedThreadPool(candidates.size());
+				for(int i=0; i<candidates.size(); i++){
+					executor.submit(new Process("RegisterCandidate", out,candidates.get(i)));
+				}
+				
+				executor.shutdown();
+				System.out.println("All candidates are registered!");
+				executor.awaitTermination(20, TimeUnit.SECONDS);
+				
+				executor2 = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					int k = (int) (Math.random()*candidates.size());
+					executor2.submit(new Process("Voting", out,users.get(i), candidates.get(k)));
+				}
+				
+				executor2.shutdown();
+				executor2.awaitTermination(20, TimeUnit.SECONDS);
+				
+				executor3 = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					int k = (int) (Math.random()*candidates.size());
+					executor3.submit(new Process("Voting2", out,users.get(i), candidates.get(k)));
+				}
+				
+				executor3.shutdown();
+				executor3.awaitTermination(20, TimeUnit.SECONDS);
+				
+				out.close();
+				return;
+			}
+			
+			if(chosenCase.equals("LI1")){
 //				registerVoter(users);
 //				voterLogin(users);
-				outputFile = new File(opPath + "//LoginTest_"+chosenCase);
+				outputFile = new File(opPath + "//LoginTest_"+chosenCase+".txt");
 				out = new BufferedWriter(new FileWriter(outputFile));
 				
 				executor = Executors.newFixedThreadPool(users.size());
@@ -160,16 +198,66 @@ public class testframework {
 				
 				executor.shutdown();
 				System.out.println("All voters are loged in!");
-				executor.awaitTermination(5, TimeUnit.SECONDS);
+				executor.awaitTermination(20, TimeUnit.SECONDS);
 				
 				out.close();
 				return;
 			}
-			if(chosenCase.equals("LO1")||chosenCase.equals("LO2")){
+			if(chosenCase.equals("LI3")){
+				outputFile = new File(opPath + "//LoginTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
+				executor = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					executor.submit(new Process("VoterLogin", out,users.get(i)));
+				}
+				
+				executor.shutdown();
+				System.out.println("All voters are loged in!");
+				executor.awaitTermination(10, TimeUnit.SECONDS);
+				
+				executor2 = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					executor2.submit(new Process("VoterLogin3", out,users.get(i)));
+				}
+				executor2.shutdown();
+				executor2.awaitTermination(10, TimeUnit.SECONDS);
+				
+				out.close();
+				return;
+			}
+			
+			if(chosenCase.equals("LI4")){
+				outputFile = new File(opPath + "//LoginTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
+				executor = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					executor.submit(new Process("VoterLogin4", out,users.get(i)));
+				}
+				
+				executor.shutdown();
+				executor.awaitTermination(5, TimeUnit.SECONDS);
+			}
+			
+			if(chosenCase.equals("LI2")||chosenCase.equals("LI5")){
+				outputFile = new File(opPath + "//LoginTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
+				executor = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					executor.submit(new Process("VoterLogin2", out,users.get(i)));
+				}
+				
+				executor.shutdown();
+				executor.awaitTermination(5, TimeUnit.SECONDS);
+			}
+			
+			if(chosenCase.equals("LO1")){
 //				registerVoter(users);
 //				voterLogin(users);
 //				voterLogout(users);
-				outputFile = new File(opPath + "//LogoutTest_"+chosenCase);
+				outputFile = new File(opPath + "//LogoutTest_"+chosenCase+".txt");
 				out = new BufferedWriter(new FileWriter(outputFile));
 				
 				executor = Executors.newFixedThreadPool(users.size());
@@ -181,6 +269,31 @@ public class testframework {
 				System.out.println("All voters are loged out!");
 				executor.awaitTermination(5, TimeUnit.SECONDS);
 				
+				
+				out.close();
+				return;
+			}
+			
+			if(chosenCase.equals("LO2")){
+				outputFile = new File(opPath + "//LogoutTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
+				executor = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					executor.submit(new Process("VoterLogout", out,users.get(i)));
+				}
+				
+				executor.shutdown();
+				System.out.println("All voters are loged out!");
+				executor.awaitTermination(10, TimeUnit.SECONDS);
+				
+				executor2 = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					executor2.submit(new Process("VoterLogout2", out,users.get(i)));
+				}
+				
+				executor2.shutdown();
+				executor2.awaitTermination(10, TimeUnit.SECONDS);
 				
 				out.close();
 				return;
@@ -288,6 +401,25 @@ public class testframework {
 				voterLogin_S(voter);
 				return;
 			}
+			if(chosenCase.equals("VoterLogin2")){
+				registerVoter_S(voter);
+				User fakeVoter = voter;
+				fakeVoter.setUserName(voter.getUserName()+"a");
+				voterLogin_S(fakeVoter);
+				return;
+			}
+			
+			if(chosenCase.equals("VoterLogin3")){
+				voterLogin_S(voter);
+				return;
+			}
+			if(chosenCase.equals("VoterLogin4")){
+				registerVoter_S(voter);
+				User fakeVoter = voter;
+				fakeVoter.setPassword(voter.getPassword()+"a");
+				voterLogin_S(fakeVoter);
+				return;
+			}
 			if(chosenCase.equals("Voting")){
 				registerVoter_S(voter);
 				voterLogin_S(voter);
@@ -295,9 +427,19 @@ public class testframework {
 				voterLogout_S(voter);
 				return;
 			}
+			if(chosenCase.equals("Voting2")){
+				voterLogin_S(voter);
+				voting_S(voter, cand);
+				voterLogout_S(voter);
+				return;
+			}
 			if(chosenCase.equals("VoterLogout")){
 				registerVoter_S(voter);
 				voterLogin_S(voter);
+				voterLogout_S(voter);
+				return;
+			}
+			if(chosenCase.equals("VoterLogout2")){
 				voterLogout_S(voter);
 				return;
 			}
@@ -310,7 +452,7 @@ public class testframework {
 				DatagramSocket soc = new DatagramSocket();
 				Transmission tra = new Transmission(soc);
 				String data = "2:"+voter.getUserName()+":"+cand.getUserName();
-				String output = tra.sendData(data, 8088, host);
+				String output = tra.sendData(data, port, host);
 				out.write(output+"\r\n");
 				System.out.println(output);
 				out.flush();
@@ -324,7 +466,7 @@ public class testframework {
 			DatagramSocket soc = new DatagramSocket();
 			Transmission tra = new Transmission(soc);
 			String data = "1:1:"+ voter.getUserName()+":"+voter.getLastName()+":"+voter.getFirstName()+":"+voter.getAddress()+":"+voter.getPassword();
-			String output = tra.sendData(data, 8088, host);
+			String output = tra.sendData(data, port, host);
 			out.write(output+"\r\n");
 			System.out.println(output);
 			out.flush();
@@ -338,7 +480,7 @@ public class testframework {
 			DatagramSocket soc = new DatagramSocket();
 			Transmission tra = new Transmission(soc);
 			String data = "1:2:"+cand.getUserName()+":"+cand.getLastName()+":"+cand.getFirstName()+":"+cand.getAddress();
-			String output = tra.sendData(data, 8088, host);
+			String output = tra.sendData(data, port, host);
 			out.write(output+"\r\n");
 			System.out.println(output);
 			out.flush();
@@ -353,7 +495,7 @@ public class testframework {
 				DatagramSocket soc = new DatagramSocket();
 				Transmission tra = new Transmission(soc);
 				String data = "5:"+voter.getUserName();
-				String output = tra.sendData(data, 8088, host);
+				String output = tra.sendData(data, port, host);
 				out.write(output+"\r\n");
 				System.out.println(output);
 				out.flush();
@@ -367,11 +509,14 @@ public class testframework {
 				DatagramSocket soc = new DatagramSocket();
 				Transmission tra = new Transmission(soc);
 				String data = "3:"+voter.getUserName()+":"+voter.getPassword();
-				String output = tra.sendData(data, 8088, host);
+				String output = tra.sendData(data, port, host);
 				String [] temp = output.split(":");
 				if(temp[0].equals("2")){
 					String message = "2:("+voter.getUserName()+") has successfully loged in"+"\r\n";
 					out.write(message);
+				}
+				if(temp[0].equals("1")){
+					out.write(output+"\r\n");
 				}
 				System.out.println(output);
 				out.flush();
