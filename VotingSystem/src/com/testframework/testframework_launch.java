@@ -67,71 +67,74 @@ public class testframework_launch {
 		shell.setText("TestFrameWork");
 		shell.setLocation(300, 300);;
 		
-		text = new Text(shell, SWT.BORDER);
-		text.setBounds(60, 46, 290, 19);
+//		text = new Text(shell, SWT.BORDER);
+//		text.setBounds(60, 46, 290, 19);
 		
 		
-		text_1 = new Text(shell, SWT.BORDER);
-		text_1.setBounds(60, 123, 290, 19);
+//		text_1 = new Text(shell, SWT.BORDER);
+//		text_1.setBounds(60, 123, 290, 19);
 		
-		Button btnBrowse = new Button(shell, SWT.NONE);
-		btnBrowse.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectedDir1 = "";
-				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
-		        fileDialog.setFilterPath(selectedDir1);
-		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
-		        fileDialog.setFilterNames(new String[]{ ""});
-		        String dir = fileDialog.open();
-		        if(dir != null) {
-		          selectedDir1 = dir;
-		        }
-		        text.setText(selectedDir1);
-			}
-		});
-		btnBrowse.setBounds(356, 42, 75, 28);
-		btnBrowse.setText("browse");
+//		Button btnBrowse = new Button(shell, SWT.NONE);
+//		btnBrowse.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				selectedDir1 = "";
+//				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
+//		        fileDialog.setFilterPath(selectedDir1);
+//		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
+//		        fileDialog.setFilterNames(new String[]{ ""});
+//		        String dir = fileDialog.open();
+//		        if(dir != null) {
+//		          selectedDir1 = dir;
+//		        }
+//		        text.setText(selectedDir1);
+//			}
+//		});
+//		btnBrowse.setBounds(356, 42, 75, 28);
+//		btnBrowse.setText("browse");
 		
-		button = new Button(shell, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectedDir2 = "";
-				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
-		        fileDialog.setFilterPath(selectedDir2);
-		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
-		        fileDialog.setFilterNames(new String[]{ ""});
-		        String dir = fileDialog.open();
-		        if(dir != null) {
-		          selectedDir2 = dir;
-		        }
-		        text_1.setText(selectedDir2);
-			}
-		});
-		button.setText("browse");
-		button.setBounds(356, 119, 75, 28);
+//		button = new Button(shell, SWT.NONE);
+//		button.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				selectedDir2 = "";
+//				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
+//		        fileDialog.setFilterPath(selectedDir2);
+//		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
+//		        fileDialog.setFilterNames(new String[]{ ""});
+//		        String dir = fileDialog.open();
+//		        if(dir != null) {
+//		          selectedDir2 = dir;
+//		        }
+//		        text_1.setText(selectedDir2);
+//			}
+//		});
+//		button.setText("browse");
+//		button.setBounds(356, 119, 75, 28);
 		
-		Label lblCandidatesFile = new Label(shell, SWT.NONE);
-		lblCandidatesFile.setBounds(52, 21, 113, 14);
-		lblCandidatesFile.setText("Candidates' File:");
+//		Label lblCandidatesFile = new Label(shell, SWT.NONE);
+//		lblCandidatesFile.setBounds(52, 21, 113, 14);
+//		lblCandidatesFile.setText("Candidates' File:");
 		
-		Label lblVotersFile = new Label(shell, SWT.NONE);
-		lblVotersFile.setBounds(60, 103, 75, 14);
-		lblVotersFile.setText("Voters' File:");
+//		Label lblVotersFile = new Label(shell, SWT.NONE);
+//		lblVotersFile.setBounds(60, 103, 75, 14);
+//		lblVotersFile.setText("Voters' File:");
+		if(chosenCase.equals("VR1") || chosenCase.equals("VR2") || chosenCase.equals("VR3") ||chosenCase.equals("LI1") || chosenCase.equals("LI2")||chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")||chosenCase.equals("LO1")||chosenCase.equals("LO2")){
+			loadVoters();
+		}
+		if(chosenCase.equals("CR1") || chosenCase.equals("CR2") || chosenCase.equals("CR3")){
+			loadCandidates();
+		}
+		if(chosenCase.equals("V1") || chosenCase.equals("V1")){
+			loadCandidates();
+			loadVoters();
+		}
 		
 		btnTest = new Button(shell, SWT.NONE);
 		btnTest.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(selectedDir1.compareTo("")!=1 && selectedDir2.compareTo("")!=1){
-//					testframework tf = new testframework(selectedDir1, selectedDir2,selectedDir3);
-//					System.out.println(selectedDir1);
-//					System.out.println(selectedDir2);
-//					tf.run();
-				
-					//testcases_window tw = new testcases_window();
-					//tw.open(selectedDir1,selectedDir2,selectedDir3);
 					testframework tf = new testframework(selectedDir1,selectedDir2,selectedDir3);
 					tf.run(chosenCase);
 				}
@@ -167,4 +170,58 @@ public class testframework_launch {
 		lblOutputFile.setBounds(60, 173, 83, 14);
 		lblOutputFile.setText("Output File:");
 	}
+	
+	public void loadCandidates(){
+		text = new Text(shell, SWT.BORDER);
+		text.setBounds(60, 46, 290, 19);
+		Label lblCandidatesFile = new Label(shell, SWT.NONE);
+		lblCandidatesFile.setBounds(52, 21, 113, 14);
+		lblCandidatesFile.setText("Candidates' File:");
+		Button btnBrowse = new Button(shell, SWT.NONE);
+		btnBrowse.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedDir1 = "";
+				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
+		        fileDialog.setFilterPath(selectedDir1);
+		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
+		        fileDialog.setFilterNames(new String[]{ ""});
+		        String dir = fileDialog.open();
+		        if(dir != null) {
+		          selectedDir1 = dir;
+		        }
+		        text.setText(selectedDir1);
+			}
+		});
+		btnBrowse.setBounds(356, 42, 75, 28);
+		btnBrowse.setText("browse");
+	}
+	
+	public void loadVoters(){
+		text_1 = new Text(shell, SWT.BORDER);
+		text_1.setBounds(60, 123, 290, 19);
+		Label lblVotersFile = new Label(shell, SWT.NONE);
+		lblVotersFile.setBounds(60, 103, 75, 14);
+		lblVotersFile.setText("Voters' File:");
+		button = new Button(shell, SWT.NONE);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedDir2 = "";
+				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
+		        fileDialog.setFilterPath(selectedDir2);
+		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
+		        fileDialog.setFilterNames(new String[]{ ""});
+		        String dir = fileDialog.open();
+		        if(dir != null) {
+		          selectedDir2 = dir;
+		        }
+		        text_1.setText(selectedDir2);
+			}
+		});
+		button.setText("browse");
+		button.setBounds(356, 119, 75, 28);
+		
+	}
+	
 }
