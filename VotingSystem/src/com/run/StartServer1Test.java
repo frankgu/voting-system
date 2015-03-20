@@ -1,6 +1,8 @@
 package com.run;
 
-public class runServer1Test {
+import com.testframework.testServer1Function;
+
+public class StartServer1Test {
 
 	public static void main(String[] arg){
 		

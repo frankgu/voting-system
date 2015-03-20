@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.functions.Transmission;
 
-public class CandidateReg {
+public class StartCandidateRegister {
 	
     public class serverInfo{
     	public String ip;
@@ -67,14 +67,14 @@ public class CandidateReg {
 	 */
 	public static void main(String[] args) {
 		try {
-			CandidateReg window = new CandidateReg();
+			StartCandidateRegister window = new StartCandidateRegister();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public CandidateReg(){
+	public StartCandidateRegister(){
 		quit = false;
 	}
 

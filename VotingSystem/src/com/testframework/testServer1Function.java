@@ -1,4 +1,4 @@
-package com.run;
+package com.testframework;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -19,7 +19,7 @@ public class testServer1Function {
 		 */
 		try {
 
-			port = 8080;
+			port = 8088;
 			host = InetAddress.getByName("127.0.0.1");
 
 			DatagramSocket aSocket = new DatagramSocket();

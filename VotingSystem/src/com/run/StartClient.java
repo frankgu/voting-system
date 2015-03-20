@@ -2,7 +2,7 @@ package com.run;
 
 import com.client.Client;
 
-public class client {
+public class StartClient {
 
 	public static void main(String[] arg) {
 
