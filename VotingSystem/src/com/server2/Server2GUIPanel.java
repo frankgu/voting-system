@@ -65,10 +65,9 @@ public class Server2GUIPanel extends JPanel {
 					leaders = leaders + ", ";
 			}
 			g.drawString("Poll Leaders: " + leaders, 5, 75);
-		}
+		}	
+		else if(winner.size() == 1) g.drawString("Poll Leader: " + winner.get(0).getFirstName() + " " + winner.get(0).getLastName(), 5, 75);
 			
-		else g.drawString("Poll Leader: " + winner.get(0).getFirstName() + " " + winner.get(0).getLastName(), 5, 75);
-		
 		
 		//vote bar graph
 		for(int i = 0; i<votes.size(); i++){

@@ -1,6 +1,7 @@
 package com.server2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -73,7 +74,7 @@ public class PollUpdater extends JFrame implements Runnable{
 	
 	private void updateWinner(){
 		List<Candidate> sortedVotes = new ArrayList<Candidate>(votes);
-		sortedVotes.sort(new PollComparator());
+		Collections.sort(sortedVotes,new PollComparator());
 		winner = new ArrayList<Candidate>();
 		winner.add(sortedVotes.get(0));
 		for (int i=1; i<sortedVotes.size(); i++){
