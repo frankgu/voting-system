@@ -2,6 +2,7 @@
 package com.server1;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -157,7 +158,8 @@ public class Server1 implements Runnable {
 
 				// -----poll a packet from the queue
 				DatagramPacket packet = queue.poll();
-				if (packet != null) {
+				
+				if (packet != null) {					
 					new Thread(new processPacket(packet)).start();
 				}
 
@@ -420,8 +422,6 @@ public class Server1 implements Runnable {
 			Candidate candidate = (Candidate) session.get(Candidate.class,
 					candidateUserName);
 			Voter voter = (Voter) session.get(Voter.class, voterUserName);
-
-			System.out.println("candidateUserName" + " " + candidateUserName);
 
 			if (voter.getCandidateName().isEmpty()) {
 
