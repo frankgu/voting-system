@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -141,7 +142,7 @@ public class Server2 implements Runnable {
 		List<Candidate> candidates = session.createCriteria(Candidate.class)
 				.list();
 		
-		candidates.sort(new PollComparator());
+		Collections.sort(candidates,new PollComparator());
 
 		String candidatePollsData = "";
 		for (int i = 0; i < candidates.size(); i++) {
