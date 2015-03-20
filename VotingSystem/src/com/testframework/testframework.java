@@ -32,7 +32,7 @@ public class testframework {
 	
 //	private String ufPath;
 //	private String cfPath;
-//	private String opPath;
+	private String opPath;
 
 	private File useFile;
 	private File candFile;
@@ -51,8 +51,9 @@ public class testframework {
 //		this.ufPath = ufPath;
 		useFile = new File(ufPath);
 		candFile = new File(cfPath);
+		this.opPath = opPath;
 		
-		outputFile = new File(opPath+"//VotingSystemTest.txt");
+		//outputFile = new File(opPath+"//VotingSystemTest.txt");
 		
 		//voted = new ArrayList<String>();
 		try{
@@ -61,7 +62,7 @@ public class testframework {
 			host = InetAddress.getByName("127.0.0.1");
 			//host = InetAddress.getByName("go.joyclick.org");	
 			//out = new BufferedWriter(new FileWriter("//Users//xianchizou//Dropbox//3303//testframework//votingsys_m1//VotingSystemTest.txt"));
-			out = new BufferedWriter(new FileWriter(outputFile));
+			//out = new BufferedWriter(new FileWriter(outputFile));
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -80,6 +81,8 @@ public class testframework {
 		try{
 			if(chosenCase.equals("VR1") || chosenCase.equals("VR2") || chosenCase.equals("VR3")){	//the voters registration cases
 				//registerVoter(users);
+				outputFile = new File(opPath + "//VoterRegisterTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
 				executor = Executors.newFixedThreadPool(users.size());
 				for(int i=0; i<users.size(); i++){
 					executor.submit(new Process("RegisterVoter", out,users.get(i)));
@@ -94,6 +97,9 @@ public class testframework {
 			}
 			if(chosenCase.equals("CR1") || chosenCase.equals("CR2") || chosenCase.equals("CR3")){	//the candidate registration cases
 //				registerCandidate(candidates);
+				outputFile = new File(opPath + "//CandidateRegisterTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
 				executor = Executors.newFixedThreadPool(candidates.size());
 				for(int i=0; i<candidates.size(); i++){
 					executor.submit(new Process("RegisterCandidate", out,candidates.get(i)));
@@ -116,6 +122,9 @@ public class testframework {
 //					out.close();
 //				}
 //				voterLogout(users);
+				outputFile = new File(opPath + "//VotingTest_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
 				executor = Executors.newFixedThreadPool(candidates.size());
 				for(int i=0; i<candidates.size(); i++){
 					executor.submit(new Process("RegisterCandidate", out,candidates.get(i)));
@@ -141,6 +150,9 @@ public class testframework {
 			if(chosenCase.equals("LI1") || chosenCase.equals("LI2")||chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")){
 //				registerVoter(users);
 //				voterLogin(users);
+				outputFile = new File(opPath + "//LoginTest_"+chosenCase);
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
 				executor = Executors.newFixedThreadPool(users.size());
 				for(int i=0; i<users.size(); i++){
 					executor.submit(new Process("VoterLogin", out,users.get(i)));
@@ -157,6 +169,9 @@ public class testframework {
 //				registerVoter(users);
 //				voterLogin(users);
 //				voterLogout(users);
+				outputFile = new File(opPath + "//LogoutTest_"+chosenCase);
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
 				executor = Executors.newFixedThreadPool(users.size());
 				for(int i=0; i<users.size(); i++){
 					executor.submit(new Process("VoterLogout", out,users.get(i)));
@@ -283,7 +298,7 @@ public class testframework {
 			if(chosenCase.equals("VoterLogout")){
 				registerVoter_S(voter);
 				voterLogin_S(voter);
-				voterLogin_S(voter);
+				voterLogout_S(voter);
 				return;
 			}
 			}
@@ -353,7 +368,11 @@ public class testframework {
 				Transmission tra = new Transmission(soc);
 				String data = "3:"+voter.getUserName()+":"+voter.getPassword();
 				String output = tra.sendData(data, 8088, host);
-				out.write(output+"\r\n");
+				String [] temp = output.split(":");
+				if(temp[0].equals("2")){
+					String message = "2:("+voter.getUserName()+") has successfully loged in"+"\r\n";
+					out.write(message);
+				}
 				System.out.println(output);
 				out.flush();
 			}catch(Exception e){
