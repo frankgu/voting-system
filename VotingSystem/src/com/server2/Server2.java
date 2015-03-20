@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,11 +38,6 @@ public class Server2 implements Runnable {
 			// initial the hibernate factory
 			HibernateUtil.getSessionFactory();
 
-			// for the lab in HP4115
-			// int socket_no = 60009; // server 1 port number
-			// InetAddress temp = InetAddress.getByName("134.117.59.109");
-			// aSocket = new DatagramSocket(socket_no, temp)
-
 		} catch (SocketException e) {
 
 			System.out.println("Socket: " + e.getMessage());
@@ -55,27 +51,34 @@ public class Server2 implements Runnable {
 
 	@Override
 	public void run() {
-		//run the poll updater
+		// run the poll updater
 		new Thread(new PollUpdater()).start();
-		
-		// ------receive the datagram packet from the client and simulate
-		// the loss and modification
-		byte[] buffer = new byte[10000];
-		/*
+
 		while (true) {
 
-			DatagramPacket request = new DatagramPacket(buffer, buffer.length);
 			try {
-				aSocket.receive(request);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// -----every time the server 1 receive a packet, it start a new
-			// thread to handle this
-			new Thread(new Responder(aSocket, request)).start();
+				
+				byte[] buffer = new byte[10000];
+				DatagramPacket request = new DatagramPacket(buffer,
+						buffer.length);
 
-		}*/
+				aSocket.receive(request);
+				
+				// -----every time the server 1 receive a packet, it start a new
+				// thread to handle this
+				new Thread(new Responder(aSocket, request)).start();
+				
+			} catch (SocketTimeoutException e) {
+
+				// do nothing if the receive socket time out.
+				
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+		
+		}
 
 	}
 
@@ -91,7 +94,6 @@ public class Server2 implements Runnable {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 
 			// -----check if the data is valid or not, if the data is
 			// invalid, tell the client to send the message again
@@ -102,7 +104,7 @@ public class Server2 implements Runnable {
 						packet.getAddress());
 
 			} else {
-				
+
 				// -----data is valid, process the data
 				analyseDataFromClient(packet.getData(), packet.getLength(),
 						packet.getPort(), packet.getAddress());
@@ -137,12 +139,13 @@ public class Server2 implements Runnable {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 		@SuppressWarnings("unchecked")
-		//retrieve all the candidate data from the database and then store them as the candidate object
-		//into the list(below)
+		// retrieve all the candidate data from the database and then store them
+		// as the candidate object
+		// into the list(below)
 		List<Candidate> candidates = session.createCriteria(Candidate.class)
 				.list();
-		
-		Collections.sort(candidates,new PollComparator());
+
+		Collections.sort(candidates, new PollComparator());
 
 		String candidatePollsData = "";
 		for (int i = 0; i < candidates.size(); i++) {
