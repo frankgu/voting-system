@@ -67,67 +67,15 @@ public class testframework_launch {
 		shell.setText("TestFrameWork");
 		shell.setLocation(300, 300);;
 		
-//		text = new Text(shell, SWT.BORDER);
-//		text.setBounds(60, 46, 290, 19);
-		
-		
-//		text_1 = new Text(shell, SWT.BORDER);
-//		text_1.setBounds(60, 123, 290, 19);
-		
-//		Button btnBrowse = new Button(shell, SWT.NONE);
-//		btnBrowse.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				selectedDir1 = "";
-//				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
-//		        fileDialog.setFilterPath(selectedDir1);
-//		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
-//		        fileDialog.setFilterNames(new String[]{ ""});
-//		        String dir = fileDialog.open();
-//		        if(dir != null) {
-//		          selectedDir1 = dir;
-//		        }
-//		        text.setText(selectedDir1);
-//			}
-//		});
-//		btnBrowse.setBounds(356, 42, 75, 28);
-//		btnBrowse.setText("browse");
-		
-//		button = new Button(shell, SWT.NONE);
-//		button.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				selectedDir2 = "";
-//				FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
-//		        fileDialog.setFilterPath(selectedDir2);
-//		        fileDialog.setFilterExtensions(new String[]{"*.txt"});
-//		        fileDialog.setFilterNames(new String[]{ ""});
-//		        String dir = fileDialog.open();
-//		        if(dir != null) {
-//		          selectedDir2 = dir;
-//		        }
-//		        text_1.setText(selectedDir2);
-//			}
-//		});
-//		button.setText("browse");
-//		button.setBounds(356, 119, 75, 28);
-		
-//		Label lblCandidatesFile = new Label(shell, SWT.NONE);
-//		lblCandidatesFile.setBounds(52, 21, 113, 14);
-//		lblCandidatesFile.setText("Candidates' File:");
-		
-//		Label lblVotersFile = new Label(shell, SWT.NONE);
-//		lblVotersFile.setBounds(60, 103, 75, 14);
-//		lblVotersFile.setText("Voters' File:");
 		if(chosenCase.equals("VR1") || chosenCase.equals("VR2") || chosenCase.equals("VR3") ||chosenCase.equals("LI1") || chosenCase.equals("LI2")||chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")||chosenCase.equals("LO1")||chosenCase.equals("LO2")){
-			loadVoters();
+			loadVoters(40);
 		}
 		if(chosenCase.equals("CR1") || chosenCase.equals("CR2") || chosenCase.equals("CR3")){
-			loadCandidates();
+			loadCandidates(50);
 		}
 		if(chosenCase.equals("V1") || chosenCase.equals("V1")){
-			loadCandidates();
-			loadVoters();
+			loadCandidates(0);
+			loadVoters(0);
 		}
 		
 		btnTest = new Button(shell, SWT.NONE);
@@ -171,11 +119,11 @@ public class testframework_launch {
 		lblOutputFile.setText("Output File:");
 	}
 	
-	public void loadCandidates(){
+	public void loadCandidates(int x){
 		text = new Text(shell, SWT.BORDER);
-		text.setBounds(60, 46, 290, 19);
+		text.setBounds(60, 46+x, 290, 19);
 		Label lblCandidatesFile = new Label(shell, SWT.NONE);
-		lblCandidatesFile.setBounds(52, 21, 113, 14);
+		lblCandidatesFile.setBounds(52, 21+x, 113, 14);
 		lblCandidatesFile.setText("Candidates' File:");
 		Button btnBrowse = new Button(shell, SWT.NONE);
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
@@ -193,15 +141,15 @@ public class testframework_launch {
 		        text.setText(selectedDir1);
 			}
 		});
-		btnBrowse.setBounds(356, 42, 75, 28);
+		btnBrowse.setBounds(356, 42+x, 75, 28);
 		btnBrowse.setText("browse");
 	}
 	
-	public void loadVoters(){
+	public void loadVoters(int x){
 		text_1 = new Text(shell, SWT.BORDER);
-		text_1.setBounds(60, 123, 290, 19);
+		text_1.setBounds(60, 123-x, 290, 19);
 		Label lblVotersFile = new Label(shell, SWT.NONE);
-		lblVotersFile.setBounds(60, 103, 75, 14);
+		lblVotersFile.setBounds(60, 103-x, 75, 14);
 		lblVotersFile.setText("Voters' File:");
 		button = new Button(shell, SWT.NONE);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -220,7 +168,7 @@ public class testframework_launch {
 			}
 		});
 		button.setText("browse");
-		button.setBounds(356, 119, 75, 28);
+		button.setBounds(356, 119-x, 75, 28);
 		
 	}
 	
