@@ -11,7 +11,6 @@ public class testServer1Function {
 
 	private int port;
 	private InetAddress host;
-	private Transmission tran;
 
 	public void begin() {
 
@@ -24,7 +23,7 @@ public class testServer1Function {
 			host = InetAddress.getByName("127.0.0.1");
 
 			DatagramSocket aSocket = new DatagramSocket();
-			tran = new Transmission(aSocket);
+			Transmission tran = new Transmission(aSocket);
 
 			// -----test
 			// InetAddress host = InetAddress.getByName("go.joyclick.org"); //
@@ -60,7 +59,7 @@ public class testServer1Function {
 			new Thread(new testVoting("voter4", "candidate")).start();
 			new Thread(new testVoting("voter5", "candidate")).start();
 			new Thread(new testVoting("voter6", "candidate")).start();
-
+/*
 			// ----test the login
 			new Thread(new testLogin("voter", "hyfgdf")).start();
 			new Thread(new testLogin("voter2", "hyfgdf")).start();
@@ -80,7 +79,7 @@ public class testServer1Function {
 			new Thread(new testLogout("voter6")).start();
 
 			System.out.println(tran.sendData("6:voter", port, host));
-
+*/
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,9 +95,19 @@ public class testServer1Function {
 
 	public class testLogout implements Runnable {
 
+
+		private DatagramSocket aSocket;
+		private Transmission tran;
 		private String name;
 
 		public testLogout(String name) {
+			try {
+				aSocket = new DatagramSocket();
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			tran = new Transmission(aSocket);
 			this.name = name;
 		}
 
@@ -115,8 +124,17 @@ public class testServer1Function {
 
 		private String name;
 		private String password;
-
+		private DatagramSocket aSocket;
+		private Transmission tran;
+		
 		public testLogin(String name, String password) {
+			try {
+				aSocket = new DatagramSocket();
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			tran = new Transmission(aSocket);
 			this.name = name;
 			this.password = password;
 		}
@@ -135,8 +153,17 @@ public class testServer1Function {
 
 		private String voter;
 		private String candidate;
+		private DatagramSocket aSocket;
+		private Transmission tran;
 
 		public testVoting(String voter, String candidate) {
+			try {
+				aSocket = new DatagramSocket();
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			tran = new Transmission(aSocket);
 			this.voter = voter;
 			this.candidate = candidate;
 		}
