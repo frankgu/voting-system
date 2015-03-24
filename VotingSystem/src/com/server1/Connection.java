@@ -1,11 +1,9 @@
 package com.server1;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 
 import com.functions.Property;
@@ -18,7 +16,7 @@ public class Connection {
 	private Responder res = null;
 
 	public void initialize(DatagramSocket socket, String district,
-			ArrayList<User> activeUsers) {
+			ArrayList<User> activeUsers, Server1 server1) {
 		
 		// initialize the semaphore number
 		int semNum = 0;
@@ -33,7 +31,7 @@ public class Connection {
 
 		// initialize the responder
 
-		res = new Responder(socket, district, activeUsers);
+		res = new Responder(socket, district, activeUsers, server1);
 		
 	}
 

@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 
 import com.functions.HibernateUtil;
 import com.functions.Property;
+import com.functions.Transmission;
 import com.object.User;
 
 public class Server1 implements Runnable {
@@ -27,16 +28,26 @@ public class Server1 implements Runnable {
 	// server1 thread pools
 	private ExecutorService executor = null;
 
-	// -----active user list
+	// active user list
 	private ArrayList<User> activeUsers = null;
 
-	// for the lab
-	// private static String host = "134.117.59.109";
-	// private static String port = "60010";
+	// Determine whether the election has been closed or not
+	private boolean electionClosed;
+
+	public boolean isElectionClosed() {
+		return electionClosed;
+	}
+
+	public void setElectionClosed(boolean electionClosed) {
+		this.electionClosed = electionClosed;
+	}
 
 	public Server1(String district, int portNumber, String host) {
 
 		try {
+
+			// start the election
+			electionClosed = false;
 
 			InetAddress aHost = InetAddress.getByName(host);
 
@@ -48,7 +59,7 @@ public class Server1 implements Runnable {
 					.loadProperties("activeUserForServer1")));
 
 			// initialize the connection instance
-			Connection.getInstance().initialize(aSocket, district, activeUsers);
+			Connection.getInstance().initialize(aSocket, district, activeUsers, this);
 
 			// initialize the thread pools
 			executor = Executors
@@ -58,10 +69,6 @@ public class Server1 implements Runnable {
 			// initial the hibernate factory
 			HibernateUtil.getSessionFactory();
 
-			// for the lab in HP4115
-			// int socket_no = 60009; // server 1 port number
-			// InetAddress temp = InetAddress.getByName("134.117.59.109");
-			// aSocket = new DatagramSocket(socket_no, temp);
 
 		} catch (SocketException e) {
 
@@ -96,6 +103,22 @@ public class Server1 implements Runnable {
 			try {
 
 				aSocket.receive(request);
+
+				if (electionClosed) {
+
+					// if the election has been closed , then return the error
+					// message
+					String replydata = "1:The election for this district has been closed, you can check the result on TV";
+					Transmission tran = new Transmission(aSocket);
+					tran.replyData(replydata, request.getPort(),
+							request.getAddress());
+
+				} else {
+					// for every incoming packet, the server1 will start a new
+					// thread to handle this packet.
+					executor.submit(new ThreadHandler(request));
+				}
+				
 			} catch (SocketTimeoutException e) {
 
 				// do nothing
@@ -106,9 +129,7 @@ public class Server1 implements Runnable {
 
 			}
 
-			// for every incoming packet, the server1 will start a new
-			// thread to handle this packet.
-			executor.submit(new ThreadHandler(request));
+		
 
 		}
 	}

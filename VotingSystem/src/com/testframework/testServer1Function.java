@@ -52,6 +52,11 @@ public class testServer1Function {
 			System.out.println(tran.sendData(
 					"1:1:voter6:hello:liu:1591 riverside:hyfgdf", port, host));
 
+			
+			//test to close the election
+			System.out.println(tran.sendData(
+					"0", port, host));
+			
 			// -----test the concurrenty voting
 			new Thread(new testVoting("voter", "candidate")).start();
 			new Thread(new testVoting("voter2", "candidate")).start();

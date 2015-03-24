@@ -16,6 +16,7 @@ The server 1 Request/Reply form
 // ---[flag] = 4 , [value] = null (get candidate list)
 // ---[flag] = 5 , [value] = [userName] (logout the server1)
 // ---[flag] = 6 , [value] = [userName] (check the voter vote state)
+// ---[flag] = 0 , [value] = null (close the election)
 
 // -----reply form : "[flag]:[value]"
 // ---[flag] = 1 , [value] = string (error message)

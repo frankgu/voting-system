@@ -23,6 +23,8 @@ public class Responder {
 
 	private String district = null;
 	private Transmission tran = null;
+	private Server1 server1 = null;
+	
 	// -----lock for the critical section
 	private static Object lock1 = new Object();
 	private static Object lock2 = new Object();
@@ -30,11 +32,12 @@ public class Responder {
 	private ArrayList<User> activeUsers = null;
 
 	public Responder(DatagramSocket socket, String district,
-			ArrayList<User> activeUsers) {
+			ArrayList<User> activeUsers, Server1 server1) {
 
 		this.activeUsers = activeUsers;
 		this.district = district;
 		tran = new Transmission(socket);
+		this.server1 = server1;
 
 	}
 
@@ -66,7 +69,12 @@ public class Responder {
 
 		String[] dataArray = message.split(":");
 
-		if (dataArray[0].compareTo("1") == 0) {
+		if (dataArray[0].compareTo("0") == 0) {
+			
+			//close the election
+			server1.setElectionClosed(true);
+
+		} else if (dataArray[0].compareTo("1") == 0) {
 
 			String userName = dataArray[2];
 			String lastName = dataArray[3];
