@@ -38,6 +38,7 @@ public class ClientVote {
 	private List list;
 	private Thread upd;
 	private boolean stopDaemon;
+	private int currSelection;
 
 	/**
 	 * Launch the application.
@@ -75,6 +76,7 @@ public class ClientVote {
 		voter = new Voter(u, ln, fn, n, addr, pwd);
 		candList = new ArrayList<Candidate>();
 		stopDaemon = false;
+		currSelection = 0;
 		// updCandList();
 		//
 		try {
@@ -112,6 +114,7 @@ public class ClientVote {
 		port = 0;
 		voter = new Voter();
 		stopDaemon = false;
+		currSelection = 0;
 		candList = new ArrayList<Candidate>();
 		upd = new Thread(new Runnable() {
 			public void run() {
@@ -146,6 +149,7 @@ public class ClientVote {
 	}
 
 	public void updCandList() {
+		
 		String candis = tran.sendData("4:", port, host);
 		int numOfCand = (candis.split(":").length - 1) / 3;
 		System.out.println(candis);
@@ -166,6 +170,11 @@ public class ClientVote {
 		if (!candList.isEmpty()) {
 			for (int i = 0; i < numOfCand; i++) {
 				list.add(candList.get(i).fn + " " + candList.get(i).ln);
+			}
+		}
+		if(!candList.isEmpty()){
+			if(currSelection <= (list.getItemCount()-1)){
+				list.select(currSelection);
 			}
 		}
 	}
@@ -206,8 +215,13 @@ public class ClientVote {
 		label_1.setAlignment(SWT.CENTER);
 		label_1.setBounds(97, 23, 385, 74);
 
-		list = new List(shlVoting, SWT.BORDER);
+		list = new List(shlVoting, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		list.setBounds(247, 164, 140, 151);
+		list.addListener(SWT.Selection, new Listener() {
+		      public void handleEvent(Event e) {
+		        currSelection = list.getSelectionIndex();
+		      }
+		    });
 		updCandList();
 
 		final Button btnVote = new Button(shlVoting, SWT.NONE);
