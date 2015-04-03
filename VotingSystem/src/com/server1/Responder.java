@@ -130,9 +130,19 @@ public class Responder {
 			// -----check the voter vote state
 			checkVoteState(userName, port, host);
 
+		} else if(dataArray[0].compareTo("7") == 0) {
+			
+			// -----return the district information to the client
+			getDistrictInfo(port, host);
 		}
 	}
 
+	private void getDistrictInfo(int port, InetAddress host){
+		
+		tran.replyData("5:" + district, port, host);
+		
+	}
+	
 	private void checkVoteState(String userName, int port, InetAddress host) {
 
 		// ---[flag] = 4 , [value] =

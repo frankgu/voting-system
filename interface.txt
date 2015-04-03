@@ -16,6 +16,7 @@ The server 1 Request/Reply form
 // ---[flag] = 4 , [value] = null (get candidate list)
 // ---[flag] = 5 , [value] = [userName] (logout the server1)
 // ---[flag] = 6 , [value] = [userName] (check the voter vote state)
+// ---[flag] = 7 , [value] = null (return the district info to the client)
 // ---[flag] = 0 , [value] = null (close the election)
 
 // -----reply form : "[flag]:[value]"
@@ -26,6 +27,7 @@ The server 1 Request/Reply form
 
 // ---[flag] = 3 , [value] = [candidate name]:[candidate name]:... (candidate name consist of [userName]:[FirstName]:[LastName])
 // ---[flag] = 4 , [value] = [flag2]:[candidateFirstName]:[candidateLastName] (check the voter vote state) [flag2] = 1 (voter hasn't vote) , [flag2] = 2 (voter already vote and return the candidate name)
+// ---[flag] = 5 , [value] = [district] (return the district info to the client)
 
 The server 2 Request/Reply form 
 // -----request form : "[flag]:[value]"
