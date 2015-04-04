@@ -78,8 +78,8 @@ public class RequestHandler implements Runnable {
 				
 				BufferedWriter output;
 				output = new BufferedWriter(new FileWriter(inputFile, true));
-				output.write("\r\n");
-				output.append(data);
+				output.write("\n");
+				output.write(data);
 				output.close();
 
 			} else if (rtnMsg.split(":")[0].equals("1")) {//del server
