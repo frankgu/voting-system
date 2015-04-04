@@ -58,7 +58,7 @@ public class RequestHandler implements Runnable {
 
 			if (rtnMsg.split(":")[0].equals("0")) {// add server
 				File inputFile = new File("sl.txt");
-				File tempFile = new File("slTempFile.txt");
+				/*File tempFile = new File("slTempFile.txt");
 
 				BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 				BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
@@ -74,12 +74,14 @@ public class RequestHandler implements Runnable {
 				}
 				writer.close(); 
 				reader.close(); 
-				boolean successful = tempFile.renameTo(inputFile);
+				boolean successful = tempFile.renameTo(inputFile);*/
 				
+				System.out.println(data+"endline");
 				BufferedWriter output;
 				output = new BufferedWriter(new FileWriter(inputFile, true));
-				output.write("\n");
+				
 				output.write(data);
+				output.write("\n");
 				output.close();
 
 			} else if (rtnMsg.split(":")[0].equals("1")) {//del server
