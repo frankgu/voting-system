@@ -56,6 +56,7 @@ public class RequestHandler implements Runnable {
 					+ new String(reqData) + "\n");
 
 			if (rtnMsg.split(":")[0].equals("0")) {// add server
+				removeLineFromFile("sl.txt", data);
 				addLineToFile("sl.txt", data);
 				System.out.println("Added: "+ data);
 			} else if (rtnMsg.split(":")[0].equals("1")) {// del server
