@@ -81,7 +81,7 @@ public class RequestHandler implements Runnable {
 				output = new BufferedWriter(new FileWriter(inputFile, true));
 				
 				output.write(data);
-				output.write("\n");
+				output.write(System.getProperty("line.separator"));
 				output.close();
 
 			} else if (rtnMsg.split(":")[0].equals("1")) {//del server
@@ -91,7 +91,8 @@ public class RequestHandler implements Runnable {
 				BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 				BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 
-				String lineToRemove = data;
+				String lineToRemove = "";
+				lineToRemove = data;
 				String currentLine;
 
 				while((currentLine = reader.readLine()) != null) {
