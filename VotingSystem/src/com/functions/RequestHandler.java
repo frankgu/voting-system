@@ -50,7 +50,7 @@ public class RequestHandler implements Runnable {
 
 	public void run() {
 		String rtnMsg = new String(reqData);
-		String data = rtnMsg.split(":")[1]+":"+rtnMsg.split(":")[2]+":"+rtnMsg.split(":")[3];
+		String data = rtnMsg.substring(2);
 
 		try {
 			System.out.println("Processing request content: "
