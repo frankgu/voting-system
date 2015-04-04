@@ -82,38 +82,62 @@ public class Server1 implements Runnable {
 			System.out.println("IO: " + e.getMessage());
 
 		}
-		servInfo = "0:"+district+":"+host+":"+portNumber;
+		servInfo = district+":"+host+":"+portNumber;
 		//------------add server to serverList-------------
-				DatagramSocket bSocket;
-				try {
-					bSocket = new DatagramSocket();
-					Transmission btran = new Transmission(bSocket);
-					InetAddress bhost = InetAddress.getByName("go.joyclick.org");
-					btran.sendData("0:"+district+":"+host+":"+portNumber, 8888, bhost);
-				} catch (SocketException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (UnknownHostException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		try {
+			DatagramSocket bSocket;
+			bSocket = new DatagramSocket();
+			byte[] buffer = new byte[80];
+			InetAddress bhost = InetAddress.getByName("go.joyclick.org");
+			
+	        DatagramPacket request = new DatagramPacket(buffer,
+	                                                    buffer.length);
+	        String a = "0:"+servInfo;
+			request.setAddress(bhost);
+			request.setData(a.getBytes());
+			request.setPort(8089);
+			
+			bSocket.send(request);
+			bSocket.close();
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//-------------------------------------------------
 
 	}
 
 	public void stop() {
 		
-		//------------add server to serverList-------------
-		DatagramSocket bSocket;
+		//------------delete server to serverList-------------
 		try {
-			bSocket = new DatagramSocket();
-			Transmission btran = new Transmission(bSocket);
+			DatagramSocket cSocket;
+			cSocket = new DatagramSocket();
+			byte[] buffer = new byte[80];
 			InetAddress bhost = InetAddress.getByName("go.joyclick.org");
-			btran.sendData(servInfo, 8888, bhost);
+			
+	        DatagramPacket request = new DatagramPacket(buffer,
+	                                                    buffer.length);
+	        String a = "1:"+servInfo;
+			request.setAddress(bhost);
+			request.setData(a.getBytes());
+			request.setPort(8089);
+			
+			cSocket.send(request);
+			cSocket.close();
 		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

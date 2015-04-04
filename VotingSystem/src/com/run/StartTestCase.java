@@ -15,8 +15,9 @@ public class StartTestCase {
 		//testframework_launch run = new testframework_launch();
 		//testframework_launch.main(args);
 		
-		DatagramSocket bSocket;
+		
 		try {
+			DatagramSocket bSocket;
 			bSocket = new DatagramSocket();
 			byte[] buffer = new byte[80];
 			InetAddress bhost = InetAddress.getByName("go.joyclick.org");
