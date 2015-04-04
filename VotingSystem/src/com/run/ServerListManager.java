@@ -40,7 +40,6 @@ public class ServerListManager {
                 DatagramPacket request = new DatagramPacket(buffer,
                                                             buffer.length);
                 aSocket.receive(request);
-                System.out.println("new ...");
                 //Thread.sleep(2000);
                 new Thread(new RequestHandler(new String(request.getData()), request.getAddress(),request.getPort(), socket_no, args[0])).start();
             }

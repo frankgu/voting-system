@@ -76,9 +76,9 @@ public class RequestHandler implements Runnable {
 				reader.close(); 
 				boolean successful = tempFile.renameTo(inputFile);
 				
-				Writer output;
+				BufferedWriter output;
 				output = new BufferedWriter(new FileWriter(inputFile, true));
-				output.append(System.getProperty("line.separator"));
+				output.newLine();
 				output.append(data);
 				output.close();
 
