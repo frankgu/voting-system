@@ -133,6 +133,7 @@ public class RequestHandler implements Runnable {
 	    	  System.out.println("curr: "+line);
 	    	  System.out.println("lineToRemove: "+lineToRemove);
 	        if (!line.equals(lineToRemove)) {
+	          System.out.println("!=");
 	          pw.println(line);
 	          pw.flush();
 	        }
