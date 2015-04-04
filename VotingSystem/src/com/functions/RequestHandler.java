@@ -131,7 +131,7 @@ public class RequestHandler implements Runnable {
 	      //unless content matches data to be removed.
 	      while ((line = br.readLine()) != null) {
 
-	        if (!line.trim().equals(lineToRemove)) {
+	        if (!line.equals(lineToRemove)) {
 
 	          pw.println(line);
 	          pw.flush();
