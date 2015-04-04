@@ -135,8 +135,7 @@ public class RequestHandler implements Runnable {
 	    	  
 	    	  
 	        if (line.split(":")[0].equals(lineToRemove.split(":")[0]) &&
-	  	    	  line.split(":")[1].equals(lineToRemove.split(":")[1]) &&
-		    	  line.split(":")[2].equals(lineToRemove.split(":")[2]) ) {
+	  	    	  line.split(":")[1].equals(lineToRemove.split(":")[1]) ) {
 	        	//skip write
 	        }else{
 	        	System.out.println("!=");
