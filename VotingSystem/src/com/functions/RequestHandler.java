@@ -88,6 +88,7 @@ public class RequestHandler implements Runnable {
 
 			} else if (rtnMsg.split(":")[0].equals("1")) {//del server
 				removeLineFromFile("sl.txt", data);
+				System.out.println("deleted");
 			} else {
 				//do nothing
 			}
