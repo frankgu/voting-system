@@ -106,7 +106,7 @@ public class StartCandidateRegister {
 		
 		URL servers;
 		try {
-			servers = new URL("https://raw.githubusercontent.com/frankgu/voting-system/master/VotingSystem/server1List.txt?token=AFlT_MY6aFwJFWzHQEWTBVognwsku7gqks5VJDnFwA%3D%3D");
+			servers = new URL("http://go.joyclick.org/sl.txt");
 			BufferedReader in;
 			in = new BufferedReader(
 					new InputStreamReader(servers.openStream()));
