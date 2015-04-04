@@ -130,9 +130,9 @@ public class RequestHandler implements Runnable {
 	      //Read from the original file and write to the new
 	      //unless content matches data to be removed.
 	      while ((line = br.readLine()) != null) {
-
+	    	  System.out.println("curr: "+line);
+	    	  System.out.println("lineToRemove: "+lineToRemove);
 	        if (!line.equals(lineToRemove)) {
-
 	          pw.println(line);
 	          pw.flush();
 	        }
