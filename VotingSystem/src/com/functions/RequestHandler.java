@@ -104,8 +104,7 @@ public class RequestHandler implements Runnable {
 			    	System.out.println("trimmed: "+trimmedLine);
 			    	System.out.println("line: "+lineToRemove);
 			    	
-				    if(trimmedLine.equals(lineToRemove)){
-				    	System.out.println("trimmed: "+lineToRemove);
+				    if(currentLine.equals(lineToRemove)){
 				    	continue;
 				    }
 				    writer.write(currentLine + System.getProperty("line.separator"));
