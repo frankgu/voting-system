@@ -66,7 +66,7 @@ public class Responder {
 
 		byte[] dataByte = Arrays.copyOfRange(data, 9, length);
 		String message = new String(dataByte);
-
+		System.out.println(message);
 		String[] dataArray = message.split(":");
 
 		if (dataArray[0].compareTo("0") == 0) {
