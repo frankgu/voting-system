@@ -92,7 +92,7 @@ public class Server1 implements Runnable {
 			
 	        DatagramPacket request = new DatagramPacket(buffer,
 	                                                    buffer.length);
-	        String a = "0:"+servInfo;
+	        String a = "0:"+servInfo+":";
 			request.setAddress(bhost);
 			request.setData(a.getBytes());
 			request.setPort(8089);
@@ -124,7 +124,7 @@ public class Server1 implements Runnable {
 			
 	        DatagramPacket request = new DatagramPacket(buffer,
 	                                                    buffer.length);
-	        String a = "1:"+servInfo;
+	        String a = "1:"+servInfo+":";
 			request.setAddress(bhost);
 			request.setData(a.getBytes());
 			request.setPort(8089);

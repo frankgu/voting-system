@@ -89,9 +89,9 @@ public class RequestHandler implements Runnable {
 			// Read from the original file and write to the new
 			// unless content matches data to be removed.
 			while ((line = br.readLine()) != null) {
-				if (line.split(":")[0].equals(lineToRemove.split(":")[0])
-						&& line.split(":")[1]
-								.equals(lineToRemove.split(":")[1])) {
+				if (line.split(":")[0].equals(lineToRemove.split(":")[0])&& 
+					line.split(":")[1].equals(lineToRemove.split(":")[1])&&
+					line.split(":")[2].equals(lineToRemove.split(":")[2])) {
 					// skip write
 				} else {
 					pw.println(line);
@@ -144,7 +144,8 @@ public class RequestHandler implements Runnable {
 				pw.println(line);
 				pw.flush();
 			}
-			pw.println(lineToAdd);
+			String newLine = lineToAdd.split(":")[0] + ":" + lineToAdd.split(":")[1] +":"+ lineToAdd.split(":")[2];
+			pw.println(newLine);
 			pw.flush();
 			
 			pw.close();
