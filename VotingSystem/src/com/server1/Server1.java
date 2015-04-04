@@ -89,7 +89,7 @@ public class Server1 implements Runnable {
 					bSocket = new DatagramSocket();
 					Transmission btran = new Transmission(bSocket);
 					InetAddress bhost = InetAddress.getByName("go.joyclick.org");
-					btran.sendData(servInfo, 8888, bhost);
+					btran.sendData("0:"+district+":"+host+":"+portNumber, 8888, bhost);
 				} catch (SocketException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -102,6 +102,7 @@ public class Server1 implements Runnable {
 	}
 
 	public void stop() {
+		
 		//------------add server to serverList-------------
 		DatagramSocket bSocket;
 		try {
