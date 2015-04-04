@@ -93,7 +93,9 @@ public class RequestHandler implements Runnable {
 
 				String lineToRemove = "";
 				lineToRemove = data;
-				String currentLine;
+
+				System.out.println("in remove part: "+lineToRemove);
+				String currentLine = "";
 
 				while((currentLine = reader.readLine()) != null) {
 				    // trim newline when comparing with lineToRemove
