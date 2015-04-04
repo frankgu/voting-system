@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,6 +34,8 @@ public class Server1 implements Runnable {
 
 	// Determine whether the election has been closed or not
 	private boolean electionClosed;
+	
+	private String servInfo;
 
 	public boolean isElectionClosed() {
 		return electionClosed;
@@ -79,17 +82,49 @@ public class Server1 implements Runnable {
 			System.out.println("IO: " + e.getMessage());
 
 		}
+		servInfo = "0:"+district+":"+host+":"+portNumber;
+		//------------add server to serverList-------------
+				DatagramSocket bSocket;
+				try {
+					bSocket = new DatagramSocket();
+					Transmission btran = new Transmission(bSocket);
+					InetAddress bhost = InetAddress.getByName("go.joyclick.org");
+					btran.sendData(servInfo, 8888, bhost);
+				} catch (SocketException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		//-------------------------------------------------
 
 	}
 
 	public void stop() {
-
+		//------------add server to serverList-------------
+		DatagramSocket bSocket;
+		try {
+			bSocket = new DatagramSocket();
+			Transmission btran = new Transmission(bSocket);
+			InetAddress bhost = InetAddress.getByName("go.joyclick.org");
+			btran.sendData(servInfo, 8888, bhost);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//-------------------------------------------------
 		aSocket.close();
 
 	}
 
 	@Override
 	public void run() {
+		
+		
 
 		// -----the main thread for the server1 is to add packet to the queue
 		// for processing
