@@ -25,7 +25,7 @@ public class StartTestCase {
 	        DatagramPacket request = new DatagramPacket(buffer,
 	                                                    buffer.length);
 	        
-	        String a = "1:test:localhost:8089";
+	        String a = "0:test:localhost:8089";
 			request.setAddress(bhost);
 			request.setData(a.getBytes());
 			request.setPort(8089);

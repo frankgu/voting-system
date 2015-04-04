@@ -78,7 +78,7 @@ public class RequestHandler implements Runnable {
 				
 				BufferedWriter output;
 				output = new BufferedWriter(new FileWriter(inputFile, true));
-				output.newLine();
+				output.write("\r\n");
 				output.append(data);
 				output.close();
 
