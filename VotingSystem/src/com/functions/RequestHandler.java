@@ -101,7 +101,7 @@ public class RequestHandler implements Runnable {
 				    // trim newline when comparing with lineToRemove
 				    String trimmedLine = currentLine.trim();
 
-			    	System.out.println("trimmed: "+trimmedLine);
+			    	System.out.println("currLine: "+trimmedLine);
 			    	System.out.println("line: "+lineToRemove);
 			    	
 				    if(currentLine.equals(lineToRemove)){
