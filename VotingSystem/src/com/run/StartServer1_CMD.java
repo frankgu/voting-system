@@ -13,7 +13,7 @@ public class StartServer1_CMD {
 
 	public static void main(String[] arg){
 		if(!arg[0].isEmpty() && !arg[1].isEmpty() && !arg[2].isEmpty()){
-			final String servInfo = arg[0]+":"+arg[2]+":"+arg[1];
+			final String servInfo = arg[0]+":"+arg[1]+":"+arg[2];
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				//exit handler
 			    public void run() {
@@ -77,7 +77,7 @@ public class StartServer1_CMD {
 			Thread thread = new Thread(server1);
 			thread.start();
 		}else{
-			System.out.println("Invalid Inputs!\njava -jar name port ip");
+			System.out.println("Invalid Inputs!\njava -jar name ip port");
 		}
 		
 		
