@@ -18,8 +18,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+import com.run.StartCandidateRegister.serverInfo;
 import com.testframework.testcases_window;
 //import com.testframework.testframework_launch;
+
 
 import java.util.ArrayList;
 
@@ -102,11 +104,17 @@ public class ClientConfig {
 			in = new BufferedReader(
 					new InputStreamReader(servers.openStream()));
 			String inputLine;
+		
 			while ((inputLine = in.readLine()) != null){
-				combo.add(inputLine.split(":")[0]);
-				serverInfo srv = new serverInfo(inputLine.split(":")[0], inputLine.split(":")[1], Integer.parseInt(inputLine.split(":")[2]));
-				serverList.add(srv);
-				combo.select(0);
+				if(inputLine.isEmpty() || inputLine.trim().equals("") || inputLine.trim().equals("\n")){
+					
+				}else{
+					combo.add(inputLine.split(":")[0]);
+					serverInfo srv = new serverInfo(inputLine.split(":")[0], inputLine.split(":")[1], Integer.parseInt(inputLine.split(":")[2]));
+					serverList.add(srv);
+					combo.select(0);
+				}
+				
 			}
 			
 			in.close();
