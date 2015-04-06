@@ -28,6 +28,10 @@ public class Server2GUIPanel extends JPanel {
 		colors.add(Color.red);
 		colors.add(Color.DARK_GRAY);
 		colors.add(Color.MAGENTA);
+		colors.add(Color.BLACK);
+		colors.add(Color.blue);
+		colors.add(Color.pink);
+		colors.add(Color.red);
 	}
 	
 	public void setData(List<Candidate> votes){
