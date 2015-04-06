@@ -24,7 +24,7 @@ public class Responder {
 	private String district = null;
 	private Transmission tran = null;
 	private Server1 server1 = null;
-	
+
 	// -----lock for the critical section
 	private static Object lock1 = new Object();
 	private static Object lock2 = new Object();
@@ -70,8 +70,8 @@ public class Responder {
 		String[] dataArray = message.split(":");
 
 		if (dataArray[0].compareTo("0") == 0) {
-			
-			//close the election
+
+			// close the election
 			server1.setElectionClosed(true);
 
 		} else if (dataArray[0].compareTo("1") == 0) {
@@ -130,19 +130,19 @@ public class Responder {
 			// -----check the voter vote state
 			checkVoteState(userName, port, host);
 
-		} else if(dataArray[0].compareTo("7") == 0) {
-			
+		} else if (dataArray[0].compareTo("7") == 0) {
+
 			// -----return the district information to the client
 			getDistrictInfo(port, host);
 		}
 	}
 
-	private void getDistrictInfo(int port, InetAddress host){
-		
+	private void getDistrictInfo(int port, InetAddress host) {
+
 		tran.replyData("5:" + district, port, host);
-		
+
 	}
-	
+
 	private void checkVoteState(String userName, int port, InetAddress host) {
 
 		// ---[flag] = 4 , [value] =
@@ -249,10 +249,14 @@ public class Responder {
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			int existUserNumber = ((Long) session
-					.createCriteria(Candidate.class)
-					.setProjection(Projections.rowCount()).uniqueResult())
-					.intValue();
+			List<Candidate> candidatelist = session.createCriteria(
+					Candidate.class).list();
+			int existUserNumber = 0;
+			for (int i = 0; i < candidatelist.size(); i++) {
+				if (candidatelist.get(i).getDistrictName().compareTo(district) == 0) {
+					existUserNumber++;
+				}
+			}
 
 			if (existUserNumber < userNumber) {
 
