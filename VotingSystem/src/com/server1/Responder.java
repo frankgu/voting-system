@@ -73,6 +73,9 @@ public class Responder {
 
 			// close the election
 			server1.setElectionClosed(true);
+			tran.replyData(
+					"2:Successfully close the election of this district", port,
+					host);
 
 		} else if (dataArray[0].compareTo("1") == 0) {
 
