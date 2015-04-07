@@ -1,5 +1,8 @@
 package com.server2;
 
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,16 +12,17 @@ import javax.swing.JFrame;
 import org.hibernate.Session;
 
 import com.functions.HibernateUtil;
+import com.functions.Transmission;
 import com.object.Candidate;
 
-public class PollUpdater extends JFrame implements Runnable{
-	Server2GUIPanel panel;
+public class SpectatorClient extends JFrame implements Runnable{
+	SpectatorClientGUIPanel panel;
 	//the list of candidateList and get method. Populated by getCandidatePolls
 	private List<Candidate> candidateList;
 	private ArrayList <Candidate> winner;
 	private ArrayList <String> districts;
 	
-	public PollUpdater(){
+	public SpectatorClient(){
 
 		// initial the hibernate factory
 		HibernateUtil.getSessionFactory();
@@ -29,7 +33,7 @@ public class PollUpdater extends JFrame implements Runnable{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		//gui panel
-		panel = new Server2GUIPanel();
+		panel = new SpectatorClientGUIPanel();
 		add(panel);
 		panel.setVisible(true);
 	}
@@ -38,6 +42,12 @@ public class PollUpdater extends JFrame implements Runnable{
 	public void run(){
 		while(true){
 			try{
+				DatagramSocket aSocket = new DatagramSocket();
+				Transmission tran = new Transmission(aSocket);
+				InetAddress host = InetAddress.getByName("127.0.0.1");
+				System.out.println(tran.sendData("1:", 8080, host));
+
+				
 				//retrieve the list of candidates from the database and update the bar graph based on which district is selected
 				updateCandidateList();
 				List<Candidate> temp = new ArrayList<Candidate>();
