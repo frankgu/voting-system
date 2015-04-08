@@ -149,18 +149,21 @@ public class Server2 implements Runnable {
 
 			if (distrct.isEmpty()
 					|| candidates.get(i).getDistrictName().compareTo(distrct) == 0) {
-
+				//string will be returned containing the data required to reconstruct a candidate in the order
+				//in which the parameters appear in the constructor
 				if (i == (candidates.size() - 1)) {
-					candidatePollsData = candidatePollsData + ":"
-							+ candidates.get(i).getFirstName() + ":"
+					candidatePollsData = candidatePollsData
 							+ candidates.get(i).getLastName() + ":"
-							+ candidates.get(i).getPolls();
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getDistrictName() + ":"
+							+ candidates.get(i).getPolls(); 
 
 				} else {
-					candidatePollsData = candidatePollsData + ":"
-							+ candidates.get(i).getFirstName() + ":"
+					candidatePollsData = candidatePollsData 
 							+ candidates.get(i).getLastName() + ":"
-							+ candidates.get(i).getPolls() + ":";
+							+ candidates.get(i).getFirstName() + ":"
+							+ candidates.get(i).getDistrictName() + ":"
+							+ candidates.get(i).getPolls() + "::";
 				}
 			}
 		}

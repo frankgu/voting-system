@@ -1,6 +1,5 @@
 package com.server2;
 
-import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -19,46 +18,33 @@ public class SpectatorClient extends JFrame implements Runnable{
 	SpectatorClientGUIPanel panel;
 	//the list of candidateList and get method. Populated by getCandidatePolls
 	private List<Candidate> candidateList;
+	private List<Candidate> candidateListDistrict;
 	private ArrayList <Candidate> winner;
 	private ArrayList <String> districts;
 	
-	public SpectatorClient(){
-
-		// initial the hibernate factory
-		HibernateUtil.getSessionFactory();
-				
+	private int port;
+	private String host;
+	
+	public SpectatorClient(int port, String host){
 		//frame properties(visible, size, closeoperation)
 		setVisible(true);
 		setSize(500,500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+	
 		//gui panel
 		panel = new SpectatorClientGUIPanel();
 		add(panel);
 		panel.setVisible(true);
-	}
 	
+		// initial the port and the host
+		this.port = port;
+		this.host = host;
+	}
 	
 	public void run(){
 		while(true){
-			try{
-				DatagramSocket aSocket = new DatagramSocket();
-				Transmission tran = new Transmission(aSocket);
-				InetAddress host = InetAddress.getByName("127.0.0.1");
-				System.out.println(tran.sendData("1:", 8080, host));
-
-				
-				//retrieve the list of candidates from the database and update the bar graph based on which district is selected
 				updateCandidateList();
-				List<Candidate> temp = new ArrayList<Candidate>();
-				if (panel.getSelectedDistrict()!="All Districts"){
-					for(int i = 0; i<candidateList.size(); i++){
-						if (candidateList.get(i).getDistrictName().equals(panel.getSelectedDistrict())){
-							temp.add(candidateList.get(i));
-						}
-					}
-				}else temp = candidateList;
-				panel.setData(temp);
+				panel.setData(candidateListDistrict);
 				
 				updateWinner();
 				panel.setWinner(winner);
@@ -66,36 +52,45 @@ public class SpectatorClient extends JFrame implements Runnable{
 				updateDistricts();
 				panel.setDistricts(districts);
 				//update the size of the frame based on the number of candidates
-				setSize(temp.size()*100 + 125, 500);
+				setSize(candidateListDistrict.size()*100 + 125, 500);
 				
 				panel.repaint();
-				Thread.sleep(100);
+				try{
+					Thread.sleep(100);
+				}
+				catch(Exception e){}
 			}
-			catch(Exception e){
-				
-			}
-		}
 	}
 	
 	private void updateCandidateList() {
 		// -----get the candidate list
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-		@SuppressWarnings("unchecked")
-		//retrieve all the candidate data from the database and then store them as the candidate object
-		//into the list(below)
-		
-		List<Candidate> candidates = session.createCriteria(Candidate.class)
-				.list();
-		candidateList = candidates;
-		
-		session.getTransaction().commit();
-		session.close();
-
+		try{
+			DatagramSocket aSocket = new DatagramSocket();
+			Transmission tran = new Transmission(aSocket);
+			InetAddress ahost = InetAddress.getByName(host);
+			String response = tran.sendData("1:", port, ahost);
+			//System.out.println(response);
+			String [] candidateStringArray = response.split("::");
+			candidateList = new ArrayList<Candidate>();
+			for (int i = 0; i<candidateStringArray.length; i++){
+				String [] candidate = candidateStringArray[i].split(":");
+				Candidate cand = new Candidate(candidate[0], candidate[1], candidate[2], Integer.parseInt(candidate[3]));
+				candidateList.add(cand);
+			}
+			
+			candidateListDistrict = new ArrayList<Candidate>();
+			if (panel.getSelectedDistrict()!="All Districts"){
+				for(int i = 0; i<candidateList.size(); i++){
+					if (candidateList.get(i).getDistrictName().equals(panel.getSelectedDistrict())){
+						candidateListDistrict.add(candidateList.get(i));
+					}
+				}
+			}else candidateListDistrict = candidateList;
+		}catch(Exception e){}
 	}
 	
 	private void updateWinner(){
-		List<Candidate> sortedVotes = new ArrayList<Candidate>(candidateList);
+		List<Candidate> sortedVotes = new ArrayList<Candidate>(candidateListDistrict);
 		Collections.sort(sortedVotes,new PollComparator());
 		winner = new ArrayList<Candidate>();
 		if (!sortedVotes.isEmpty()){
