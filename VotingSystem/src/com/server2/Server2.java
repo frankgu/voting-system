@@ -51,9 +51,6 @@ public class Server2 implements Runnable {
 
 	@Override
 	public void run() {
-		// run the poll updater
-		new Thread(new PollUpdater()).start();
-
 		while (true) {
 
 			try {
