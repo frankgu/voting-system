@@ -13,6 +13,12 @@ public class Candidate extends User {
 	public Candidate() {
 	}
 
+	//this constructor used for the spectator client(doesnt need the username, address, password)
+	public Candidate(String lastName, String firstName, String districtName, int polls){
+		super("n/a", lastName, firstName, districtName, "n/a", "n/a");
+		this.polls = polls;
+	}
+	
 	public Candidate(String userName, String lastName, String firstName,
 			String districtName, String address, String password) {
 		super(userName, lastName, firstName, districtName, address, password);

@@ -7,5 +7,4 @@ public class StartSpectatorClient {
 		Thread thread = new Thread(spectatorClient);
 		thread.start();
 	}
-	
 }
