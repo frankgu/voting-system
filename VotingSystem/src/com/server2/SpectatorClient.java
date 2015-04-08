@@ -22,16 +22,23 @@ public class SpectatorClient extends JFrame implements Runnable{
 	private ArrayList <Candidate> winner;
 	private ArrayList <String> districts;
 	
-	public SpectatorClient(){
+	private int port;
+	private String host;
+	
+	public SpectatorClient(int port, String host){
 		//frame properties(visible, size, closeoperation)
 		setVisible(true);
 		setSize(500,500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+	
 		//gui panel
 		panel = new SpectatorClientGUIPanel();
 		add(panel);
 		panel.setVisible(true);
+	
+		// initial the port and the host
+		this.port = port;
+		this.host = host;
 	}
 	
 	public void run(){
@@ -60,8 +67,8 @@ public class SpectatorClient extends JFrame implements Runnable{
 		try{
 			DatagramSocket aSocket = new DatagramSocket();
 			Transmission tran = new Transmission(aSocket);
-			InetAddress host = InetAddress.getByName("go.joyclick.org");
-			String response = tran.sendData("1:", 9090, host);
+			InetAddress ahost = InetAddress.getByName(host);
+			String response = tran.sendData("1:", port, ahost);
 			//System.out.println(response);
 			String [] candidateStringArray = response.split("::");
 			candidateList = new ArrayList<Candidate>();
