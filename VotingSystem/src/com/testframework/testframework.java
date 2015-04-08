@@ -77,6 +77,7 @@ public class testframework {
 	}
 
 	public void run(String chosenCase) {
+		System.out.println(chosenCase);
 		readCandData();
 		readUserData();		
 		//voted = new Vector(users.size());
@@ -142,17 +143,18 @@ public class testframework {
 				
 				executor = Executors.newFixedThreadPool(candidates.size());
 				for(int i=0; i<candidates.size(); i++){
-					int district = districts[(int)(Math.random()*2)];
+					//System.out.println(candidates.get(i).getUserName());
+					int district = districts[(int)(Math.random()*3)];
 					executor.submit(new Process("RegisterCandidate_X", out,candidates.get(i),district));
 				}
 				
 				executor.shutdown();
 				System.out.println("All candidates are registered!");
-				executor.awaitTermination(5, TimeUnit.SECONDS);
+				executor.awaitTermination(10, TimeUnit.SECONDS);
 				
 				executor2 = Executors.newFixedThreadPool(users.size());
 				for(int i=0; i<users.size(); i++){
-					int district = districts[(int)(Math.random()*2)];
+					int district = districts[(int)(Math.random()*3)];
 					executor2.submit(new Process("TestDistrict_"+chosenCase, out,users.get(i), district));
 				}
 				
@@ -431,6 +433,14 @@ public class testframework {
 			cand = null;
 		}
 		
+		public Process(String chosenCase, BufferedWriter out, Candidate cand, int district){
+			this.chosenCase = chosenCase;
+			this.out = out;
+			voter = null;
+			this.cand = cand;
+			this.district = district;
+		}
+		
 		public Process(String chosenCase, BufferedWriter out, Candidate cand){
 			this.chosenCase = chosenCase;
 			this.out = out;
@@ -445,6 +455,7 @@ public class testframework {
 			this.cand = cand;
 		}
 		
+		
 		public void run() {
 			synchronized (out) {
 			if(chosenCase.equals("RegisterVoter")){
@@ -453,6 +464,10 @@ public class testframework {
 			}
 			if(chosenCase.equals("RegisterCandidate")){
 				registerCandidate_S(cand);
+				return;
+			}
+			if(chosenCase.equals("RegisterCandidate_X")){
+				registerCandidate_X(cand);
 				return;
 			}
 			if(chosenCase.equals("VoterLogin")){
@@ -530,15 +545,18 @@ public class testframework {
 				Transmission tra = new Transmission(soc);
 				
 				ArrayList<String> candList = new ArrayList<String>();
-				String[] tempList = (tra.sendData("4", district, host)).split(":");
-				for(int i=0; i< tempList.length; i+=3){
+				String data1 = tra.sendData("4", district, host);
+				System.out.println(data1);
+				String[] tempList = data1.split(":");
+				System.out.println(tempList.length);
+				for(int i=1; i< tempList.length; i+=3){
 					candList.add(tempList[i]);
-					System.out.println(tempList[i]);
+					System.out.println("CandidateList:  "+tempList[i]);
 				}
 				
 				String data = "2:"+voter.getUserName()+":"+candList.get((int)(Math.random()*candList.size()));
-				soc = new DatagramSocket();
-				tra = new Transmission(soc);
+//				soc = new DatagramSocket();
+//				tra = new Transmission(soc);
 				String output = tra.sendData(data, district, host);
 				out.write(output+"(district:"+district+")"+"\r\n");
 				System.out.println(output);
@@ -605,6 +623,20 @@ public class testframework {
 				e.printStackTrace();
 			}
 			
+		}
+		
+		public void registerCandidate_X(Candidate cand){
+			try{
+				DatagramSocket soc = new DatagramSocket();
+				Transmission tra = new Transmission(soc);
+				String data = "1:2:"+cand.getUserName()+":"+cand.getLastName()+":"+cand.getFirstName()+":"+cand.getAddress();
+				String output = tra.sendData(data, district, host);
+				out.write(output +"\r\n");
+				System.out.println(output);
+				out.flush();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 		}
 		
 		public void voterLogout_S(User voter){
