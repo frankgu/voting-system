@@ -60,8 +60,8 @@ public class SpectatorClient extends JFrame implements Runnable{
 		try{
 			DatagramSocket aSocket = new DatagramSocket();
 			Transmission tran = new Transmission(aSocket);
-			InetAddress host = InetAddress.getByName("127.0.0.1");
-			String response = tran.sendData("1:", 8080, host);
+			InetAddress host = InetAddress.getByName("go.joyclick.org");
+			String response = tran.sendData("1:", 9090, host);
 			//System.out.println(response);
 			String [] candidateStringArray = response.split("::");
 			candidateList = new ArrayList<Candidate>();
