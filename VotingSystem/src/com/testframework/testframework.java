@@ -29,7 +29,7 @@ public class testframework {
 	private static ArrayList<Candidate> candidates;
 	private static ArrayList<String> voted;
 	private static int port = 8088;
-	private static int [] districts = {8088,8090,8091};
+	private static int [] districts = {8010,8050,8080};
 	//private static Vector voted;
 	
 //	private String ufPath;
@@ -102,9 +102,11 @@ public class testframework {
 			if(chosenCase.equals("TD1") || chosenCase.equals("TD2")||chosenCase.equals("TD4")){
 				outputFile = new File(opPath + "//TestDistrict_"+chosenCase+".txt");
 				out = new BufferedWriter(new FileWriter(outputFile));
-				
+				executor = Executors.newFixedThreadPool(users.size());
 				for(int i=0; i<users.size(); i++){
-					int district = districts[(int)(Math.random()*2)];
+					int district = districts[(int)(Math.random()*3)];
+					//int district = districts[0];
+					System.out.println(district);
 					executor.submit(new Process("TestDistrict_"+chosenCase, out, users.get(i),district));
 				}
 				
@@ -579,10 +581,9 @@ public class testframework {
 			try {
 				soc = new DatagramSocket();
 				Transmission tra = new Transmission(soc);
-				String data = "7";
-				String output = tra.sendData(data, district, host);
-				
-				out.write(output+ "(district: "+district+")");
+				String data = "1:1:"+ voter.getUserName()+":"+voter.getLastName()+":"+voter.getFirstName()+":"+voter.getAddress()+":"+voter.getPassword();
+				String output = tra.sendData(data, district, host);				
+				out.write(output+ "(district: "+district+")"+"\r\n");
 				System.out.println(output+"\r\n");
 				out.flush();
 			} catch (Exception e) {
