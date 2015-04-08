@@ -56,7 +56,7 @@ public class SpectatorClient extends JFrame implements Runnable{
 				
 				panel.repaint();
 				try{
-					Thread.sleep(100);
+					Thread.sleep(1000);
 				}
 				catch(Exception e){}
 			}
