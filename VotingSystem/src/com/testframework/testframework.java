@@ -29,6 +29,7 @@ public class testframework {
 	private static ArrayList<Candidate> candidates;
 	private static ArrayList<String> voted;
 	private static int port = 8088;
+	private static int [] districts = {8088,8090,8091};
 	//private static Vector voted;
 	
 //	private String ufPath;
@@ -97,6 +98,25 @@ public class testframework {
 				out.close();
 				return;
 			}
+			
+			if(chosenCase.equals("TD1") || chosenCase.equals("TD2")||chosenCase.equals("TD4")){
+				outputFile = new File(opPath + "//TestDistrict_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
+				for(int i=0; i<users.size(); i++){
+					int district = districts[(int)(Math.random()*2)];
+					executor.submit(new Process("TestDistrict_"+chosenCase, out, users.get(i),district));
+				}
+				
+				executor.shutdownNow();
+				System.out.println("All voters are registered!");
+				executor.awaitTermination(5, TimeUnit.SECONDS);
+				
+				out.close();
+				return;
+			}
+			
+			
 			if(chosenCase.equals("CR1") || chosenCase.equals("CR2") || chosenCase.equals("CR3")){	//the candidate registration cases
 //				registerCandidate(candidates);
 				outputFile = new File(opPath + "//CandidateRegisterTest_"+chosenCase+".txt");
@@ -114,6 +134,34 @@ public class testframework {
 				out.close();
 				return;
 			}
+			if(chosenCase.equals("TD3")){
+				outputFile = new File(opPath + "//TestDistrict_"+chosenCase+".txt");
+				out = new BufferedWriter(new FileWriter(outputFile));
+				
+				executor = Executors.newFixedThreadPool(candidates.size());
+				for(int i=0; i<candidates.size(); i++){
+					int district = districts[(int)(Math.random()*2)];
+					executor.submit(new Process("RegisterCandidate_X", out,candidates.get(i),district));
+				}
+				
+				executor.shutdown();
+				System.out.println("All candidates are registered!");
+				executor.awaitTermination(5, TimeUnit.SECONDS);
+				
+				executor2 = Executors.newFixedThreadPool(users.size());
+				for(int i=0; i<users.size(); i++){
+					int district = districts[(int)(Math.random()*2)];
+					executor2.submit(new Process("TestDistrict_"+chosenCase, out,users.get(i), district));
+				}
+				
+				executor2.shutdown();
+				System.out.println("All voters are voted!");
+				executor2.awaitTermination(5, TimeUnit.SECONDS);
+				
+				out.close();
+				return;
+			}
+			
 			if(chosenCase.equals("V1")){		//the voting cases 
 //				registerCandidate(candidates);
 //				registerVoter(users);
@@ -364,11 +412,20 @@ public class testframework {
 		BufferedWriter out;
 		User voter;
 		Candidate cand;
+		int district;
 		
 		public Process(String chosenCase, BufferedWriter out, User voter){
 			this.chosenCase = chosenCase;
 			this.out = out;
 			this.voter = voter;
+			cand = null;
+		}
+		
+		public Process(String chosenCase, BufferedWriter out, User voter, int district){
+			this.chosenCase = chosenCase;
+			this.out = out;
+			this.voter = voter;
+			this.district = district;
 			cand = null;
 		}
 		
@@ -443,8 +500,50 @@ public class testframework {
 				voterLogout_S(voter);
 				return;
 			}
+			if(chosenCase.equals("TestDistrict_TD1")){
+				registerVoter_X(voter);
+				return;
 			}
-			
+			if(chosenCase.equals("TestDistrict_TD2")){
+				registerVoter_X(voter);
+				voterLogin_X(voter);
+				return;
+			}
+			if(chosenCase.equals("TestDistrict_TD3")){
+				registerVoter_X(voter);
+				voterLogin_X(voter);
+				voting_X(voter, district);
+			}
+			if(chosenCase.equals("TestDistrict_TD4")){
+				registerVoter_X(voter);
+				voterLogin_X2(voter);
+				return;
+			}
+			}
+		}
+		
+		public void voting_X(User voter, int district){
+			try{
+				DatagramSocket soc = new DatagramSocket();
+				Transmission tra = new Transmission(soc);
+				
+				ArrayList<String> candList = new ArrayList<String>();
+				String[] tempList = (tra.sendData("4", district, host)).split(":");
+				for(int i=0; i< tempList.length; i+=3){
+					candList.add(tempList[i]);
+					System.out.println(tempList[i]);
+				}
+				
+				String data = "2:"+voter.getUserName()+":"+candList.get((int)(Math.random()*candList.size()));
+				soc = new DatagramSocket();
+				tra = new Transmission(soc);
+				String output = tra.sendData(data, district, host);
+				out.write(output+"(district:"+district+")"+"\r\n");
+				System.out.println(output);
+				out.flush();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		
 		public void voting_S(User voter, Candidate cand){
@@ -475,13 +574,30 @@ public class testframework {
 			}
 		}
 		
+		public void registerVoter_X(User voter){
+			DatagramSocket soc;
+			try {
+				soc = new DatagramSocket();
+				Transmission tra = new Transmission(soc);
+				String data = "7";
+				String output = tra.sendData(data, district, host);
+				
+				out.write(output+ "(district: "+district+")");
+				System.out.println(output+"\r\n");
+				out.flush();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
+		
 		public void registerCandidate_S(Candidate cand){
 			try{
 			DatagramSocket soc = new DatagramSocket();
 			Transmission tra = new Transmission(soc);
 			String data = "1:2:"+cand.getUserName()+":"+cand.getLastName()+":"+cand.getFirstName()+":"+cand.getAddress();
 			String output = tra.sendData(data, port, host);
-			out.write(output+"\r\n");
+			out.write(output +"\r\n");
 			System.out.println(output);
 			out.flush();
 			}catch(Exception e){
@@ -524,6 +640,57 @@ public class testframework {
 				e.printStackTrace();
 			}
 		}
+		
+		public void voterLogin_X(User voter){
+			try{
+				DatagramSocket soc = new DatagramSocket();
+				Transmission tra = new Transmission(soc);
+				String data = "3:"+voter.getUserName()+":"+voter.getPassword();
+				String output = tra.sendData(data, district, host);
+				String [] temp = output.split(":");
+				if(temp[0].equals("2")){
+					String message = "2:("+voter.getUserName()+") has successfully loged in to the district: "+district+"\r\n";
+					out.write(message);
+				}
+				if(temp[0].equals("1")){
+					out.write(output+"\r\n");
+				}
+				System.out.println(output);
+				out.flush();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		public void voterLogin_X2(User voter){
+			try{
+				DatagramSocket soc = new DatagramSocket();
+				Transmission tra = new Transmission(soc);
+				String data = "3:"+voter.getUserName()+":"+voter.getPassword();
+				
+				for(int i=0; i<districts.length; i++){
+					if(district!=districts[i]){
+						district = districts[i];
+						break;
+					}
+				}
+				
+				String output = tra.sendData(data, district, host);
+				String [] temp = output.split(":");
+				if(temp[0].equals("2")){
+					String message = "2:("+voter.getUserName()+") has successfully loged in to the district: "+district+"\r\n";
+					out.write(message);
+				}
+				if(temp[0].equals("1")){
+					out.write(output+"\r\n");
+				}
+				System.out.println(output);
+				out.flush();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
 	}
 }
 

@@ -67,13 +67,13 @@ public class testframework_launch {
 		shell.setText("TestFrameWork");
 		shell.setLocation(300, 300);;
 		
-		if(chosenCase.equals("VR1") || chosenCase.equals("VR2") || chosenCase.equals("VR3") ||chosenCase.equals("LI1") || chosenCase.equals("LI2")||chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")||chosenCase.equals("LO1")||chosenCase.equals("LO2")){
+		if(chosenCase.equals("TD1") ||chosenCase.equals("TD2") || chosenCase.equals("TD4") ||chosenCase.equals("VR1") || chosenCase.equals("VR2") || chosenCase.equals("VR3") ||chosenCase.equals("LI1") || /*chosenCase.equals("LI2")||*/chosenCase.equals("LI3")||chosenCase.equals("LI4")||chosenCase.equals("LI5")||chosenCase.equals("LO1")||chosenCase.equals("LO2")){
 			loadVoters(40);
 		}
 		if(chosenCase.equals("CR1") || chosenCase.equals("CR2") || chosenCase.equals("CR3")){
 			loadCandidates(50);
 		}
-		if(chosenCase.equals("V1") || chosenCase.equals("V2")){
+		if(chosenCase.equals("V1") || chosenCase.equals("V2") || chosenCase.equals("TD3")){
 			loadCandidates(0);
 			loadVoters(0);
 		}

@@ -54,7 +54,7 @@ public class testcases_window {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(530, 409);
+		shell.setSize(530, 530);
 		shell.setText("TestCases");
 		
 		Button btnNewButton = new Button(shell, SWT.NONE);
@@ -190,18 +190,18 @@ public class testcases_window {
 		lblLogin.setBounds(10, 197, 59, 28);
 		lblLogin.setText("Login:");
 		
-		Button btnNewButton_2 = new Button(shell, SWT.NONE);
-		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-//				testframework tf = new testframework(l1, l2, l3);
-//				tf.run("LI2");
-				testframework_launch tfl = new testframework_launch();
-				tfl.open("LI2");
-			}
-		});
-		btnNewButton_2.setBounds(149, 220, 175, 28);
-		btnNewButton_2.setText("VoterOutofDistrict");
+//		Button btnNewButton_2 = new Button(shell, SWT.NONE);
+//		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+////				testframework tf = new testframework(l1, l2, l3);
+////				tf.run("LI2");
+//				testframework_launch tfl = new testframework_launch();
+//				tfl.open("LI2");
+//			}
+//		});
+//		btnNewButton_2.setBounds(149, 220, 175, 28);
+//		btnNewButton_2.setText("VoterOutofDistrict");
 		
 		Button btnAlreadylogedin = new Button(shell, SWT.NONE);
 		btnAlreadylogedin.addSelectionListener(new SelectionAdapter() {
@@ -213,7 +213,7 @@ public class testcases_window {
 				tfl.open("LI3");
 			}
 		});
-		btnAlreadylogedin.setBounds(354, 220, 131, 28);
+		btnAlreadylogedin.setBounds(150, 220, 131, 28);
 		btnAlreadylogedin.setText("AlreadyLogedin");
 		
 		Button btnInvalidpassword = new Button(shell, SWT.NONE);
@@ -269,8 +269,64 @@ public class testcases_window {
 				tfl.open("LO2");
 			}
 		});
-		btnAlreadylogout.setBounds(152, 335, 111, 28);
+		btnAlreadylogout.setBounds(152, 335, 130, 28);
 		btnAlreadylogout.setText("AlreadyLogout");
+		
+		Label lbTestDistrict = new Label(shell, SWT.NONE);
+		lbTestDistrict.setBounds(10, 390, 80, 20);
+		lbTestDistrict.setText("TestDistrict:");
+		
+		Button btnTDRegister = new Button(shell, SWT.NONE);
+		btnTDRegister.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LO1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("TD1");
+			}
+		});
+		btnTDRegister.setBounds(37, 425, 94, 28);
+		btnTDRegister.setText("Register");
+		
+		Button btnTDLogin = new Button(shell, SWT.NONE);
+		btnTDLogin.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LO1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("TD2");
+			}
+		});
+		btnTDLogin.setBounds(140, 425, 94, 28);
+		btnTDLogin.setText("Login");
+		
+		Button btnTDVoting = new Button(shell, SWT.NONE);
+		btnTDVoting.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LO1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("TD3");
+			}
+		});
+		btnTDVoting.setBounds(250, 425, 94, 28);
+		btnTDVoting.setText("Voting");
+		
+		Button btnTDWrongDis = new Button(shell, SWT.NONE);
+		btnTDWrongDis.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+//				testframework tf = new testframework(l1, l2, l3);
+//				tf.run("LO1");
+				testframework_launch tfl = new testframework_launch();
+				tfl.open("TD4");
+			}
+		});
+		btnTDWrongDis.setBounds(360, 425, 150, 28);
+		btnTDWrongDis.setText("WrongDistrictLogin");
 
 	}
 }
